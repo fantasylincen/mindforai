@@ -19,6 +19,9 @@ node_modules
 # 私有汇总文档，禁止提交
 ALL.mindforai
 
+# 本地推广资料，禁止提交
+docs/promotion.md
+
 # misc
 /.sass-cache
 /connect.lock

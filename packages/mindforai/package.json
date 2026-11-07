@@ -2,6 +2,34 @@
   "name": "@mindforai/mindforai",
   "version": "1.0.0",
   "private": false,
+  "description": "Open-source AI documentation whiteboard: turn mind maps into compact .mindforai documents that AI coding agents can read.",
+  "keywords": [
+    "mindforai",
+    "ai-documentation",
+    "ai-context",
+    "mindmap",
+    "mind-map",
+    "whiteboard",
+    "flowchart",
+    "mermaid",
+    "plait",
+    "llm",
+    "ai-agent",
+    "prompt-engineering",
+    "react",
+    "typescript"
+  ],
+  "homepage": "https://fantasylincen.github.io/mindforai/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fantasylincen/mindforai.git",
+    "directory": "packages/mindforai"
+  },
+  "bugs": {
+    "url": "https://github.com/fantasylincen/mindforai/issues"
+  },
+  "author": "MindForAI Contributors",
+  "license": "MIT",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
