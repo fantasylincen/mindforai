@@ -21,6 +21,8 @@
 
 ---
 
+![MindForAI demo: drop a document, get an editable mind map, locate nodes by search](docs/demo.gif)
+
 ## What is this
 
 **MindForAI is an open-source whiteboard for generating AI-ready project documentation.**

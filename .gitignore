@@ -21,6 +21,7 @@ ALL.mindforai
 
 # 本地推广资料，禁止提交
 docs/promotion.md
+docs/promotion-assets/
 
 # misc
 /.sass-cache
