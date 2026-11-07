@@ -31,6 +31,14 @@
 
 **它解决的痛点**：每次开启新会话，AI 都要重新理解一遍你的项目。你写一段话描述背景，它理解得模棱两可；你贴一堆文件，token 成本高得离谱。MindForAI 让你用一张图 + 一个文件，**一次性把上下文说清楚**。
 
+## 我们的终极目标
+
+**1文档 + 1Agent = 1项目。**
+
+我们相信，AI 时代的项目交付可以精简为这个等式：一份足够清晰的文档，加上一个能读懂它的 Agent，就足以完成一个项目。
+
+MindForAI 想做的，是用 `.mindforai` 改写 Agent 的底层基础文档：让文档不再只是「供人阅读的背景材料」，而成为 Agent 更加严格、更加明确、更加清晰的行动方针。相比 Markdown，树状结构把目标、边界、约束和验收标准放在确定的位置，能显著减少歧义与目标漂移，为 Agent 带来更强的执行力。
+
 ## 为什么是 MindForAI
 
 **人类语言并不适合直接指挥 AI。**
@@ -76,7 +84,7 @@ MindForAI 不只用来画图，它更像一份 **可以被 AI 直接执行的说
 - 🤖 **AI 专用导出格式**：`.mindforai`（行式树状文本）比原始 JSON 小数倍，token 友好
 - 🧠 **结构化上下文**：用层级代替长文，目标、约束、步骤一次讲清，显著降低 AI 误解率
 - 🎯 **精准定位修改点**：模块 ID + 分支路径，让 AI 沿树定位，减少全仓库搜索和上下文污染
-- 📦 **可复用文档模板**：项目核心文档 / TODO / 缺陷报告 / AI 规则 / 代码地图，见 [文档模板库](./templates/)
+- 📦 **可复用文档模板**：项目核心文档 / 任务看板 / 缺陷报告 / 工作方法 / 代码审查，见 [文档模板库](./templates/)
 - ✂️ **节点级复制复用**：规则、约束、任务模板直接复制节点，跨项目复用无需重写
 - 🔗 **Mermaid 流程图**：粘贴 Mermaid 文本即可生成可编辑导图，适合已有文档迁移
 - 🩹 **坏文件自修复**：解析失败时高亮错误行并支持一键格式化，AI 改坏的文件也能救回
@@ -189,15 +197,14 @@ content[1]:
 
 ## 文档模板库
 
-[`templates/`](./templates/) 目录收录了可直接复用的 `.mindforai` 模板：
+[`templates/Templets.mindforai`](./templates/Templets.mindforai) 是一份可直接拖进 MindForAI 打开的模板合集，把真实项目文档、任务看板、常用工作方法与代码审查流程放在同一棵树里：
 
-- [项目核心文档](./templates/project.mindforai)
-- [任务清单（TODO）](./templates/todo.mindforai)
-- [缺陷报告（Bug Report）](./templates/bug-report.mindforai)
-- [AI 协作规则](./templates/ai-rules.mindforai)
-- [代码地图](./templates/code-map.mindforai)
+- **示例项目A: mindforai**：项目核心文档、已完成 / 处理中任务、TODO 与使用说明
+- **示例项目B: BeamStreamS3**：ESP32-S3 Wi-Fi 麦克风的硬件约定、固件模块、配置协议与任务记录
+- **作者常用的工作方法**：本机 Agent 操作 Docker、一键部署脚本、Web 版 AI 常用方法、启动旧项目的第一步
+- **我们的终极目标**：1文档 + 1Agent = 1项目
 
-下载后把文件放进项目根目录，或直接拖进 MindForAI 打开，按自己的项目改写即可。也欢迎把你经常使用、效果稳定的模板提交到这个目录，让更多人直接复用。
+下载后把文件放进项目根目录，或直接拖进 MindForAI 打开，按自己的项目改写；也可以只右键复制需要的那一支，作为独立文档继续使用。也欢迎把你经常使用、效果稳定的模板提交到 [`templates/`](./templates/) 目录，让更多人直接复用。
 
 ## 文件出错怎么办
 
@@ -294,11 +301,13 @@ mindforai/
 
 ## 致谢
 
-**衷心感谢 [Drawnix](https://github.com/plait-board/drawnix) 原项目及其开发团队。**
+**衷心感谢 [Drawnix](https://github.com/plait-board/drawnix) 原项目及其开发团队，也感谢所有为 AI 付出努力的开发者、研究者、开源贡献者与模型 / 工具提供者。**
 
-MindForAI 基于 Drawnix 演进而来 —— 感谢原作者在画板内核、思维导图、流程图、无限画布、插件架构等方面的开源贡献，正是这些优秀的工作让本项目得以站在更高起点上。
+MindForAI 基于 Drawnix 演进而来。特别感谢 Drawnix 原作者在画板内核、思维导图、流程图、无限画布、插件架构等方面的开源贡献，正是这些优秀的工作让本项目得以站在更高起点上。
 
-同时感谢 [Plait](https://github.com/worktile/plait) 画图框架的维护者。
+同时特别感谢 DeepSeek 团队在模型能力与开放生态上的贡献，让个人开发者与小团队也能以更低的成本获得强大的 AI 编程能力。
+
+也感谢 [Plait](https://github.com/worktile/plait) 画图框架的维护者，以及每一位通过 Issue、PR、文档与反馈帮助 MindForAI 成长的人。
 
 > ⚠️ 本项目为独立衍生项目，与 Drawnix 原项目团队无隶属关系；原项目商标与版权归其原作者所有。
 

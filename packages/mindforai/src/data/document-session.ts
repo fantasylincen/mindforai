@@ -17,7 +17,16 @@ export interface DocumentSession {
 }
 
 const ACTIVE_SESSION_PREFIX = 'mindforai.activeDocumentSession.';
+const ACTIVE_SESSION_KEY_POINTER = 'mindforai.activeDocumentSessionKey';
 const SESSION_VERSION = 1;
+
+const readActiveSessionKey = (storage: Storage): string | null => {
+  try {
+    return storage.getItem(ACTIVE_SESSION_KEY_POINTER);
+  } catch {
+    return null;
+  }
+};
 
 const getSessionKey = (filePath: string | null | undefined) => {
   const name = (filePath || '').split(/[\\/]/).pop() || '';
@@ -67,16 +76,24 @@ const getActiveSessionKeys = (storage: Storage): string[] => {
   return keys;
 };
 
+const readSessionByKey = (storage: Storage, key: string): DocumentSession | null => {
+  try {
+    const parsed: unknown = JSON.parse(storage.getItem(key) || 'null');
+    return isDocumentSession(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+};
+
 export const writeDocumentSession = (session: DocumentSession | null) => {
   const storage = getStorage();
   if (!storage || !session || !session.documentText) {
     return;
   }
   try {
-    storage.setItem(
-      getSessionKey(session.fileIdentity?.filePath),
-      JSON.stringify({ ...session, version: SESSION_VERSION })
-    );
+    const sessionKey = getSessionKey(session.fileIdentity?.filePath);
+    storage.setItem(sessionKey, JSON.stringify({ ...session, version: SESSION_VERSION }));
+    storage.setItem(ACTIVE_SESSION_KEY_POINTER, sessionKey);
   } catch {
     return;
   }
@@ -88,14 +105,17 @@ export const readDocumentSession = (): DocumentSession | null => {
     return null;
   }
   const candidates: DocumentSession[] = [];
+  const activeSessionKey = readActiveSessionKey(storage);
+  if (activeSessionKey) {
+    const activeSession = readSessionByKey(storage, activeSessionKey);
+    if (isSessionRestorable(activeSession)) {
+      return activeSession;
+    }
+  }
   for (const key of getActiveSessionKeys(storage)) {
-    try {
-      const parsed: unknown = JSON.parse(storage.getItem(key) || 'null');
-      if (isDocumentSession(parsed)) {
-        candidates.push(parsed);
-      }
-    } catch {
-      continue;
+    const parsed = readSessionByKey(storage, key);
+    if (parsed) {
+      candidates.push(parsed);
     }
   }
   if (!candidates.length) {
@@ -114,6 +134,7 @@ export const clearDocumentSession = () => {
     for (const key of getActiveSessionKeys(storage)) {
       storage.removeItem(key);
     }
+    storage.removeItem(ACTIVE_SESSION_KEY_POINTER);
   } catch {
     return;
   }

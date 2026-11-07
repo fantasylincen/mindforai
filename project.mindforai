@@ -41,7 +41,7 @@ content[1]:
               - WEB-06 apps/web/src/styles.scss :: 应用全局样式与基础布局
           - text: 静态资源与站点配置（不拆解二进制）
             children[4]:
-              - WEB-08 apps/web/public/_headers / _redirects / robots.txt / sitemap.xml :: 静态托管头信息、SPA 回退与搜索引擎配置
+              - WEB-08 apps/web/public/_headers / _redirects / robots.txt / sitemap.xml / <IndexNow 密钥>.txt :: 静态托管头信息、SPA 回退、搜索引擎配置与 IndexNow 密钥校验文件
               - WEB-09 apps/web/public/favicon.svg / favicon.ico / apple-touch-icon.png / logo/app-icon.png :: 生效图标与位图回退资源
               - WEB-10 apps/web/public/logo/icons/ :: 10 个候选图标 SVG 与预览页 index.html
               - WEB-11 apps/web/public/logo/logo_mindforai_h*.svg :: 浅色 / 深色横版文字标志
@@ -52,7 +52,7 @@ content[1]:
       - text: 4. 核心白板库（packages/mindforai）
         children[9]:
           - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
-            children[28]:
+            children[31]:
               - DATA-01 src/data/mindforai-text.ts :: .mindforai 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
               - DATA-02 src/data/toon-document.ts :: 三种格式的保存与加载总入口，并兼容读取旧版 TOON 文档
               - DATA-03 src/data/compact-document.ts :: .drawnixlite 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
@@ -124,7 +124,7 @@ content[1]:
                   - UI-01 src/components/document-title.tsx :: 顶部工具栏中的当前文件名显示，带叉号关闭按钮：调用 DATA-28 彻底清空画板元素、选择、撤销历史、视口、文件句柄与会话缓存并回到欢迎页
                   - UI-02 src/components/document-status-bar.tsx :: 左下角状态栏，显示文件路径、保存状态与自动保存开关；宽度随文字自适应，仅在浏览器宽度不足时收缩
                   - UI-03 src/components/document-drop-layer.tsx :: 拖拽文件到窗口时显示遮罩并完成打开
-                   - UI-04 src/components/node-context-menu.tsx :: 节点右键菜单，提供复制 (mindforai) / 复制 (drawnixlite) / 复制 (Markdown) 与粘贴为子节点
+                  - UI-04 src/components/node-context-menu.tsx :: 节点右键菜单，提供复制 (mindforai) / 复制 (drawnixlite) / 复制 (Markdown) 与粘贴为子节点
               - text: 工具栏
                 children[7]:
                   - UI-05 src/components/toolbar/creation-toolbar.tsx :: 顶部中间工具栏，切换手形 / 选择 / 思维导图指针，并提供"编辑"按钮呼出文档文本编辑器
@@ -231,9 +231,9 @@ content[1]:
               - UTIL-09 src/libs/image-viewer.ts :: 图片查看器（缩放步进）
               - UTIL-10 src/utils/md5.ts :: 纯 TypeScript 的 MD5 摘要计算，供状态栏节点文本指纹使用
       - text: 5. 关键约定与常见任务
-        children[10]:
+        children[11]:
           - text: SYS-01 文档格式三选一
-            children[3]:
+            children[4]:
               - .mindforai：行式缩进树状文本，叶子独占一行、文本不加引号；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）
               - .smalldrawnix：精简 JSON 树（DATA-03）
               - .drawnix：完整 JSON 文档，保留画板与视口（DATA-02 / DATA-12）
@@ -267,6 +267,7 @@ content[1]:
               - npm test :: 运行全部单元测试（Vitest）
               - npm run lint :: oxlint 代码检查（格式化用 npm run format = oxfmt）
               - node scripts/generate-icons.mjs 03-chat :: 生成图标候选并把 03 设为生效图标
+              - npm run seo:submit :: 向 IndexNow 提交站点 URL（Bing / Yandex / Seznam / Naver），并打印 Google / 百度等人工收录步骤
           - text: SYS-07 测试约定
             children[4]:
               - 单元测试与被测文件同目录（*.spec.ts(x)），运行 vite.config.ts 内置的 Vitest 配置
@@ -281,7 +282,7 @@ content[1]:
               - Windows：rundocker.bat 双击即运行，内部用 chcp 65001 + PowerShell（优先 pwsh）调用 rundocker.ps1，避免中文乱码
               - 默认端口 8080，可用环境变量 MINDFORAI_PORT 覆盖；CFPAGE-DEPLOY.md 为 Cloudflare Pages 部署说明，脚本总说明见 deploy/README.md
           - SYS-09 代码内必须标注模块 ID（如 // DATA-01），便于后续 Agent 按 ID 检索；新功能先在本文档登记 ID 再写代码
-           - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .mindforai 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
+          - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .mindforai 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
       - text: 6. 其他脚本与文档
         children[9]:
           - SCR-01 scripts/generate-icons.mjs :: 生成 10 个候选图标、预览页、生效 favicon 与横版文字标志
@@ -290,6 +291,7 @@ content[1]:
           - SCR-04 runsrc.sh / runsrc.ps1 / runsrc.bat :: 本地开发一键启动，后台跑 Vite、重复执行即重启、就绪后打开浏览器
           - SCR-05 rundocker.sh / rundocker-linux.sh / rundocker-macos.sh :: Docker 一键部署（docker run --rm），容器停止自动删除，stop 子命令立即删除
           - SCR-06 rundocker.ps1 / rundocker.bat :: Windows 版 Docker 一键部署，双击运行，UTF-8 防乱码
+          - SCR-07 scripts/submit-search-engines.mjs :: 一键把站点 URL 提交到 IndexNow（覆盖 Bing / Yandex / Seznam / Naver），并打印 Google / 百度 / 搜狗 / 360 / 头条的人工收录步骤；GitHub Pages 部署后自动执行
           - DOC-01 docs/brand.md :: 品牌资源目录、候选图标含义与更换图标的方法
           - DOC-02 README.md / README_en.md :: 面向用户的中英文项目说明（功能、部署、开发命令）
           - DOC-03 CHANGELOG.md / CONTRIBUTING.md / SECURITY.md / CODE_OF_CONDUCT.md :: 变更记录与社区协作文档
@@ -305,3 +307,4 @@ content[1]:
           - SYS-25 一树多用：产品设计、项目拆解、任务派发共用同一棵树，拆好的任务树可直接投喂 AI 执行。
           - SYS-26 模板化交付：内置项目核心文档、TODO、Bug Report 等结构，导出即可被 AI 消费。
           - SYS-27 其他已实现亮点：Mermaid 思维导图、坏文件修正编辑器、多格式互通、节点跨窗口剪贴板、本地优先零上传、多窗口、多语言、主题切换、Docker 一键部署、MIT 开源可商用。
+manifest: UEsDBBQAAAAIAJeuZ12y7OmWuQQAAHCjAAASAAAAbWFuaWZlc3QubWluZGZvcmFp1Z3RcppAFIbv8xQ8QM24CwvE2z5GJtNhhCitgoOYNnn67q9TtcbtXYdvvUQsX5Y9/3/2HNiO77tmkWzbrn7th6p9eGuGfdt3i8Q8LPtubLrx2bwsHpJklozNr9GfWnXta7Mf/aEkWa7bTT003bM7nqPPLKn75WHrf7hIdkP/vVmOj5d//s8547rZ+uvW1fDjfGxTdatDtfKHP9aXE48XfWubn7t+OF30rwvb84VP53/0/Vbw18f6oV21XTUe/67nWWrnj6n/FNncpllauC8zNz8ess48udRY93Jz/a6vm/2di+fZzeUvpyfzqy+ufnMazevPeWSbsaqrsbr5OvjHXv3+fBPvfr2p3vuDv4AfhvVlCG9xH/8D8Off3gJ/O577Dygq1vUUA2FZJlbKxMqYWI6Jld/H+qxKs6Tdf+03m2q3b+pFMg6HZlpwqojkVBnJqUKSU6Ukp4pJjpWTkKBMD1ZQwUoiGFLDDFPzDXW0kHpvmGpvmFqPvIU2FIf0tNGDMyVEYEgRERh1DjKFRGBMKaGuQm1o6vPlBJqRCAwqJ9CsRGBQOQmMFz84gmnC5CPKDA7k/EtjzfU8OHP+CYw5/6i5nsCowcHM9QSGzPUEhiwRCgxZIhQYskQosCcqmOFKP1b7DVb8DVb9DVb+DVb/DdYADNYBDNYCDNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDUqgHRNrx8ODUohq04yEwqKdCOx4CgzqqoRbVDLWoZqhFtUi7ah6cKsDUrlq4hTo9GFSALVWAA+PFj9pgG3XyEaVGbVCipweDRm2KjVpq2hQYL76cZFQ5yahyklHlJKPKSUaVk4wqJwEsvpy4eB/y8uhULRQaVA2FBtVDoUEV0cVbtvXo3DDBlm6Fhg0TbPlWaNDUQWjU5IFbxHXxVks9Olf3sBVToWF1D1s1FRpW9yxX9yxY96jtKxdvKdyjcyUZWw4XGlaSsSVxoWElGVsWFxpWklOwJFNf1HHxdjo8OtctsN0OoWHdAtvxEBrWLSJuLgTbC4BR5UZwpFtzHtG5Nxy6PecJDSvZ0C06T2hYyYZu03lCwyb40K06g0siviAH5TgKdKqXCA3qJUKDeonQoF4iNKiXCA3qJcGEKgZxwT4UITSsuETbDfbo3BuO7QYLDesm2G6w0LBugu0GCw26MhEadWXi0aCth2DlIAa3wDaqhYZ1i2h7TR6de8OxvSahQdODgFzzZ2JBnYcFdRYW2DlITVALanpaUJPTQIrFl5OSKiclVU5KqpyUVDkpqXJSYuWEutItqevckrrKLZk7YSMjMrjGovuoB2f6qMCQPiowpI8KDOmjwVU+PzigvTSBQYMD+nKxwKjBQbU06GvFwcocX06gnVqBQeUE2qUNPu7Pn4PQ/o/AoHMQ+pIi9L0O6E5WWayPunpwasRC3zsQGDRioe8cCAwqJtD3DQSGrHRmsTaIPThV56ANYoFBdQ7aIM5ibXd6cGpwQNudAoMGB7TdKTBoEsBsREH/Q1ZkvgR9XR76qnxwc8KpsZDCFdwJZmosaCQi1y2O+XyGYz6dgbyF0DoVtEoFrVFBK1TQ+hS0OgWtTUF3wcihGj/lsuc3UEsBAhQAFAAAAAgAl65nXbLs6Za5BAAAcKMAABIAAAAAAAAAAAAAAAAAAAAAAG1hbmlmZXN0Lm1pbmRmb3JhaVBLBQYAAAAAAQABAEAAAADpBAAAAAA=

@@ -27,6 +27,7 @@ export const DocumentSessionSync = () => {
   const { appState, setAppState } = useMindForAI();
   const hasRestoredRef = useRef(false);
   const lastWrittenChildrenRef = useRef<unknown>(null);
+  const lastWrittenFilePathRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (hasRestoredRef.current) {
@@ -73,16 +74,21 @@ export const DocumentSessionSync = () => {
     if (!appState.filePath && !(board.children && board.children.length)) {
       return;
     }
-    const timer = window.setInterval(() => {
+    const writeCurrentSession = () => {
       if (PlaitBoard.hasBeenTextEditing(board)) {
         return;
       }
       const currentChildren = board.children;
-      if (lastWrittenChildrenRef.current === currentChildren) {
+      const currentFilePath = appState.filePath || null;
+      if (
+        lastWrittenChildrenRef.current === currentChildren &&
+        lastWrittenFilePathRef.current === currentFilePath
+      ) {
         return;
       }
       if (!Array.isArray(currentChildren) || currentChildren.length === 0) {
         lastWrittenChildrenRef.current = currentChildren;
+        lastWrittenFilePathRef.current = currentFilePath;
         clearDocumentSession();
         return;
       }
@@ -93,6 +99,7 @@ export const DocumentSessionSync = () => {
           return;
         }
         lastWrittenChildrenRef.current = currentChildren;
+        lastWrittenFilePathRef.current = currentFilePath;
         writeDocumentSession({
           type: 'mindforai-session',
           version: 1,
@@ -108,7 +115,9 @@ export const DocumentSessionSync = () => {
       } catch {
         return;
       }
-    }, SESSION_WRITE_DELAY_MS * 2);
+    };
+    writeCurrentSession();
+    const timer = window.setInterval(writeCurrentSession, SESSION_WRITE_DELAY_MS * 2);
     return () => {
       window.clearInterval(timer);
     };

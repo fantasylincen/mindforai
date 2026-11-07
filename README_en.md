@@ -31,6 +31,14 @@ Sketch your project as a mind map, and MindForAI compresses it into a **compact 
 
 **The problem it solves**: every new AI session starts from zero. You describe the background in prose and the model only half-understands it; you paste dozens of files and blow through your token budget. MindForAI lets you say it once — with one diagram and one file — and the context is complete.
 
+## Our Ultimate Goal
+
+**1 document + 1 agent = 1 project.**
+
+We believe project delivery in the AI era can be reduced to this equation: one document that is clear enough, plus one agent that can understand it, is enough to ship a project.
+
+MindForAI exists to rewrite the foundational documents agents work from with `.mindforai`: documents stop being background material for humans and become stricter, clearer, more explicit operating instructions for agents. Compared with Markdown, the tree structure puts goals, boundaries, constraints and acceptance criteria in deterministic positions, reducing ambiguity and goal drift — and giving agents noticeably stronger execution.
+
 ## Why MindForAI
 
 **Natural language is a poor interface for commanding an AI.**
@@ -76,7 +84,7 @@ MindForAI is more than a drawing tool: it is a **specification an AI can execute
 - 🤖 **AI-native export format**: `.mindforai` (line-based tree text) is several times smaller than raw JSON and far more token-efficient
 - 🧠 **Structured context**: hierarchy replaces long prose; goals, constraints and steps are stated once, cutting the risk of misread intent
 - 🎯 **Precise change targeting**: module IDs plus branch paths let the agent navigate the tree instead of searching the whole repository
-- 📦 **Reusable document templates**: project core document / TODO / bug report / AI rules / code map — see the [template library](./templates/)
+- 📦 **Reusable document templates**: project core document / task board / bug report / working methods / code review — see the [template library](./templates/)
 - ✂️ **Reusable nodes**: copy a rule, constraint or task template into another project with one node
 - 🔗 **Mermaid mind maps**: paste Mermaid text and get an editable map — ideal for migrating existing docs
 - 🩹 **Broken-file recovery**: parse errors are highlighted with a one-click formatter, so files damaged by an AI can be rescued
@@ -188,15 +196,14 @@ Format rules: node text is never wrapped in double quotes and follows `-` direct
 
 ## Template Library
 
-The [`templates/`](./templates/) directory contains ready-to-reuse `.mindforai` templates:
+[`templates/Templets.mindforai`](./templates/Templets.mindforai) is a single template collection you can drop straight into MindForAI. It puts real project documents, task boards, everyday working methods and code review flows into one tree:
 
-- [Project core document](./templates/project.mindforai)
-- [TODO list](./templates/todo.mindforai)
-- [Bug report](./templates/bug-report.mindforai)
-- [AI collaboration rules](./templates/ai-rules.mindforai)
-- [Code map](./templates/code-map.mindforai)
+- **Example project A: mindforai**: project core document, completed / in-progress tasks, TODO and usage instructions
+- **Example project B: BeamStreamS3**: an ESP32-S3 Wi-Fi microphone — hardware conventions, firmware modules, configuration protocol and task records
+- **The author's working methods**: running Docker with a local agent, one-click deploy scripts, common AI workflows for the web edition, and the first step when starting work on an old project
+- **Our ultimate goal**: 1 document + 1 agent = 1 project
 
-Download a file, drop it into your project root, or open it directly in MindForAI and adapt it. You are also welcome to submit the templates you use most often so others can reuse them.
+Download the file, drop it into your project root, or open it directly in MindForAI and adapt it. You can also right-click and copy only the branch you need and keep it as a standalone document. You are welcome to submit the templates you use most often to the [`templates/`](./templates/) directory so others can reuse them.
 
 ## When a file is broken
 
@@ -286,11 +293,13 @@ mindforai/
 
 ## Acknowledgements
 
-**Heartfelt thanks to the original [Drawnix](https://github.com/plait-board/drawnix) project and its developers.**
+**Heartfelt thanks to the original [Drawnix](https://github.com/plait-board/drawnix) project and its developers, and to every developer, researcher, open-source contributor and model / tool provider who contributes to the AI ecosystem.**
 
-MindForAI grew out of Drawnix. We are grateful for the original team's open-source work on the board engine, mind maps, flowcharts, the infinite canvas and the plugin architecture — their excellent work is what allows this project to start from such a strong foundation.
+MindForAI grew out of Drawnix. We are especially grateful to the original Drawnix authors for their open-source work on the board engine, mind maps, flowcharts, the infinite canvas and the plugin architecture — their excellent work is what allows this project to start from such a strong foundation.
 
-Thanks also to the maintainers of the [Plait](https://github.com/worktile/plait) drawing framework.
+Special thanks also to the DeepSeek team for their model capabilities and open ecosystem, which put powerful AI programming within reach of individual developers and small teams.
+
+Thanks also to the maintainers of the [Plait](https://github.com/worktile/plait) drawing framework, and to everyone who has helped MindForAI grow through issues, pull requests, documentation and feedback.
 
 > ⚠️ This is an independent derivative project and is not affiliated with the original Drawnix team. The original project's trademarks and copyright remain with its authors.
 

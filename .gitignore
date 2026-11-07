@@ -16,6 +16,9 @@ node_modules
 .settings/
 *.sublime-workspace
 
+# 私有汇总文档，禁止提交
+ALL.mindforai
+
 # misc
 /.sass-cache
 /connect.lock
@@ -34,6 +37,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+*:Zone.Identifier
 
 .nx/cache
 .nx/workspace-data
