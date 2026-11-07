@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img">
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0.0000" stop-color="#1ea9ef"/>
+      <stop offset="0.2500" stop-color="#6852f2"/>
+      <stop offset="0.5000" stop-color="#ab56d9"/>
+      <stop offset="0.7500" stop-color="#f160b5"/>
+      <stop offset="1.0000" stop-color="#ef8861"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#brand)"/>
+<g fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round">
+    <path d="M148 176 L256 136"/>
+    <path d="M148 176 L256 256"/>
+    <path d="M148 176 L256 376"/>
+    <path d="M148 336 L256 136"/>
+    <path d="M148 336 L256 256"/>
+    <path d="M148 336 L256 376"/>
+    <path d="M256 136 L364 176"/>
+    <path d="M256 136 L364 336"/>
+    <path d="M256 256 L364 176"/>
+    <path d="M256 256 L364 336"/>
+    <path d="M256 376 L364 176"/>
+    <path d="M256 376 L364 336"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="148" cy="176" r="30"/>
+    <circle cx="148" cy="336" r="30"/>
+    <circle cx="256" cy="136" r="36"/>
+    <circle cx="256" cy="256" r="36"/>
+    <circle cx="256" cy="376" r="36"/>
+    <circle cx="364" cy="176" r="30"/>
+    <circle cx="364" cy="336" r="30"/>
+  </g>
+</svg>

@@ -1,0 +1,307 @@
+type: mindforai
+version: 1
+content[1]:
+  - text: MindForAI
+    children[7]:
+      - text: 1. 项目概述
+        children[7]:
+          - SYS-11 项目名称：`MindForAI`（内部包名 @mindforai/source，基于 Drawnix 演进）
+          - SYS-12 一句话目标：用思维导图 / 流程图 / 自由画笔梳理项目，并导出 AI 可直接阅读的 `.mindforai` 紧凑文本文档。
+          - SYS-13 产品定位：AI 时代人类与 AI 的最佳沟通数据结构。用结构化树状文档消除自然语言歧义、概念混淆与目标漂移，让 AI 按图施工、行为不跑偏。
+          - SYS-14 核心价值：`.mindforai` 比 JSON 小、比 Markdown 更好编辑；人易读、AI 更易读；节点可复制复用；AI 可沿树快速定位修改点，减少全仓库搜索与上下文污染；适用于产品设计、项目拆解与任务派发。
+          - SYS-15 技术架构：Nx monorepo + React 19 + TypeScript + Vite；画板内核基于 Plait（@plait/core / mind / draw / layouts / common），富文本基于 Slate；零后端，文档与当前文件句柄仅存内存，浏览器只保存语言与主题，文件读写走本地文件系统。
+          - SYS-16 核心任务：维护三种文档格式（.mindforai / .smalldrawnix / .drawnix）的读写与校验，在无限画布上提供思维导图、流程图、自由画笔与 Mermaid 思维导图能力，并提供多窗口、多语言、主题切换与 Docker 静态部署。
+          - text: SYS-17 目标结构（Agent 生成代码时须按此落盘）
+            children[9]:
+              - apps/web/ : Web 应用（Vite + React 19），唯一对外产物；构建产物在 dist/apps/web
+              - apps/web-e2e/ : Playwright 端到端测试
+              - packages/mindforai/ : 核心白板库（全部业务组件、插件、文档序列化），业务改动主要在此
+              - packages/react-board/ : Plait 白板内核的 React 渲染层
+              - packages/react-text/ : 基于 Slate 的富文本渲染层
+              - scripts/ : 构建辅助脚本（图标生成、发版、发布）
+              - deploy/ : 启动与部署脚本说明文档（脚本本体在仓库根目录：runsrc* / rundocker*）
+              - docs/ : 人类阅读的文档（brand.md 等），非 Agent 首选资料；.mindforai 文档解析器实现在 packages/mindforai/src/data/
+              - 禁止读取目录：node_modules/、dist/、.nx/、.git/、apps/web/public/（仅静态图片与图标资源）
+      - text: 2. 模块编号规则
+        children[5]:
+          - 前缀约定：WEB = 应用外壳，DATA = 文档格式与读写，BOARD = 画板渲染层，TEXT = 富文本层，UI = 界面组件，PLUG = 操作插件，MH = Mermaid 思维导图，I18N = 国际化，UTIL = 工具函数，SYS = 系统级约定
+          - 拆解粒度：最小到单个程序文件，一句话描述 + 相对路径
+          - 找代码路径：先在本文档按功能关键字定位模块 ID，再按 ID 在代码中检索（SYS-09 要求代码内标注 ID）
+          - 样式文件（*.scss）与测试文件（*.spec.*）随所属组件记录，不单独编号
+          - 二进制资源（png / ico / svg 图片）只列目录，不再拆解
+      - text: 3. Web 应用（WEB）
+        children[3]:
+          - text: 应用入口与外壳
+            children[6]:
+              - WEB-01 apps/web/index.html :: Vite 页面模板，挂载 #root 并引用应用脚本
+              - WEB-02 apps/web/vite.config.ts :: Web 应用构建配置（React 插件、别名、产物目录）
+              - WEB-03 apps/web/src/main.tsx :: 浏览器入口，以 StrictMode 创建 React 根并渲染 App
+              - WEB-04 apps/web/src/app/app.tsx :: 应用主组件，维护内存中的文档状态与轻量偏好
+              - WEB-05 apps/web/src/app/preferences.ts :: 应用默认偏好常量（默认暗夜主题、中文），不再写入 localStorage；主题与语言随文档 manifest 记忆
+              - WEB-06 apps/web/src/styles.scss :: 应用全局样式与基础布局
+          - text: 静态资源与站点配置（不拆解二进制）
+            children[4]:
+              - WEB-08 apps/web/public/_headers / _redirects / robots.txt / sitemap.xml :: 静态托管头信息、SPA 回退与搜索引擎配置
+              - WEB-09 apps/web/public/favicon.svg / favicon.ico / apple-touch-icon.png / logo/app-icon.png :: 生效图标与位图回退资源
+              - WEB-10 apps/web/public/logo/icons/ :: 10 个候选图标 SVG 与预览页 index.html
+              - WEB-11 apps/web/public/logo/logo_mindforai_h*.svg :: 浅色 / 深色横版文字标志
+          - text: 端到端测试
+            children[2]:
+              - WEB-12 apps/web-e2e/playwright.config.ts :: Playwright 运行配置（端口、浏览器、报告）
+              - WEB-13 apps/web-e2e/src/example.spec.ts :: 冒烟用例，验证首页标题与画板容器可见
+      - text: 4. 核心白板库（packages/mindforai）
+        children[9]:
+          - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
+            children[28]:
+              - DATA-01 src/data/mindforai-text.ts :: .mindforai 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
+              - DATA-02 src/data/toon-document.ts :: 三种格式的保存与加载总入口，并兼容读取旧版 TOON 文档
+              - DATA-03 src/data/compact-document.ts :: .drawnixlite 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
+              - DATA-04 src/data/document-format.ts :: 按扩展名优先、文件头类型声明兜底判断文档格式（含 .md 等 Markdown 扩展名）
+              - DATA-05 src/data/document-load.ts :: 统一文档读取入口，识别格式（含 Markdown）并返回内容或可定位的解析错误
+              - DATA-06 src/data/document-save.ts :: 保存 / 另存为流程（.mindforai / .drawnixlite / .md 三种格式）、清单内嵌与保存结果提示的统一处理
+              - DATA-07 src/data/document-validation.ts :: 各格式（含 Markdown 转换）的结构校验、错误定位与格式化输出
+              - DATA-08 src/data/document-issues.ts :: 解析错误码、行列定位信息与行列换算工具
+              - DATA-09 src/data/drop-open.ts :: 拖拽文件到窗口时打开画板文档的公共逻辑
+              - DATA-10 src/data/blob.ts :: 文件内容解析、DataURL 读取与图片类型判断工具
+              - DATA-11 src/data/filesystem.ts :: File System Access 的打开、保存与另存为封装；传入既有文件句柄时直接静默写入，不再弹出选择器
+              - DATA-12 src/data/json.ts :: 文档序列化与读写工具，文件句柄路径解析
+              - DATA-13 src/data/image.ts :: 图片元素插入与命中检测相关数据操作
+              - DATA-14 src/data/node-clipboard.ts :: 思维导图节点复制 / 粘贴为子节点，经系统剪贴板跨窗口共享
+              - DATA-15 src/data/types.ts :: 文档数据、导出类型与节点结构的 TypeScript 类型定义
+              - DATA-16 src/constants.ts :: 全局常量（事件名、扩展名、MIME 类型、版本号）
+              - DATA-17 src/errors.ts :: 统一错误类型（如 AbortError）
+              - DATA-18 src/types.ts :: 库级通用类型（指针类型、DataURL 等）
+              - DATA-19 src/data/document-manifest.ts :: 清单的采集、应用与内嵌读写：记录节点样式、折叠状态、元数据、视口、文档主题与界面语言，经 DATA-27 压缩为 ZIP+Base64 后写入主文档 manifest 字段，打开时从该字段还原主题与语言；不再生成独立清单文件
+              - DATA-20 src/data/document-session.ts :: 仅把当前文档文本与文件身份写入本地会话用于刷新恢复，视口、主题、语言等文件元数据不再进入会话缓存（由 DATA-19 清单承载）
+              - DATA-21 src/data/markdown-to-mindforai.ts :: 将 Markdown 文档解析为 mindforai 树结构，支持标题层级、有序 / 无序列表、嵌套列表、引用、表格、代码块与行内格式清理
+              - DATA-22 src/data/document-merge.ts :: 将同时拖入 / 打开的多个文档合并成一张思维导图，以文件名作为分支节点
+              - DATA-23 src/data/document-fingerprint.ts :: 统计当前画板或选中子树的所有节点数量，并按默认先序拼接节点文本计算 MD5 指纹
+              - DATA-24 src/data/document-open.ts :: 统一多文件读取、合并与应用到画板的打开流程，供拖拽、菜单与首页复用；从主文档 manifest 字段还原节点状态，无内嵌清单时按 DATA-26 折叠到默认可见层级
+              - DATA-25 src/data/document-manifest-text.ts :: 清单与 .mindforai 文本树的互相转换：manifest 根节点下含 document / theme / language 字段与 viewport / nodes 段落，节点状态写成 node 路径 + key: value 行
+              - DATA-26 src/data/document-expansion.ts :: 没有内嵌清单时按可见层级折叠节点，默认只展开到第三级（一~三级可见，三级节点收起）
+              - DATA-27 src/data/document-manifest-embed.ts :: 清单文本与主文档 manifest 字段的编解码：先 ZIP 压缩再转 Base64，读取时 Base64 解码再解压还原为清单文本
+              - DATA-28 src/data/document-reset.ts :: 关闭 / 清空当前文件时把画板元素、选择、撤销历史、视口与会话缓存重置到初始欢迎态，供 UI-01 与快捷键 Ctrl+N 复用
+              - DATA-29 src/data/node-search.ts :: 遍历全部思维导图节点检索文本，展开当前节点的祖先、居中定位目标节点并用 CSS Highlight 高亮匹配文本
+              - DATA-30 src/data/markdown-document.ts :: mindforai 树与 Markdown 文本互转（标题层级 + 深层列表），并在 Markdown 末尾追加 / 提取内嵌清单字段，供 .md 保存与打开识别
+              - DATA-31 src/data/markdown-document-save.ts :: 把画板内容保存为 .md 文件，序列化为 Markdown 并在末尾内嵌 manifest 字段
+          - text: 4.2 画板渲染层（BOARD，packages/react-board）
+            children[8]:
+              - BOARD-01 src/wrapper.tsx :: 白板包装组件，组装 Plait 内核与所有基础插件并渲染
+              - BOARD-02 src/board.tsx :: 白板 React 组件本体，处理 roughjs 绘制、变更监听与视口
+              - BOARD-03 src/plugins/board.ts :: ReactBoard 扩展类型定义（renderComponent 接口）
+              - BOARD-04 src/plugins/with-react.tsx :: 用 React 渲染 Slate 文本的平台插件
+              - BOARD-05 src/plugins/with-pinch-zoom-plugin.ts :: 触屏双指缩放与平移插件
+              - BOARD-06 src/hooks/use-board.tsx :: 画板对象 React Context 与订阅机制
+              - BOARD-07 src/hooks/use-board-event.ts / use-plugin-event.tsx :: 画板事件与插件事件的订阅钩子
+              - BOARD-08 src/styles/index.scss / mixins.scss :: 画板层样式与 SCSS 混入
+          - text: 4.3 富文本层（TEXT，packages/react-text）
+            children[5]:
+              - TEXT-01 src/text.tsx :: 基于 Slate 的文本编辑器组件（渲染元素 / 叶子与快捷键）
+              - TEXT-02 src/plugins/with-text.ts :: 文本编辑器行为扩展（换行、粘贴等）
+              - TEXT-03 src/plugins/with-link.tsx :: 链接内联元素的渲染与编辑（含 Chromium 光标补丁）
+              - TEXT-04 src/custom-types.ts :: 文本层自定义 Element / Text 类型
+              - TEXT-05 src/styles/index.scss :: 富文本层样式
+          - text: 4.4 库主体入口（CORE）
+            children[6]:
+              - CORE-01 src/mindforai.tsx :: 对外主组件 MindForAI，组装画板、工具栏、拖拽层与状态栏
+              - CORE-02 src/hooks/use-mindforai.tsx :: MindForAI 的 React Context（板对象、状态、指针类型、工具状态）
+              - CORE-03 src/index.ts :: 库公开导出入口
+              - CORE-05 src/mermaid-mind-editing.ts :: Mermaid 思维导图节点的文本编辑辅助
+              - CORE-06 testing/index.ts / setup-testing-board.ts :: 单元测试用的画板测试环境搭建
+              - CORE-07 src/css.d.ts :: 样式属性与自定义 CSS 变量的类型声明
+          - text: 4.5 Mermaid 思维导图（MH）——把 Mermaid 文本转成可编辑思维导图
+            children[6]:
+              - MH-01 src/mermaid-mind.ts :: Mermaid 语法到 Plait 思维导图元素的构建与尺寸缓存
+              - MH-02 src/mermaid-mind-node.ts :: 生成的思维导图节点选择、缩放与交互处理
+              - MH-03 src/mermaid-mind-sync.ts :: Mermaid 文本变化后同步更新画板元素
+              - MH-04 src/plugins/mermaid-mind-element.ts :: 注册 Mermaid 思维导图元素类型与创建逻辑
+              - MH-05 src/plugins/components/mermaid-mind.tsx :: Mermaid 思维导图元素在画板上的 React 渲染与双击编辑
+              - MH-06 src/mermaid-mind-editing.ts :: 见 CORE-05（编辑辅助，与 MH 系列同属一条流程）
+          - text: 4.6 界面组件（UI）
+            children[7]:
+              - text: 文档与状态
+                children[4]:
+                  - UI-01 src/components/document-title.tsx :: 顶部工具栏中的当前文件名显示，带叉号关闭按钮：调用 DATA-28 彻底清空画板元素、选择、撤销历史、视口、文件句柄与会话缓存并回到欢迎页
+                  - UI-02 src/components/document-status-bar.tsx :: 左下角状态栏，显示文件路径、保存状态与自动保存开关；宽度随文字自适应，仅在浏览器宽度不足时收缩
+                  - UI-03 src/components/document-drop-layer.tsx :: 拖拽文件到窗口时显示遮罩并完成打开
+                   - UI-04 src/components/node-context-menu.tsx :: 节点右键菜单，提供复制 (mindforai) / 复制 (drawnixlite) / 复制 (Markdown) 与粘贴为子节点
+              - text: 工具栏
+                children[7]:
+                  - UI-05 src/components/toolbar/creation-toolbar.tsx :: 顶部中间工具栏，切换手形 / 选择 / 思维导图指针，并提供"编辑"按钮呼出文档文本编辑器
+                  - UI-06 src/components/toolbar/pencil-mode-toolbar.tsx :: 画笔模式下的画笔样式工具栏
+                  - UI-07 src/components/toolbar/theme-toolbar.tsx :: 主题下拉工具栏（暗夜等主题切换）
+                  - UI-08 src/components/toolbar/zoom-toolbar.tsx :: 缩放比例菜单（适配 / 100%），去掉加减号按钮，右上角常显当前缩放比例
+                  - UI-09 src/components/toolbar/app-toolbar/app-toolbar.tsx :: 左上角主菜单工具栏容器
+                  - UI-10 src/components/toolbar/app-toolbar/app-menu-items.tsx :: 主菜单项定义（打开、另存为、导出、新窗口等）
+                  - UI-11 src/components/toolbar/app-toolbar/language-switcher-menu.tsx :: 界面语言切换菜单
+              - text: 元素弹出工具栏
+                children[8]:
+                  - UI-12 src/components/toolbar/popup-toolbar/popup-toolbar.tsx :: 选中元素后的浮动工具栏容器
+                  - UI-13 src/components/toolbar/popup-toolbar/fill-button.tsx :: 填充色选择按钮
+                  - UI-14 src/components/toolbar/popup-toolbar/stroke-button.tsx :: 描边样式按钮
+                  - UI-15 src/components/toolbar/popup-toolbar/arrow-mark-button.tsx :: 箭头标记选择按钮
+                  - UI-16 src/components/toolbar/popup-toolbar/insert-mermaid-button.tsx :: 插入 Mermaid 思维导图按钮
+                  - UI-17 src/components/toolbar/popup-toolbar/expand-collapse-buttons.tsx :: 思维导图全部展开 / 全部折叠按钮（递归处理所有后代，快捷键 Ctrl+Alt+E / Ctrl+Alt+C）；全部折叠后由 Plait 原生渲染的“折叠气泡”（也叫折叠圆饼 / 收拢气泡 / 折叠徽标，即节点右侧带节点数量或省略号的实心圆）承载收起状态
+                  - UI-18 src/components/toolbar/popup-toolbar/expand-collapse.ts :: 展开 / 折叠能力核心实现；getAllDescendants 获取全部后代，collapseOrExpandChildren 处理一级，collapseOrExpandAllDescendants 先一次性计算全部后代路径再统一写入（避免父节点折叠后深层路径失效），并保留被选中节点（含根节点）展开，使每个分支右侧出现可点击的原生“折叠气泡”，可随时再次展开
+                  - UI-19 src/components/arrow-mark-picker.tsx :: 箭头标记选择弹层
+              - text: 通用基础组件
+                children[9]:
+                  - UI-20 src/components/menu/ :: 菜单体系（menu.tsx、menu-item 系列、menu-separator、common.ts 点击逻辑）
+                  - UI-21 src/components/dialog/dialog.tsx :: 通用对话框容器与内容区
+                  - UI-22 src/components/popover/popover.tsx :: 通用弹出层（基于 floating-ui）
+                  - UI-25 src/components/color-picker.tsx :: 颜色选择器（含透明 / 无颜色选项）
+                  - UI-26 src/components/size-slider.tsx :: 尺寸滑块（线宽等数值调节）
+                  - UI-27 src/components/island.tsx :: 悬浮岛式容器（工具栏基座，借鉴 Excalidraw）
+                  - UI-28 src/components/stack.tsx :: 水平 / 垂直堆叠布局容器
+                  - UI-29 src/components/tool-button.tsx :: 工具栏图标按钮；图标按钮默认可见，仅 visible={false} 或 hidden 时隐藏
+                  - UI-30 src/components/icons.tsx :: 全库 SVG 图标集合
+              - text: 反馈与引导
+                children[5]:
+                  - UI-31 src/components/toast/toast.tsx :: 轻提示（toast）渲染与队列
+                  - UI-32 src/components/clean-confirm/clean-confirm.tsx :: 清空画布前的二次确认弹窗
+                  - UI-33 src/components/tutorial.tsx :: 首页标题头（品牌标题 + 描述），并提供插槽承载下方 UI-44 拖拽提示面板
+                  - UI-34 src/components/text-editor/text-editor-dialog.tsx :: 文档文本编辑器，支持解析错误修正与当前文档文本直接编辑
+                  - UI-35 src/components/text-editor/highlight.ts :: 为各文档格式提供轻量逐行语法着色
+              - text: 搜索与帮助
+                children[2]:
+                  - UI-45 src/components/search/search-panel.tsx :: 浮动搜索面板，在主菜单或 Ctrl/Cmd+F 打开，显示当前匹配序号 / 总数并支持上下切换
+                  - UI-46 src/components/help/help-dialog.tsx :: 主菜单帮助对话框，分组展示基本操作与常用快捷键
+              - text: 其他
+                children[8]:
+                  - UI-36 src/components/popup/link-popup/link-popup.tsx :: 链接编辑弹层（输入 URL、打开 / 移除）
+                  - UI-37 src/components/logo 与教程相关图片 :: 见 WEB-09 / WEB-10（不重复拆解）
+                  - UI-38 组件样式 :: 每个组件目录下同名 *.scss，随组件修改同步维护
+                  - UI-39 src/components/document-node-clipboard.tsx :: 拦截复制与粘贴事件，复制选中节点为 mindforai 文本，Ctrl+V 等效粘贴为子节点
+                  - UI-41 src/components/document-session-sync.tsx :: 同步当前文档到本地会话并在刷新后恢复，会话文本同样内嵌清单
+                  - UI-42 src/components/node-more/node-more-hint.tsx :: 节点加减号圆形按钮的 Ctrl 快捷交互：基于真实 DOM 命中折叠 / 展开按钮，悬浮提示（跟随主题配色）与 Ctrl+点击全部展开 / 折叠其全部后代分支（被点击节点本身保持展开，根节点同样可再次展开），并阻止框选
+                  - UI-43 src/components/node-fingerprint-status.tsx :: 左下角状态栏显示所有节点或当前选中节点的节点数与文本 MD5（MD5 仅展示前四位与后四位，完整值放入悬浮提示），仅在文档变化且非文字编辑时重算
+                  - UI-44 src/components/welcome.tsx :: 空画布首页拖拽提示面板，与 UI-33 处于同一容器内：显示支持的文件类型（mindforai / markdown / drawnixlite）、打开按钮，并在文件拖入画布时高亮反馈
+          - text: 4.7 画板操作插件（PLUG）
+            children[5]:
+              - text: 通用插件
+                children[6]:
+                  - PLUG-01 src/plugins/with-common.tsx :: 组装通用插件链（图片 / 文本 / i18n 渲染组件注册）
+                  - PLUG-02 src/plugins/with-hotkey.ts :: 快捷键插件（保存、撤销重做、指针切换）
+                  - PLUG-03 src/plugins/with-image.tsx :: 图片元素的选择、缩放与下载
+                  - PLUG-04 src/plugins/with-text-link.tsx :: 文本中链接的点击与编辑行为
+                  - PLUG-05 src/plugins/with-mind-extend.tsx :: 思维导图能力扩展（节点新增、选择、编辑入口）
+                  - PLUG-06 src/plugins/with-tool-state-sync.ts :: 工具状态与指针类型在画板与 React 间同步
+              - text: 铅笔绘制
+                children[2]:
+                  - PLUG-07 src/plugins/with-pencil.ts :: 铅笔指针事件拦截与状态维护
+                  - PLUG-08 src/components/toolbar/pencil-mode-toolbar.tsx :: 见 UI-06（画笔模式 UI）
+              - text: 自由画笔
+                children[9]:
+                  - PLUG-09 src/plugins/freehand/with-freehand.ts :: 自由画笔主插件，串联创建 / 擦除 / 片段复制
+                  - PLUG-10 src/plugins/freehand/with-freehand-create.ts :: 自由画笔元素的创建、压感与平滑
+                  - PLUG-11 src/plugins/freehand/with-freehand-erase.ts :: 橡皮擦模式下的元素删除
+                  - PLUG-12 src/plugins/freehand/with-freehand-fragment.ts :: 自由画笔元素的剪切 / 复制 / 粘贴处理
+                  - PLUG-13 src/plugins/freehand/freehand.component.ts :: 自由画笔元素的 React 渲染组件
+                  - PLUG-14 src/plugins/freehand/freehand.generator.ts :: 自由画笔路径生成器（描边、线帽）
+                  - PLUG-15 src/plugins/freehand/smoother.ts :: 手写笔迹的平滑算法
+                  - PLUG-16 src/plugins/freehand/presets.ts :: 画笔颜色预设
+                  - PLUG-17 src/plugins/freehand/type.ts / utils.ts :: 自由画笔元素类型定义与命中 / 几何工具
+              - text: 插件内渲染组件
+                children[2]:
+                  - PLUG-18 src/plugins/components/image.tsx :: 图片元素的 React 渲染组件
+                  - PLUG-19 src/plugins/components/emoji.tsx :: emoji 元素的 React 渲染组件
+              - text: 其他
+                children[3]:
+                  - PLUG-20 src/transforms/property.ts :: 元素属性变换统一入口（填充、描边等）
+                  - PLUG-21 src/plugins/with-ctrl-multi-select.ts :: 按住 Ctrl 或 Command 点击节点的多选支持
+                  - PLUG-22 src/plugins/with-shift-range-select.ts :: Shift 区间多选功能的空壳模块，旧逻辑已全部移除且不再接入画板，等待重制
+          - text: 4.8 国际化（I18N）
+            children[6]:
+              - I18N-01 src/i18n/index.tsx :: 语言 Context、切换逻辑与 Plait 语言联动
+              - I18N-02 src/i18n.tsx :: 对外转导出入口（I18nProvider / useI18n / setBoardLanguage）
+              - I18N-03 src/i18n/types.ts :: 翻译字典类型定义
+              - I18N-04 src/i18n/translations/zh.ts / en.ts / ru.ts / ar.ts / vi.ts :: 中文 / 英文 / 俄文 / 阿拉伯文 / 越南文文案
+              - I18N-05 src/i18n/translations/index.ts :: 翻译字典汇总导出
+              - I18N-06 新增文案规则 :: 先加到 types.ts，再补齐全部 5 个语言文件，避免类型报错
+          - text: 4.9 工具函数（UTIL）
+            children[10]:
+              - UTIL-01 src/utils/common.ts :: 通用工具（平台判断、画板转图片、下载）
+              - UTIL-02 src/utils/image.ts :: 选中元素导出 SVG / PNG 与图片数据转换
+              - UTIL-03 src/utils/color.ts :: 颜色常量与主题色解析
+              - UTIL-04 src/utils/property.ts :: 元素几何 / 类型判断（闭合图形、自定义几何等）
+              - UTIL-05 src/utils/laser-pointer.ts :: 激光笔轨迹效果
+              - UTIL-06 src/utils/utility-types.ts :: 工具类型（如 ResolutionType）
+              - UTIL-07 src/utils/index.ts :: 工具函数汇总导出
+              - UTIL-08 src/constants/color.ts :: 颜色与透明 / 无颜色常量
+              - UTIL-09 src/libs/image-viewer.ts :: 图片查看器（缩放步进）
+              - UTIL-10 src/utils/md5.ts :: 纯 TypeScript 的 MD5 摘要计算，供状态栏节点文本指纹使用
+      - text: 5. 关键约定与常见任务
+        children[10]:
+          - text: SYS-01 文档格式三选一
+            children[3]:
+              - .mindforai：行式缩进树状文本，叶子独占一行、文本不加引号；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）
+              - .smalldrawnix：精简 JSON 树（DATA-03）
+              - .drawnix：完整 JSON 文档，保留画板与视口（DATA-02 / DATA-12）
+              - .md：标准 Markdown 文本，打开时解析为思维导图、保存时把画板写回 Markdown（DATA-30 / DATA-31），末尾同样内嵌 manifest 字段
+          - text: SYS-02 常见任务落点
+            children[6]:
+              - 改 .mindforai 解析 / 序列化 → DATA-01（错误定位在 DATA-08，校验在 DATA-07）；改内嵌清单编解码 → DATA-27
+              - 加一种可打开的文件格式 → DATA-04 判断 + DATA-05 读取 + DATA-06 保存 + DATA-16 常量
+              - 改菜单项 / 新窗口 → UI-10
+              - 改画板交互（缩放、拖拽、快捷键）→ BOARD-01 / BOARD-05 / PLUG-02
+              - 加语言 → I18N-04 与 I18N-05，并过一遍 I18N-03 类型
+              - 改 Mermaid 导图生成 → MH-01 ~ MH-05 一条链
+          - text: SYS-03 解析错误处理流程
+            children[3]:
+              - DATA-05 读取失败 → 返回 DocumentValidationIssue（行号 + 错误码）
+              - UI-34 弹出文本修正编辑器，UI-35 负责着色与红线
+              - 用户可格式化、修正后重新校验并打开
+          - text: SYS-04 渲染分层
+            children[3]:
+              - Plait 内核负责画板模型与几何；react-board 把内核接到 React；react-text 负责 Slate 文本
+              - mindforai 库只做业务组装与 UI，禁止在组件里直接操作 Plait 内部状态，走插件（PLUG）
+              - 组件样式与组件同目录（*.scss），风格统一继承 src/styles/
+          - SYS-05 代码规范：单个程序文件不超过 800 行；不引入未经确认的新依赖；先查现有组件（UI-20 ~ UI-30）再新建
+          - SYS-29 术语：折叠气泡（同义：折叠圆饼 / 收拢圆饼 / 折叠徽标 / 收拢气泡）:: 思维导图节点收拢后，在节点右侧显示的实心圆，内含被收起的节点数量，数量过多时显示省略号，由 Plait 内核原生绘制
+          - text: SYS-06 常用命令
+            children[7]:
+              - npm start :: 开发服务器 http://localhost:7200
+              - bash runsrc.sh / runsrc.bat :: 本地源码一键启动（重复执行即重启），停止用 runsrc.sh stop
+              - npm run build:web :: 构建 Web 应用，产物 dist/apps/web
+              - npm run build :: 构建全部包
+              - npm test :: 运行全部单元测试（Vitest）
+              - npm run lint :: oxlint 代码检查（格式化用 npm run format = oxfmt）
+              - node scripts/generate-icons.mjs 03-chat :: 生成图标候选并把 03 设为生效图标
+          - text: SYS-07 测试约定
+            children[4]:
+              - 单元测试与被测文件同目录（*.spec.ts(x)），运行 vite.config.ts 内置的 Vitest 配置
+              - 涉及画板的测试用 CORE-06 的 setup-testing-board 搭建环境
+              - 端到端测试在 apps/web-e2e（WEB-12 / WEB-13），覆盖首页可用性
+              - 修改 DATA-01 / DATA-03 / DATA-07 必须同步更新对应 spec
+          - text: SYS-08 部署与构建
+            children[5]:
+              - Dockerfile 多阶段构建（Node 构建 → 静态站点托管）；docker-compose.yml 仅作可选的手动编排，脚本默认不使用
+              - 根目录 rundocker.sh（通用）：检查环境 → docker build（失败重试一次，仍失败且本地已有镜像则改用本地镜像）→ docker run --rm -d → 等待就绪 → 打开浏览器 → 退出；容器停止即被 Docker 自动删除，stop 子命令执行 docker rm -f 立即删除
+              - 根目录 rundocker-linux.sh / rundocker-macos.sh 为平台包装（Linux 处理无桌面与 systemd、macOS 等待 Docker Desktop），最终 exec 通用脚本
+              - Windows：rundocker.bat 双击即运行，内部用 chcp 65001 + PowerShell（优先 pwsh）调用 rundocker.ps1，避免中文乱码
+              - 默认端口 8080，可用环境变量 MINDFORAI_PORT 覆盖；CFPAGE-DEPLOY.md 为 Cloudflare Pages 部署说明，脚本总说明见 deploy/README.md
+          - SYS-09 代码内必须标注模块 ID（如 // DATA-01），便于后续 Agent 按 ID 检索；新功能先在本文档登记 ID 再写代码
+           - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .mindforai 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
+      - text: 6. 其他脚本与文档
+        children[9]:
+          - SCR-01 scripts/generate-icons.mjs :: 生成 10 个候选图标、预览页、生效 favicon 与横版文字标志
+          - SCR-02 scripts/release-version.js :: 发版时统一升版本号
+          - SCR-03 scripts/publish.js :: 构建并发布包到 npm
+          - SCR-04 runsrc.sh / runsrc.ps1 / runsrc.bat :: 本地开发一键启动，后台跑 Vite、重复执行即重启、就绪后打开浏览器
+          - SCR-05 rundocker.sh / rundocker-linux.sh / rundocker-macos.sh :: Docker 一键部署（docker run --rm），容器停止自动删除，stop 子命令立即删除
+          - SCR-06 rundocker.ps1 / rundocker.bat :: Windows 版 Docker 一键部署，双击运行，UTF-8 防乱码
+          - DOC-01 docs/brand.md :: 品牌资源目录、候选图标含义与更换图标的方法
+          - DOC-02 README.md / README_en.md :: 面向用户的中英文项目说明（功能、部署、开发命令）
+          - DOC-03 CHANGELOG.md / CONTRIBUTING.md / SECURITY.md / CODE_OF_CONDUCT.md :: 变更记录与社区协作文档
+      - text: 7. 产品亮点（对外传播与使用建议）
+        children[10]:
+          - SYS-18 消除歧义：用树状层级明确概念边界与目标关系，避免自然语言的歧义、概念混淆与目标漂移，让 AI 的行为与人的意图保持一致。
+          - SYS-19 节省 Token：`.mindforai` 以缩进表达层级，无括号、引号与重复字段，相同信息量下体积更小，显著降低上下文成本。
+          - SYS-20 最佳沟通结构：为 AI 时代设计的人机沟通数据结构，人类易读、AI 更易解析。
+          - SYS-21 优于 Markdown：节点即段落，增删、折叠、调层级与复制都更直接；没有标题层级和列表符号的维护负担。
+          - SYS-22 节点级复用：AI 规则、行为约束、任务模板可以整节点复制到其他项目或窗口，复用成本接近零。
+          - SYS-23 贴合认知结构：树状发散结构与人类联想、神经元连接方式高度契合，便于人和 AI 建立全局认知。
+          - SYS-24 精准定位修改点：模块 ID + 文件路径 + 一句话职责，AI 可沿树直接定位目标文件，减少全仓库搜索、Token 浪费与上下文污染。
+          - SYS-25 一树多用：产品设计、项目拆解、任务派发共用同一棵树，拆好的任务树可直接投喂 AI 执行。
+          - SYS-26 模板化交付：内置项目核心文档、TODO、Bug Report 等结构，导出即可被 AI 消费。
+          - SYS-27 其他已实现亮点：Mermaid 思维导图、坏文件修正编辑器、多格式互通、节点跨窗口剪贴板、本地优先零上传、多窗口、多语言、主题切换、Docker 一键部署、MIT 开源可商用。

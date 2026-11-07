@@ -1,0 +1,17 @@
+node_modules
+dist
+coverage
+.nx
+.git
+.gitignore
+.dockerignore
+*.log
+*.pid
+.DS_Store
+Thumbs.db
+README.md
+README_en.md
+CHANGELOG.md
+project.mindforai
+.mindforai.pid
+.mindforai.log

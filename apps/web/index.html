@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <!-- 基础 SEO 元信息（中文） -->
+    <title>MindForAI - 用思维导图生成喂给 AI 的项目文档</title>
+    <meta
+      name="description"
+      content="MindForAI 是一款开源的 AI 文档生成白板。用思维导图梳理项目核心文档、待办清单（TODO）与缺陷报告（Bug Report），一键导出为 .mindforai / .drawnixlite 紧凑格式，直接投喂给 AI 编程助手（Claude Code、Cursor、Copilot 等），节省上下文与沟通成本。基于 Plait 画图框架，支持无限画布、流程图与 PNG/SVG 导出。"
+    />
+    <meta
+      name="keywords"
+      content="MindForAI,AI 文档生成,喂给AI的文档,AI 上下文,项目核心文档,AI TODO 列表,AI Bug Report,思维导图,流程图,白板,开源白板,开源思维导图,AI 编程助手,Claude Code,Cursor,Spec Kit,MindMap,TOON,白板工具"
+    />
+    <!-- 基础 SEO 元信息（English） -->
+    <meta
+      name="description"
+      lang="en"
+      content="MindForAI is an open-source AI documentation whiteboard. Turn mind maps into AI-ready project core documents, TODO lists and bug reports, then export them as compact .mindforai / .drawnixlite files that you can feed directly to AI coding assistants such as Claude Code, Cursor and Copilot. Built on the Plait framework with infinite canvas, flowcharts and PNG/SVG export."
+    />
+    <meta
+      name="keywords"
+      lang="en"
+      content="MindForAI,AI documentation generator,AI context,AI-ready docs,project core document,AI TODO list,AI bug report,mind map,flowchart,whiteboard,open source whiteboard,AI coding assistant,Claude Code,Cursor,Spec Kit,TOON format,whiteboard tool"
+    />
+    <!-- 基础 SEO 元信息（Русский） -->
+    <meta
+      name="description"
+      lang="ru"
+      content="MindForAI — открытая виртуальная доска для подготовки документов для ИИ. Превращайте интеллект-карты в основные документы проекта, списки задач (TODO) и отчёты об ошибках (Bug Report) и экспортируйте их в компактные файлы .mindforai / .drawnixlite, готовые для ИИ-ассистентов. Построена на фреймворке Plait: бесконечный холст, блок-схемы, экспорт в PNG/SVG."
+    />
+    <meta
+      name="keywords"
+      lang="ru"
+      content="MindForAI,документы для ИИ,контекст для ИИ,интеллект-карты,mind-карты,списки задач,TODO,баг-репорт,доска,открытая доска,ИИ-ассистент,Claude Code,Cursor,блок-схемы,фреймворк Plait"
+    />
+    <!-- Open Graph 元信息（中文） -->
+    <meta property="og:title" content="MindForAI - 用思维导图生成喂给 AI 的项目文档 | AI 上下文 | TODO 清单 | Bug Report" />
+    <meta
+      property="og:description"
+      content="开源 AI 文档生成白板：思维导图 → 项目核心文档 / TODO 清单 / 缺陷报告，一键导出紧凑格式，直接投喂给 AI 编程助手。"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fantasylincen.github.io/mindforai/" />
+    <meta property="og:site_name" content="MindForAI" />
+    <!-- Open Graph 元信息（English） -->
+    <meta
+      property="og:title"
+      lang="en"
+      content="MindForAI - Turn Mind Maps into AI-Ready Project Docs | AI Context | TODO Lists | Bug Reports"
+    />
+    <meta
+      property="og:description"
+      lang="en"
+      content="Open-source AI documentation whiteboard: mind map to project core doc, TODO list or bug report, exported in a compact format you can feed straight to your AI coding assistant."
+    />
+    <!-- Open Graph 元信息（Русский） -->
+    <meta
+      property="og:title"
+      lang="ru"
+      content="MindForAI - Документы проекта для ИИ из интеллект-карт | Контекст | TODO | Баг-репорты"
+    />
+    <meta
+      property="og:description"
+      lang="ru"
+      content="Открытая доска для документов ИИ: интеллект-карта превращается в основной документ проекта, список задач или баг-репорт в компактном формате."
+    />
+    <!-- Twitter Card 元信息 -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="MindForAI - Turn Mind Maps into AI-Ready Project Docs | TODO | Bug Reports"
+    />
+    <meta
+      name="twitter:description"
+      content="Open-source AI documentation whiteboard. Export compact .mindforai files that Claude Code, Cursor and Copilot can read."
+    />
+    <!-- 其他重要元信息 -->
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="author" content="MindForAI Contributors" />
+    <meta name="theme-color" content="#1ea9ef" />
+    <link rel="canonical" href="https://fantasylincen.github.io/mindforai/" />
+    <!-- 多语言备用链接 -->
+    <link rel="alternate" hreflang="zh-CN" href="https://fantasylincen.github.io/mindforai/" />
+    <link rel="alternate" hreflang="en" href="https://fantasylincen.github.io/mindforai/en" />
+    <link rel="alternate" hreflang="ru" href="https://fantasylincen.github.io/mindforai/ru" />
+    <link rel="alternate" hreflang="x-default" href="https://fantasylincen.github.io/mindforai/" />
+    <!-- 结构化数据（JSON-LD）中英双语 -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "MindForAI",
+          "alternateName": ["MindForAI", "mindforai"],
+          "applicationCategory": "DesignApplication",
+          "applicationSubCategory": "Documentation Tool",
+          "operatingSystem": "Any",
+          "url": "https://fantasylincen.github.io/mindforai/",
+          "downloadUrl": "https://github.com/fantasylincen/mindforai",
+          "license": "https://github.com/fantasylincen/mindforai/blob/main/LICENSE",
+          "isBasedOn": "https://github.com/plait-board/drawnix",
+          "description": {
+            "zh-CN": "MindForAI 是一款开源的 AI 文档生成白板，用思维导图梳理项目核心文档、待办清单与缺陷报告，并导出为可直接投喂给 AI 编程助手的紧凑格式。",
+            "en": "MindForAI is an open-source AI documentation whiteboard. Turn mind maps into project core documents, TODO lists and bug reports, then export them as compact files ready for AI coding assistants.",
+            "ru": "MindForAI — открытая доска для подготовки документов для ИИ: интеллект-карты превращаются в основные документы проекта, списки задач и баг-репорты в компактном формате."
+          },
+          "keywords": [
+            "AI 文档生成",
+            "喂给AI的文档",
+            "AI 上下文",
+            "项目核心文档",
+            "AI TODO 列表",
+            "AI Bug Report",
+            "思维导图",
+            "流程图",
+            "白板",
+            "AI 编程助手",
+            "Claude Code",
+            "Cursor",
+            "TOON",
+            "mind map",
+            "AI documentation",
+            "AI context",
+            "whiteboard"
+          ],
+          "inLanguage": ["zh-CN", "en", "ru"],
+          "softwareRequirements": "Modern web browser"
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="stylesheet" href="/src/styles.scss" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

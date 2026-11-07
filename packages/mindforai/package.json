@@ -1,0 +1,21 @@
+{
+  "name": "@mindforai/mindforai",
+  "version": "1.0.0",
+  "private": false,
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    },
+    "./index.css": "./index.css"
+  },
+  "dependencies": {
+    "@floating-ui/react": "^0.26.24",
+    "@toon-format/toon": "^4.4.0",
+    "fflate": "^0.8.2",
+    "mobile-detect": "^1.4.5"
+  }
+}

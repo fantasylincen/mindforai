@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# 禁止访问管理后台
+Disallow: /admin/
+Disallow: /private/
+
+# 站点地图
+Sitemap: https://fantasylincen.github.io/mindforai/sitemap.xml

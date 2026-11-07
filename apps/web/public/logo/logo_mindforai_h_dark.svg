@@ -1,0 +1,28 @@
+<svg id="layer_1" data-name="layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 790 160" width="790" height="160" role="img" aria-label="MindForAI">
+  <defs>
+    <style>.cls-1{fill:#ffffff;}</style>
+    <linearGradient id="gradient_74" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1ea9ef"/>
+      <stop offset="0.27" stop-color="#6852f2"/>
+      <stop offset="0.54" stop-color="#ab56d9"/>
+      <stop offset="0.78" stop-color="#f160b5"/>
+      <stop offset="1" stop-color="#ef8861"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(18 21) scale(0.2305)">
+<g fill="none" stroke="url(#gradient_74)" stroke-width="20" stroke-linecap="round">
+    <path d="M256 256 L140 140"/>
+    <path d="M256 256 L372 140"/>
+    <path d="M256 256 L140 372"/>
+    <path d="M256 256 L372 372"/>
+  </g>
+  <g fill="url(#gradient_74)">
+    <circle cx="256" cy="256" r="58"/>
+    <circle cx="140" cy="140" r="32"/>
+    <circle cx="372" cy="140" r="32"/>
+    <circle cx="140" cy="372" r="32"/>
+    <circle cx="372" cy="372" r="32"/>
+  </g>
+  </g>
+  <text class="cls-1" x="155" y="125" font-family="'Helvetica Neue',Helvetica,Arial,'PingFang SC','Microsoft Yahei',sans-serif" font-size="132" font-weight="700" letter-spacing="0" textLength="620" lengthAdjust="spacingAndGlyphs">MindForAI</text>
+</svg>

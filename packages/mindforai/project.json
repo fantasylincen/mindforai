@@ -1,0 +1,9 @@
+{
+  "name": "mindforai",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/mindforai/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project mindforai --web",
+  "targets": {}
+}

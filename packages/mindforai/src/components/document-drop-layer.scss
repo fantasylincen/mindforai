@@ -1,0 +1,29 @@
+.mindforai {
+  .document-drop-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed var(--color-primary);
+    border-radius: var(--border-radius-lg);
+    background-color: var(--color-surface-primary-container);
+    pointer-events: none;
+
+    &__hint {
+      padding: 10px 18px;
+      border-radius: var(--border-radius-md);
+      background-color: var(--status-bar-bg-color, var(--island-bg-color));
+      box-shadow: var(--shadow-island);
+      color: var(--text-primary-color);
+      font-size: 14px;
+    }
+  }
+}
+
+.mindforai--mobile {
+  .document-drop-layer {
+    display: none;
+  }
+}

@@ -1,0 +1,64 @@
+.mindforai-node-more-hint {
+    position: fixed;
+    z-index: 2024;
+    transform: translate(-50%, calc(-100% - 14px));
+    max-width: 260px;
+    padding: 6px 12px;
+    border: 1px solid var(--node-more-hint-border-color, var(--island-border-color));
+    border-radius: var(--border-radius-md);
+    background: var(--node-more-hint-bg-color, var(--island-bg-color));
+    box-shadow: var(--node-more-hint-shadow, var(--shadow-island));
+    color: var(--node-more-hint-text-color, var(--color-on-surface));
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: mindforai-node-more-hint-fade 0.18s ease;
+}
+
+.mindforai {
+    &.theme--default,
+    &.theme--colorful {
+        --node-more-hint-bg-color: var(--island-bg-color);
+        --node-more-hint-border-color: var(--island-border-color);
+        --node-more-hint-text-color: var(--color-gray-90);
+    }
+
+    &.theme--soft {
+        --node-more-hint-bg-color: #ffffff;
+        --node-more-hint-border-color: var(--color-gray-20);
+        --node-more-hint-text-color: var(--color-gray-90);
+    }
+
+    &.theme--retro {
+        --node-more-hint-bg-color: #fffdf2;
+        --node-more-hint-border-color: #e4dfc6;
+        --node-more-hint-text-color: #4f4a34;
+    }
+
+    &.theme--dark {
+        --node-more-hint-bg-color: var(--color-gray-85);
+        --node-more-hint-border-color: var(--color-gray-80);
+        --node-more-hint-text-color: var(--color-gray-10);
+        --node-more-hint-shadow: 0 8px 24px #00000040;
+    }
+
+    &.theme--starry {
+        --node-more-hint-bg-color: #153047;
+        --node-more-hint-border-color: #284b66;
+        --node-more-hint-text-color: #f5fbff;
+        --node-more-hint-shadow: 0 8px 24px #00111f66;
+    }
+}
+
+@keyframes mindforai-node-more-hint-fade {
+    from {
+        opacity: 0;
+        transform: translate(-50%, calc(-100% - 10px));
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, calc(-100% - 14px));
+    }
+}

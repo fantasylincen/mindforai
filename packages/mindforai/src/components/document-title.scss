@@ -1,0 +1,60 @@
+.mindforai {
+  .document-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 220px;
+    margin-left: 4px;
+    padding: 0 8px;
+    box-sizing: border-box;
+    color: var(--color-on-surface);
+    font-size: 13px;
+    line-height: 1.4;
+    user-select: text;
+    white-space: nowrap;
+
+    &__text {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    &__dot {
+      flex: 0 0 auto;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #e09400;
+    }
+
+    &__close {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border: none;
+      border-radius: var(--border-radius-sm);
+      background-color: transparent;
+      color: inherit;
+      opacity: 0.6;
+      cursor: pointer;
+
+      svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      &:hover {
+        opacity: 1;
+        background-color: var(--color-surface-primary-container);
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+}
