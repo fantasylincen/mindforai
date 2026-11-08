@@ -1,0 +1,19 @@
+{
+  "name": "mindforai-sdk",
+  "version": "1.0.0",
+  "description": "JavaScript API library for .mindforai documents",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "require": "./dist/src/index.js"
+    }
+  },
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test/sdk.test.js"
+  },
+  "license": "MIT"
+}

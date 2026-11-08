@@ -21,7 +21,7 @@
 
 ---
 
-![MindForAI 演示：拖入文档 → 生成思维导图 → 搜索定位 → 文本编辑](docs/demo.gif)
+![MindForAI 演示：右键复制思维导图节点，直接粘贴到网页版 AI 对话框](docs/demo.gif)
 
 ## 这是什么
 

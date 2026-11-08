@@ -21,7 +21,7 @@
 
 ---
 
-![MindForAI demo: drop a document, get an editable mind map, locate nodes by search](docs/demo.gif)
+![MindForAI demo: right-click a mind map node, copy it, and paste it straight into a web AI chat](docs/demo.gif)
 
 ## What is this
 
