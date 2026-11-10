@@ -16,6 +16,9 @@ node_modules
 .settings/
 *.sublime-workspace
 
+# VS Code 扩展构建产物，禁止提交
+apps/vscode-extension/webview/
+
 # 私有汇总文档，禁止提交
 ALL.mindforai
 

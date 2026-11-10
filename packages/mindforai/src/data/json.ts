@@ -3,13 +3,14 @@ import { PlaitBoard } from '@plait/core';
 import { DOCUMENT_FILE_EXTENSIONS } from '../constants';
 import { isMarkdownFileName } from './markdown-to-mindforai';
 import { fileOpen, type FileSystemHandle } from './filesystem';
+import type { HostFileHandle } from './file-host';
 import { DocumentExportedData, type SaveableDocumentFormat } from './types';
 import { saveAsCompactDocument } from './compact-document';
 import { saveAsMindForAI } from './toon-document';
 import { saveAsMarkdown } from './markdown-document-save';
 import { readDocumentFile, type InvalidLoadedDocumentFile } from './document-load';
 
-export type MindForAIFileHandle = FileSystemHandle | null;
+export type MindForAIFileHandle = FileSystemHandle | HostFileHandle | null;
 
 type FileWithHandle = File & {
   handle?: FileSystemHandle;

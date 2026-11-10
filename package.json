@@ -10,6 +10,8 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "build:web": "nx build web",
+    "build:webview": "vite build --config apps/web/vite.vscode.config.ts",
+    "package:vscode": "node scripts/package-vscode-extension.mjs",
     "test": "nx run-many -t=test",
     "seo:submit": "node scripts/submit-search-engines.mjs",
     "release": "node scripts/release-version.js",

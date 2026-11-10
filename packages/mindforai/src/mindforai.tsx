@@ -84,6 +84,7 @@ export type MindForAIProps = {
   onOpenNewWindow?: () => void;
   afterInit?: (board: PlaitBoard) => void;
   tutorial?: boolean;
+  enableSessionRestore?: boolean;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSelect'>;
 
 export type { MindForAIToolState } from './hooks/use-mindforai';
@@ -132,6 +133,7 @@ export const MindForAI: React.FC<MindForAIProps> = ({
   onOpenNewWindow,
   afterInit,
   tutorial = false,
+  enableSessionRestore = true,
 }) => {
   const options: PlaitBoardOptions = {
     readonly: false,
@@ -341,7 +343,7 @@ export const MindForAI: React.FC<MindForAIProps> = ({
               }}
             >
               {tutorial && board && <Tutorial>{board && <Welcome />}</Tutorial>}
-              {board && <DocumentSessionSync />}
+              {board && enableSessionRestore && <DocumentSessionSync />}
             </Board>
             {!tutorial && board && <Welcome />}
             <AppToolbar></AppToolbar>

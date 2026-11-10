@@ -2,7 +2,7 @@ type: mindforai
 version: 1
 content[1]:
   - text: MindForAI
-    children[7]:
+    children[8]:
       - text: 1. 项目概述
         children[7]:
           - SYS-11 项目名称：`MindForAI`（内部包名 @mindforai/source，基于 Drawnix 演进）
@@ -12,7 +12,7 @@ content[1]:
           - SYS-15 技术架构：Nx monorepo + React 19 + TypeScript + Vite；画板内核基于 Plait（@plait/core / mind / draw / layouts / common），富文本基于 Slate；零后端，文档与当前文件句柄仅存内存，浏览器只保存语言与主题，文件读写走本地文件系统。
           - SYS-16 核心任务：维护三种文档格式（.mindforai / .smalldrawnix / .drawnix）的读写与校验，在无限画布上提供思维导图、流程图、自由画笔与 Mermaid 思维导图能力，并提供多窗口、多语言、主题切换与 Docker 静态部署。
           - text: SYS-17 目标结构（Agent 生成代码时须按此落盘）
-            children[9]:
+            children[11]:
               - apps/web/ : Web 应用（Vite + React 19），唯一对外产物；构建产物在 dist/apps/web
               - apps/web-e2e/ : Playwright 端到端测试
               - packages/mindforai/ : 核心白板库（全部业务组件、插件、文档序列化），业务改动主要在此
@@ -21,6 +21,8 @@ content[1]:
               - scripts/ : 构建辅助脚本（图标生成、发版、发布）
               - deploy/ : 启动与部署脚本说明文档（脚本本体在仓库根目录：runsrc* / rundocker*）
               - docs/ : 人类阅读的文档（brand.md 等），非 Agent 首选资料；.mindforai 文档解析器实现在 packages/mindforai/src/data/
+              - apps/vscode-extension/ : VS Code / TRAE 扩展宿主（纯 JavaScript，零运行时依赖），图标在 media/，构建产物在 webview/ 与 dist/vscode-extension/
+              - apps/web/src/vscode/ : 扩展 Webview 入口与宿主消息桥（复用核心库渲染白板）
               - 禁止读取目录：node_modules/、dist/、.nx/、.git/、apps/web/public/（仅静态图片与图标资源）
       - text: 2. 模块编号规则
         children[5]:
@@ -30,7 +32,7 @@ content[1]:
           - 样式文件（*.scss）与测试文件（*.spec.*）随所属组件记录，不单独编号
           - 二进制资源（png / ico / svg 图片）只列目录，不再拆解
       - text: 3. Web 应用（WEB）
-        children[3]:
+        children[4]:
           - text: 应用入口与外壳
             children[6]:
               - WEB-01 apps/web/index.html :: Vite 页面模板，挂载 #root 并引用应用脚本
@@ -49,10 +51,17 @@ content[1]:
             children[2]:
               - WEB-12 apps/web-e2e/playwright.config.ts :: Playwright 运行配置（端口、浏览器、报告）
               - WEB-13 apps/web-e2e/src/example.spec.ts :: 冒烟用例，验证首页标题与画板容器可见
+          - text: VS Code / TRAE 扩展 Webview
+            children[5]:
+              - WEB-14 apps/web/src/vscode/app.tsx :: Webview 内的 MindForAI 应用，装载宿主文档、防抖回写文本并处理无新窗口场景
+              - WEB-15 apps/web/src/vscode/main.tsx :: Webview 入口，注册宿主文件通道并挂载应用
+              - WEB-16 apps/web/src/vscode/styles.scss :: Webview 基础样式与加载占位、错误提示样式
+              - WEB-17 apps/web/src/vscode/bridge.ts :: Webview 与扩展宿主之间的请求响应消息通道、文档订阅与文件读写实现
+              - WEB-18 apps/web/vscode.html / apps/web/vite.vscode.config.ts :: Webview HTML 模板与独立构建配置（相对资源路径、产物 dist/apps/vscode-webview）
       - text: 4. 核心白板库（packages/mindforai）
         children[9]:
           - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
-            children[31]:
+            children[33]:
               - DATA-01 src/data/mindforai-text.ts :: .mindforai 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
               - DATA-02 src/data/toon-document.ts :: 三种格式的保存与加载总入口，并兼容读取旧版 TOON 文档
               - DATA-03 src/data/compact-document.ts :: .drawnixlite 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
@@ -84,6 +93,8 @@ content[1]:
               - DATA-29 src/data/node-search.ts :: 遍历全部思维导图节点检索文本，展开当前节点的祖先、居中定位目标节点并用 CSS Highlight 高亮匹配文本
               - DATA-30 src/data/markdown-document.ts :: mindforai 树与 Markdown 文本互转（标题层级 + 深层列表），并在 Markdown 末尾追加 / 提取内嵌清单字段，供 .md 保存与打开识别
               - DATA-31 src/data/markdown-document-save.ts :: 把画板内容保存为 .md 文件，序列化为 Markdown 并在末尾内嵌 manifest 字段
+              - DATA-33 src/data/file-host.ts :: 宿主文件通道注册表：IDE 扩展接管打开与保存对话框，浏览器环境保持默认实现
+              - DATA-34 src/data/ide-bridge.ts :: IDE 集成入口：文本解析、格式推断、画板与文本互转、初始视图还原，供 Webview 与扩展复用
           - text: 4.2 画板渲染层（BOARD，packages/react-board）
             children[8]:
               - BOARD-01 src/wrapper.tsx :: 白板包装组件，组装 Plait 内核与所有基础插件并渲染
@@ -259,7 +270,7 @@ content[1]:
           - SYS-05 代码规范：单个程序文件不超过 800 行；不引入未经确认的新依赖；先查现有组件（UI-20 ~ UI-30）再新建
           - SYS-29 术语：折叠气泡（同义：折叠圆饼 / 收拢圆饼 / 折叠徽标 / 收拢气泡）:: 思维导图节点收拢后，在节点右侧显示的实心圆，内含被收起的节点数量，数量过多时显示省略号，由 Plait 内核原生绘制
           - text: SYS-06 常用命令
-            children[7]:
+            children[9]:
               - npm start :: 开发服务器 http://localhost:7200
               - bash runsrc.sh / runsrc.bat :: 本地源码一键启动（重复执行即重启），停止用 runsrc.sh stop
               - npm run build:web :: 构建 Web 应用，产物 dist/apps/web
@@ -268,6 +279,7 @@ content[1]:
               - npm run lint :: oxlint 代码检查（格式化用 npm run format = oxfmt）
               - node scripts/generate-icons.mjs 03-chat :: 生成图标候选并把 03 设为生效图标
               - npm run seo:submit :: 向 IndexNow 提交站点 URL（Bing / Yandex / Seznam / Naver），并打印 Google / 百度等人工收录步骤
+              - npm run package:vscode :: 一键构建 Webview、组装扩展目录并生成 dist/mindforai-<version>.vsix 安装包
           - text: SYS-07 测试约定
             children[4]:
               - 单元测试与被测文件同目录（*.spec.ts(x)），运行 vite.config.ts 内置的 Vitest 配置
@@ -284,7 +296,7 @@ content[1]:
           - SYS-09 代码内必须标注模块 ID（如 // DATA-01），便于后续 Agent 按 ID 检索；新功能先在本文档登记 ID 再写代码
           - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .mindforai 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
       - text: 6. 其他脚本与文档
-        children[9]:
+        children[10]:
           - SCR-01 scripts/generate-icons.mjs :: 生成 10 个候选图标、预览页、生效 favicon 与横版文字标志
           - SCR-02 scripts/release-version.js :: 发版时统一升版本号
           - SCR-03 scripts/publish.js :: 构建并发布包到 npm
@@ -307,4 +319,25 @@ content[1]:
           - SYS-25 一树多用：产品设计、项目拆解、任务派发共用同一棵树，拆好的任务树可直接投喂 AI 执行。
           - SYS-26 模板化交付：内置项目核心文档、TODO、Bug Report 等结构，导出即可被 AI 消费。
           - SYS-27 其他已实现亮点：Mermaid 思维导图、坏文件修正编辑器、多格式互通、节点跨窗口剪贴板、本地优先零上传、多窗口、多语言、主题切换、Docker 一键部署、MIT 开源可商用。
-manifest: UEsDBBQAAAAIAJeuZ12y7OmWuQQAAHCjAAASAAAAbWFuaWZlc3QubWluZGZvcmFp1Z3RcppAFIbv8xQ8QM24CwvE2z5GJtNhhCitgoOYNnn67q9TtcbtXYdvvUQsX5Y9/3/2HNiO77tmkWzbrn7th6p9eGuGfdt3i8Q8LPtubLrx2bwsHpJklozNr9GfWnXta7Mf/aEkWa7bTT003bM7nqPPLKn75WHrf7hIdkP/vVmOj5d//s8547rZ+uvW1fDjfGxTdatDtfKHP9aXE48XfWubn7t+OF30rwvb84VP53/0/Vbw18f6oV21XTUe/67nWWrnj6n/FNncpllauC8zNz8ess48udRY93Jz/a6vm/2di+fZzeUvpyfzqy+ufnMazevPeWSbsaqrsbr5OvjHXv3+fBPvfr2p3vuDv4AfhvVlCG9xH/8D8Off3gJ/O577Dygq1vUUA2FZJlbKxMqYWI6Jld/H+qxKs6Tdf+03m2q3b+pFMg6HZlpwqojkVBnJqUKSU6Ukp4pJjpWTkKBMD1ZQwUoiGFLDDFPzDXW0kHpvmGpvmFqPvIU2FIf0tNGDMyVEYEgRERh1DjKFRGBMKaGuQm1o6vPlBJqRCAwqJ9CsRGBQOQmMFz84gmnC5CPKDA7k/EtjzfU8OHP+CYw5/6i5nsCowcHM9QSGzPUEhiwRCgxZIhQYskQosCcqmOFKP1b7DVb8DVb9DVb+DVb/DdYADNYBDNYCDNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDLNYDUqgHRNrx8ODUohq04yEwqKdCOx4CgzqqoRbVDLWoZqhFtUi7ah6cKsDUrlq4hTo9GFSALVWAA+PFj9pgG3XyEaVGbVCipweDRm2KjVpq2hQYL76cZFQ5yahyklHlJKPKSUaVk4wqJwEsvpy4eB/y8uhULRQaVA2FBtVDoUEV0cVbtvXo3DDBlm6Fhg0TbPlWaNDUQWjU5IFbxHXxVks9Olf3sBVToWF1D1s1FRpW9yxX9yxY96jtKxdvKdyjcyUZWw4XGlaSsSVxoWElGVsWFxpWklOwJFNf1HHxdjo8OtctsN0OoWHdAtvxEBrWLSJuLgTbC4BR5UZwpFtzHtG5Nxy6PecJDSvZ0C06T2hYyYZu03lCwyb40K06g0siviAH5TgKdKqXCA3qJUKDeonQoF4iNKiXCA3qJcGEKgZxwT4UITSsuETbDfbo3BuO7QYLDesm2G6w0LBugu0GCw26MhEadWXi0aCth2DlIAa3wDaqhYZ1i2h7TR6de8OxvSahQdODgFzzZ2JBnYcFdRYW2DlITVALanpaUJPTQIrFl5OSKiclVU5KqpyUVDkpqXJSYuWEutItqevckrrKLZk7YSMjMrjGovuoB2f6qMCQPiowpI8KDOmjwVU+PzigvTSBQYMD+nKxwKjBQbU06GvFwcocX06gnVqBQeUE2qUNPu7Pn4PQ/o/AoHMQ+pIi9L0O6E5WWayPunpwasRC3zsQGDRioe8cCAwqJtD3DQSGrHRmsTaIPThV56ANYoFBdQ7aIM5ibXd6cGpwQNudAoMGB7TdKTBoEsBsREH/Q1ZkvgR9XR76qnxwc8KpsZDCFdwJZmosaCQi1y2O+XyGYz6dgbyF0DoVtEoFrVFBK1TQ+hS0OgWtTUF3wcihGj/lsuc3UEsBAhQAFAAAAAgAl65nXbLs6Za5BAAAcKMAABIAAAAAAAAAAAAAAAAAAAAAAG1hbmlmZXN0Lm1pbmRmb3JhaVBLBQYAAAAAAQABAEAAAADpBAAAAAA=
+      - text: 8. VS Code / TRAE 扩展（VSX）
+        children[4]:
+          - text: 扩展宿主（apps/vscode-extension）
+            children[5]:
+              - VSX-01 apps/vscode-extension/extension.js :: 扩展入口：注册 mindforai.editor 自定义编辑器、Webview HTML 注入（CSP 与资源 URI 重写）、文档双向同步与打开/另存为/新建命令
+              - VSX-02 apps/vscode-extension/package.json :: 扩展清单：languages（.mindforai / .drawnixlite 及文件图标）、customEditors、commands、menus、icon
+              - VSX-03 apps/vscode-extension/media/icon.png :: 扩展图标与文件图标（512×512，取自品牌 app-icon.png）
+              - VSX-04 apps/vscode-extension/webview/ :: 构建产物（index.html + assets，由 scripts/package-vscode-extension.mjs 生成，不入版本库）
+              - VSX-05 webview 消息协议 :: Webview 发 ready / edit / openFiles / saveFile / newDocument / showTextEditor；宿主回 document / response；edit 只做整文档最小替换并回写其它视图
+          - text: Webview 构建与打包
+            children[3]:
+              - SCR-08 scripts/package-vscode-extension.mjs :: 一键脚本：构建 Webview → 组装 dist/vscode-extension/<publisher>.<name>-<version> → 生成 dist/mindforai-<version>.vsix
+              - SCR-09 apps/web/vite.vscode.config.ts :: Webview 独立 Vite 配置（base=./、publicDir=false、产物 dist/apps/vscode-webview）
+              - PUBLIC-01 apps/web/vscode.html :: Webview HTML 模板，由扩展注入 CSP 并把相对资源替换为 webview.asWebviewUri
+          - text: 已注册的环境能力
+            children[2]:
+              - SYS-30 IDE 嵌入约定：Webview 通过 DATA-33 接管打开与保存对话框；文档文本仍以 .mindforai / .drawnixlite 纯文本落盘，编辑器与 VS Code 文本模型保持一致（保存、撤销、热退出由 IDE 负责）
+              - SYS-31 兼容范围：VS Code 1.74+ 及 TRAE、Cursor 等基于 VS Code 内核的 IDE；扩展为纯 JavaScript，零运行时依赖，无需编译
+          - text: 未纳入版本管理的文档
+            children[1]:
+              - 安装方法与上架流程（本地目录安装、.vsix 安装、市场发布、市场安装）只在交付报告中说明，不写入仓库与公开 GitHub
+manifest: UEsDBBQAAAAIANu2al3el3RUOAUAAJi2AAASAAAAbWFuaWZlc3QubWluZGZvcmFp1Z3NctowFIX3eQo/QGEq+QeFbR8jk+l4wAluwWaMSZs8fXUgDSmJssiifLfdGYM/W9I5V/fKyvi4bebZpu2Wd/1Qt1cPzbBr+26euatF341NN9642/lVlk2ysfk9xlPrrr1rdmM8lGWLVbteDk13Ux7O0b9JtuwX+0384jzbDv2PZjFOTz//95xx1WzidZf18PPl2Lru7vf1fTz8tDqdeLjoQ9v82vbD8aL/XNi/XPh4/lPfbwT/+lg/tPdtV4+H+7qZ+KqYlqFw1awIX4sqzMovk6LKpyHPc+evQ/DB+fL2DKHrl83unetf52cEp9Ozr68+SDIfv9XuvvXrdb3dNct5dlevd82bU56ffzPWy3qszz7+8Oefv//S1O9+vK4f+328QHxYq9ODPr+j6WfvaRz2n7+lYxf86Ja+H879ADsF/van/y/W664KwvJMrJyJVTCxSiZWZVVCKqqIVFQZqahCUlGlpKKKSYWVk5SgXB5sRgULVLBrKphDSn9C9ulW6phG6pg26pgm6pgW6pgGmmhC+kj1Vif8EZwpMgJDyozAkEIjMKTUCIwpNtTJv7casURwqpxAoxaBQeUEGrl4u0FCMky4+BOlDo5ED+Q3dU5t6hzb1FQdzKk6mDPDKqNjNjliDYAzxUZgSLERGFJsBIYUG4ExxYY6hxMYsuIiMGTFRWDIiovAkBWXg8BypR+r/Q4r/g6r/g4r/w6r/w5rAA7rAA5rAQ7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rATnWA3KsB+RQDzBa/Y3g1EQktPorMGofpCYioSvXBAYNQhw1EemoiUijKwwiOFWAoSsMBAYV4OTih8uDQQXYbOEZulhEYNBRC10sIjDoqKUuFon/oWFT4nnx5aSgyklBlZOCKicFVU4KqpzEXUuYYAksvpyUdhfGRXSqFgoNqoZCg+qh0KCKWNpN20Z07jDBpm6Fhh0m2PSt0KChg9CowQM3iVvazZZGdK7uYTOmQsPqHjZrKjSs7nmu7nmw7lHLV6XdVHhE50oyNh0uNKwkY1PiQsNKMjYtLjSsJOdgSaa+3FTarXREdK5bYKsdQsO6BbbiITSsWxguLiTLC4Cnyh3BRneHPqBzGxy6Q/QRDSvZ0F2ij2hYyYbuFH1Ewwb40N2ik1MiviAn5dgEOtVLhAb1EqFBvURoUC8RGtRLhAb1kmRAZUFcsIsihIYVF7PV4IjObXBsNVhoWDfBVoOFhnUTbDVYaNCZidCoM5OIBi09JDMHFtwCW6gWGtYtzNaaIjq3wbG1JqFBw4OEXPN74ozaD2fUXjjD9kFqgDqjhqczanCaCLH4chKochKochKochKochKochKwckKd6QbqPDdQZ7mBuXu40ZlYchZmAJzptAJDOq3AkE4rMKTTJvMA/MEBrbYJDDo4oK8fC4w6OJhhqMCQYWgyd8eXE2gtV2BQOYHWcZMvBPD7ILRCJDBoH4S+xgh98wO611VhdTFsBKeOWOibCQKDjljoWwkCg4oJ9I0EgSFzoQJD5kIFhsyFFlaL7hGc6gzQorvAoM4ALboXVkvIEZw6OKAlZIFBBwe0hCwwaNjELO5B/zCw0Y0KoJsUQDcoSG4JeWkspLQl99+5NBZyNpjc+uLSWMiZYMmcB5ZM0zSatoQmLaEpS2jCEpquhCYroalKaKISmqaEJikrpjkZzZwm86YGwJm+KjCkswoM6a0CQ7qrwJD+miwq8EctdB2pwKCjFrqONFk/4vdB6OJDgUH7oNE1fhH8kk39B1BLAQIUABQAAAAIANu2al3el3RUOAUAAJi2AAASAAAAAAAAAAAAAAAAAAAAAABtYW5pZmVzdC5taW5kZm9yYWlQSwUGAAAAAAEAAQBAAAAAaAUAAAAA

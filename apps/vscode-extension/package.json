@@ -1,0 +1,97 @@
+{
+  "name": "mindforai",
+  "displayName": "MindForAI",
+  "description": "在 VS Code、TRAE 等兼容 IDE 中直接打开 .mindforai / .drawnixlite 白板文档，支持保存与格式化编辑。",
+  "version": "1.0.0",
+  "publisher": "mindforai",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "mindforai",
+    "mindmap",
+    "whiteboard",
+    "ai-documentation"
+  ],
+  "icon": "media/icon.png",
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCustomEditor:mindforai.editor",
+    "onCommand:mindforai.openWithEditor",
+    "onCommand:mindforai.newDocument"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "mindforai",
+        "aliases": [
+          "MindForAI",
+          "mindforai"
+        ],
+        "extensions": [
+          ".mindforai"
+        ],
+        "icon": {
+          "light": "./media/icon.png",
+          "dark": "./media/icon.png"
+        }
+      },
+      {
+        "id": "drawnixlite",
+        "aliases": [
+          "DrawnixLite"
+        ],
+        "extensions": [
+          ".drawnixlite"
+        ],
+        "icon": {
+          "light": "./media/icon.png",
+          "dark": "./media/icon.png"
+        }
+      }
+    ],
+    "customEditors": [
+      {
+        "viewType": "mindforai.editor",
+        "displayName": "MindForAI 白板",
+        "selector": [
+          {
+            "filenamePattern": "*.mindforai"
+          },
+          {
+            "filenamePattern": "*.drawnixlite"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "commands": [
+      {
+        "command": "mindforai.openWithEditor",
+        "title": "用 MindForAI 白板打开",
+        "category": "MindForAI",
+        "icon": "./media/icon.png"
+      },
+      {
+        "command": "mindforai.newDocument",
+        "title": "新建 MindForAI 文档",
+        "category": "MindForAI",
+        "icon": "./media/icon.png"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "mindforai.openWithEditor",
+          "when": "resourceExtname == .mindforai || resourceExtname == .drawnixlite",
+          "group": "navigation"
+        }
+      ]
+    }
+  }
+}
