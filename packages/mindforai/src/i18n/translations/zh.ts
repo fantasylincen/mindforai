@@ -158,6 +158,10 @@ const zhTranslations: Translations = {
   'welcome.supportedFormats': '支持的文件类型',
   'welcome.multiFileHint': '支持同时拖入多个文件，自动按文件名组织成一张思维导图',
   'welcome.openFile': '选择文件',
+  'welcome.touchDropHere': '打开 .mindforai 文档',
+  'welcome.touchHint':
+    '点击下方按钮选择文档；若文件显示为灰色，请先在「文件」App 中把文档保存到本机或 iCloud 云盘',
+  'theme.switcher': '主题',
   'toast.markdownSaveConverted': 'Markdown 已转换为 mindforai 格式并保存',
   'toast.saveSuccess': '文件已保存',
   'toast.saveFailed': '保存失败，请重试',

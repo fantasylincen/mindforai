@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import { useMindForAI, type MindForAIBoard } from '../hooks/use-mindforai';
 import { useI18n } from '../i18n';
 import { saveDocumentToCurrentFile, isFileHandleWritable } from '../data/document-save';
+import { isHostDocumentFileChannel } from '../data/file-host';
 import { NodeFingerprintStatus } from './node-fingerprint-status';
 import './document-status-bar.scss';
 
@@ -14,6 +15,7 @@ export const DocumentStatusBar = () => {
   const { appState, setAppState } = useMindForAI();
   const { t } = useI18n();
   const { filePath, fileHandle, isDirty } = appState;
+  const isHostChannel = isHostDocumentFileChannel();
   const autoSave = !!appState.autoSave;
   const pathText = filePath || t('statusBar.noFile');
   const hasLocalFile = !!fileHandle;
@@ -105,35 +107,41 @@ export const DocumentStatusBar = () => {
       className={classNames('document-status-bar', ATTACHED_ELEMENT_CLASS_NAME)}
       data-testid="document-status-bar"
     >
-      <span
-        className={classNames('document-status-bar__indicator', {
-          'document-status-bar__indicator--dirty': isDirty,
-        })}
-      ></span>
-      <span className="document-status-bar__path" title={pathText}>
-        {pathText}
-      </span>
-      <span className="document-status-bar__status">{statusText}</span>
+      {!isHostChannel && (
+        <span
+          className={classNames('document-status-bar__indicator', {
+            'document-status-bar__indicator--dirty': isDirty,
+          })}
+        ></span>
+      )}
+      {!isHostChannel && (
+        <span className="document-status-bar__path" title={pathText}>
+          {pathText}
+        </span>
+      )}
+      {!isHostChannel && <span className="document-status-bar__status">{statusText}</span>}
       <NodeFingerprintStatus />
-      <label className="document-status-bar__auto-save" title={t('statusBar.autoSaveHint')}>
-        <input
-          className="document-status-bar__auto-save-input"
-          type="checkbox"
-          checked={autoSave}
-          data-testid="auto-save-toggle"
-          onChange={(event) => {
-            const nextAutoSave = event.target.checked;
-            setAppState((currentAppState) => ({
-              ...currentAppState,
-              autoSave: nextAutoSave,
-            }));
-            if (nextAutoSave && fileHandle) {
-              isFileHandleWritable(fileHandle).catch(() => false);
-            }
-          }}
-        />
-        <span className="document-status-bar__auto-save-label">{t('statusBar.autoSave')}</span>
-      </label>
+      {!isHostChannel && (
+        <label className="document-status-bar__auto-save" title={t('statusBar.autoSaveHint')}>
+          <input
+            className="document-status-bar__auto-save-input"
+            type="checkbox"
+            checked={autoSave}
+            data-testid="auto-save-toggle"
+            onChange={(event) => {
+              const nextAutoSave = event.target.checked;
+              setAppState((currentAppState) => ({
+                ...currentAppState,
+                autoSave: nextAutoSave,
+              }));
+              if (nextAutoSave && fileHandle) {
+                isFileHandleWritable(fileHandle).catch(() => false);
+              }
+            }}
+          />
+          <span className="document-status-bar__auto-save-label">{t('statusBar.autoSave')}</span>
+        </label>
+      )}
     </div>
   );
 };

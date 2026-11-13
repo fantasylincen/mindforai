@@ -62,6 +62,19 @@ export const DOCUMENT_FILE_EXTENSIONS = {
   mindforai: 'mindforai',
 } as const;
 
+export const DOCUMENT_OPEN_EXTENSIONS = ['mindforai', 'drawnixlite', 'md'] as const;
+
+// DATA-35 移动端浏览器地址栏与软键盘遮挡画板时，把可视视口尺寸写入 CSS 变量
+
+// CORE-01 移动端浏览器可视视口相关 CSS 变量名
+export const MOBILE_VIEWPORT_HEIGHT_CSS_VAR = '--mindforai-viewport-height';
+
+// CORE-01 移动端软键盘占据高度相关 CSS 变量名
+export const MOBILE_KEYBOARD_HEIGHT_CSS_VAR = '--mindforai-keyboard-height';
+
+// DATA-35 软键盘高度变化识别阈值，小于该值时视为键盘已收起
+export const MOBILE_KEYBOARD_VISIBLE_THRESHOLD_PX = 120;
+
 export const DOCUMENT_MANIFEST_TYPE = 'mindforai-manifest';
 
 export const DOCUMENT_MANIFEST_FIELD = 'manifest';

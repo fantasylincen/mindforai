@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { PlaitBoard } from '@plait/core';
 import { useBoard, useListRender } from '@plait-board/react-board';
 import { getDroppedFileHandles, isMindForAIDocumentFile } from '../data/drop-open';
+import { hasDocumentExtension } from '../data/document-format';
 import { useMindForAI } from '../hooks/use-mindforai';
 import { useI18n } from '../i18n';
 import {
@@ -54,7 +55,13 @@ export const DocumentDropLayer = () => {
       event.preventDefault();
       event.stopPropagation();
       const droppedHandles = await getDroppedFileHandles(event);
-      const result = await readFilesForOpen(documentFiles);
+      const documentFilesWithExtension = documentFiles.filter((file) =>
+        hasDocumentExtension(file.name)
+      );
+      const filesToOpen = documentFilesWithExtension.length
+        ? documentFilesWithExtension
+        : documentFiles;
+      const result = await readFilesForOpen(filesToOpen);
       if (result.invalid) {
         const invalidFileHandle = droppedHandles[result.invalid.file.name] || null;
         setAppState((currentAppState) => ({
@@ -76,10 +83,10 @@ export const DocumentDropLayer = () => {
       const isMultiFile = result.isMultiFile;
       const documentName = isMultiFile
         ? `${t('toast.mergedFileNamePrefix')}${result.fileCount}${t('toast.mergedFileNameSuffix')}`
-        : documentFiles[0].name;
+        : filesToOpen[0].name;
       let droppedFileHandle: MindForAIFileHandle = null;
       if (!isMultiFile) {
-        droppedFileHandle = droppedHandles[documentFiles[0].name] || null;
+        droppedFileHandle = droppedHandles[filesToOpen[0].name] || null;
       }
       const manifest = getMergeManifest(result.data, isMultiFile);
       applyDocumentDataToBoard(board, listRender, result.data, manifest);

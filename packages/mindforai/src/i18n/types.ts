@@ -152,7 +152,6 @@ export interface Translations {
   // Document title
   'documentTitle.close': string;
 
-
   // File drag and drop
   'toast.dropFileHint': string;
   'toast.dropFileLoaded': string;
@@ -164,7 +163,10 @@ export interface Translations {
   'welcome.dropActive': string;
   'welcome.supportedFormats': string;
   'welcome.multiFileHint': string;
+  'welcome.touchDropHere': string;
+  'welcome.touchHint': string;
   'welcome.openFile': string;
+  'theme.switcher': string;
   'toast.markdownSaveConverted': string;
   'toast.saveSuccess': string;
   'toast.saveFailed': string;

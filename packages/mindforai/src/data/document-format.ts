@@ -9,9 +9,23 @@ export type DocumentFormatDetection = {
 };
 
 const FORMAT_EXTENSIONS = DOCUMENT_FILE_EXTENSIONS;
+const DOCUMENT_FILE_EXTENSIONS_WITH_DOT = [
+  `.${DOCUMENT_FILE_EXTENSIONS.mindforai}`,
+  `.${DOCUMENT_FILE_EXTENSIONS.drawnixlite}`,
+  '.md',
+  '.markdown',
+];
+
 const FORMAT_MIME_TYPES: Record<string, DocumentFormat> = {
   [MIME_TYPES.drawnixlite]: 'drawnixlite',
   [MIME_TYPES.mindforai]: 'mindforai',
+};
+
+export const hasDocumentExtension = (fileName: string): boolean => {
+  const lowerCaseFileName = (fileName || '').toLowerCase();
+  return DOCUMENT_FILE_EXTENSIONS_WITH_DOT.some((extension) =>
+    lowerCaseFileName.endsWith(extension)
+  );
 };
 
 export const getDocumentExtension = (fileName: string): string => {
@@ -27,9 +41,9 @@ export const resolveDocumentFormatByName = (fileName: string): DocumentFormat | 
   if (!extension) {
     return null;
   }
-  const matched = (Object.keys(FORMAT_EXTENSIONS) as Exclude<SaveableDocumentFormat, 'markdown'>[]).find(
-    (format) => FORMAT_EXTENSIONS[format] === extension
-  );
+  const matched = (
+    Object.keys(FORMAT_EXTENSIONS) as Exclude<SaveableDocumentFormat, 'markdown'>[]
+  ).find((format) => FORMAT_EXTENSIONS[format] === extension);
   return matched || null;
 };
 
@@ -40,6 +54,18 @@ const readJsonDocumentType = (contents: string): string | null => {
   }
   const typeMatch = /"type"\s*:\s*"([^"]*)"/.exec(trimmed.slice(0, 4096));
   return typeMatch ? typeMatch[1] : null;
+};
+
+const readMindForAILineText = (contents: string): string | null => {
+  const lines = contents.replace(/^\uFEFF/, '').split(/\r?\n/);
+  for (const line of lines) {
+    const trimmedLine = line.trim();
+    if (!trimmedLine) {
+      continue;
+    }
+    return /^content\[\d+\]:$|^content:\s*$|^-\s*text\s*:/.test(trimmedLine) ? 'mindforai' : null;
+  }
+  return null;
 };
 
 const readTextDocumentType = (contents: string): string | null => {
@@ -59,6 +85,10 @@ export const resolveDocumentFormatByHeader = (contents: string): DocumentFormat 
   if (jsonType === null) {
     const textType = readTextDocumentType(contents);
     if (textType === 'mindforai') {
+      return 'mindforai';
+    }
+    const lineTextType = readMindForAILineText(contents);
+    if (lineTextType === 'mindforai') {
       return 'mindforai';
     }
   }

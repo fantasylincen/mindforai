@@ -1,6 +1,6 @@
 // DATA-24 统一“读取多个文件 → 合并为一张思维导图 → 应用到画板”的打开流程
 import { PlaitBoard, PlaitElement, ListRender, Viewport } from '@plait/core';
-import type { MindForAIBoard } from '../hooks/use-mindforai';
+import type { MindForAIBoard, MindForAIState } from '../hooks/use-mindforai';
 import type { LoadedDocumentFile } from './document-load';
 import type { DocumentExportedData } from './types';
 import { mergeLoadedDocumentsIntoMindMap } from './document-merge';
@@ -13,14 +13,35 @@ import {
   type DocumentManifest,
 } from './document-manifest';
 import { readMindForAIDocumentFile } from './drop-open';
+import { fileOpen } from './filesystem';
+import { DOCUMENT_OPEN_EXTENSIONS } from '../constants';
 import { applyDefaultVisibleLevels } from './document-expansion';
 
-export interface ReadFilesResult {
+export type ReadFilesResult = {
   data: DocumentExportedData | null;
   invalid: Extract<LoadedDocumentFile, { ok: false }> | null;
   isMultiFile: boolean;
   fileCount: number;
-}
+};
+
+export type OpenDocumentFilesText = {
+  mergedFileNamePrefix: string;
+  mergedFileNameSuffix: string;
+  dropFileLoaded: string;
+  dropFileUnsupported: string;
+};
+
+export const isOpenDocumentAbortError = (error: unknown) => {
+  return !!error && typeof error === 'object' && (error as Error).name === 'AbortError';
+};
+
+export const pickDocumentFilesForOpen = () => {
+  return fileOpen({
+    description: 'MindForAI files',
+    extensions: [...DOCUMENT_OPEN_EXTENSIONS],
+    multiple: true,
+  });
+};
 
 export const readFilesForOpen = async (files: File[]): Promise<ReadFilesResult> => {
   const loadedFiles: LoadedDocumentFile[] = [];
@@ -85,4 +106,53 @@ export const applyDocumentDataToBoard = (
       }));
     }
   }
+};
+
+export const openDocumentFilesViaFileInput = async (
+  board: PlaitBoard,
+  listRender: ListRender,
+  setAppState: (updater: (currentAppState: MindForAIState) => MindForAIState) => void,
+  showToast: (options: { message: string; type: 'success' | 'error' }) => void,
+  openText: OpenDocumentFilesText
+) => {
+  if (PlaitBoard.isReadonly(board)) {
+    return;
+  }
+  const pickedFiles = await pickDocumentFilesForOpen();
+  const fileList = Array.isArray(pickedFiles) ? pickedFiles : [pickedFiles];
+  if (!fileList.length) {
+    return;
+  }
+  const result = await readFilesForOpen(fileList);
+  if (result.invalid) {
+    setAppState((currentAppState) => ({
+      ...currentAppState,
+      invalidDocument: {
+        fileName: result.invalid!.filePath,
+        fileHandle: null,
+        contents: result.invalid!.contents,
+        format: result.invalid!.format,
+        issues: result.invalid!.issues,
+      },
+    }));
+    return;
+  }
+  if (!result.data) {
+    showToast({ message: openText.dropFileUnsupported, type: 'error' });
+    return;
+  }
+  const isMultiFile = result.isMultiFile;
+  const documentName = isMultiFile
+    ? `${openText.mergedFileNamePrefix}${result.fileCount}${openText.mergedFileNameSuffix}`
+    : fileList[0].name;
+  const manifest = getMergeManifest(result.data, isMultiFile);
+  applyDocumentDataToBoard(board, listRender, result.data, manifest);
+  setAppState((currentAppState) => ({
+    ...currentAppState,
+    filePath: documentName,
+    fileHandle: isMultiFile ? null : (fileList[0] as File & { handle?: any }).handle || null,
+    editingDocument: false,
+    isDirty: false,
+  }));
+  showToast({ message: `${openText.dropFileLoaded}${documentName}`, type: 'success' });
 };

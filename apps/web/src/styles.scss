@@ -8,9 +8,20 @@ body {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
 }
 #root {
     height: 100%;
     width: 100%;
     overflow: hidden;
+}
+
+/* 移动端使用动态视口高度，避免地址栏伸缩导致画板被裁切 */
+@media (pointer: coarse) {
+    html,
+    body,
+    #root {
+        height: 100dvh;
+    }
 }

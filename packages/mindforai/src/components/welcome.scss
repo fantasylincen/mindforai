@@ -42,6 +42,12 @@
     animation: mindforai-welcome-highlight 1.4s ease-in-out infinite;
   }
 
+  .mindforai-welcome__touch-hint {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--status-bar-path-color, var(--color-gray-60));
+  }
+
   .mindforai-welcome__button {
     padding: 8px 26px;
     border: none;
@@ -91,5 +97,30 @@
   }
   50% {
     opacity: 1;
+  }
+}
+
+.mindforai.mindforai--mobile {
+  .mindforai-welcome__panel {
+    width: min(520px, calc(100vw - 32px));
+    gap: 12px;
+    padding: 20px 18px;
+    max-height: calc(var(--mindforai-viewport-height, 100vh) - 200px);
+    overflow-y: auto;
+  }
+
+  .mindforai-welcome__drop-text {
+    font-size: 16px;
+  }
+
+  .mindforai-welcome__button {
+    min-height: 46px;
+    padding: 12px 32px;
+    font-size: 16px;
+    touch-action: manipulation;
+  }
+
+  .mindforai-welcome__formats {
+    font-size: 13px;
   }
 }

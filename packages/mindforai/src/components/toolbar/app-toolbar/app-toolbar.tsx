@@ -29,6 +29,7 @@ import Menu from '../../menu/menu';
 import MenuSeparator from '../../menu/menu-separator';
 import { useI18n } from '../../../i18n';
 import { DocumentTitle } from '../../document-title';
+import { isHostDocumentFileChannel } from '../../../data/file-host';
 
 export const AppToolbar = () => {
   const board = useBoard();
@@ -38,6 +39,7 @@ export const AppToolbar = () => {
   const [appMenuOpen, setAppMenuOpen] = useState(false);
   const isUndoDisabled = board.history.undos.length <= 0;
   const isRedoDisabled = board.history.redos.length <= 0;
+  const isHostChannel = isHostDocumentFileChannel();
   return (
     <Island padding={1} className={classNames('app-toolbar', ATTACHED_ELEMENT_CLASS_NAME)}>
       <Stack.Row gap={1}>
@@ -69,11 +71,11 @@ export const AppToolbar = () => {
                 setAppMenuOpen(false);
               }}
             >
-              <OpenFile></OpenFile>
-              <OpenNewWindow></OpenNewWindow>
+              {!isHostChannel && <OpenFile></OpenFile>}
+              {!isHostChannel && <OpenNewWindow></OpenNewWindow>}
               <SearchNodes></SearchNodes>
-              <SaveToFile></SaveToFile>
-              <SaveAsFile></SaveAsFile>
+              {!isHostChannel && <SaveToFile></SaveToFile>}
+              {!isHostChannel && <SaveAsFile></SaveAsFile>}
               <SaveAsImage></SaveAsImage>
               <CleanBoard></CleanBoard>
               <MenuSeparator />

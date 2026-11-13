@@ -1,7 +1,7 @@
 // 提供统一的文档读取入口，识别格式并返回内容或可定位的解析错误
 import { parseFileContents } from './blob';
 import { type FileSystemHandle } from './filesystem';
-import { detectDocumentFormat } from './document-format';
+import { detectDocumentFormat, hasDocumentExtension } from './document-format';
 import { validateDocumentContents, type DocumentValidationIssue } from './document-validation';
 import type { DocumentExportedData, DocumentFormat } from './types';
 
@@ -18,9 +18,19 @@ export type LoadedDocumentFile =
 
 export type InvalidLoadedDocumentFile = Extract<LoadedDocumentFile, { ok: false }>;
 
+const resolveReadableDocumentFile = (file: File, filePath: string): File => {
+  if (hasDocumentExtension(filePath)) {
+    return file;
+  }
+  return new File([file], `${filePath}.mindforai`, {
+    type: file.type,
+    lastModified: file.lastModified,
+  });
+};
+
 export const readDocumentFile = async (file: File): Promise<LoadedDocumentFile> => {
-  const contents = await parseFileContents(file);
   const filePath = file.name || '';
+  const contents = await parseFileContents(resolveReadableDocumentFile(file, filePath));
   const detection = detectDocumentFormat(file, contents);
   const result = validateDocumentContents(contents, detection.format);
   if (result.ok && result.data) {

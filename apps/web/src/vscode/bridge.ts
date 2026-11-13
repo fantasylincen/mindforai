@@ -39,7 +39,6 @@ let hostApi: VsCodeApi | null = null;
 let requestSeed = 0;
 const pendingRequests = new Map<string, (response: HostResponse) => void>();
 const documentHandlers = new Set<(message: HostDocumentMessage) => void>();
-let latestDocumentMessage: HostDocumentMessage | null = null;
 
 const getHostApi = (): VsCodeApi => {
   if (!hostApi) {
@@ -78,9 +77,8 @@ export const notifyHost = (message: Record<string, unknown>) => {
 
 export const subscribeHostDocument = (handler: (message: HostDocumentMessage) => void) => {
   documentHandlers.add(handler);
-  if (latestDocumentMessage) {
-    handler(latestDocumentMessage);
-  }
+  // 客户端不缓存文档内容：每次订阅都向宿主重新读取当前文件
+  notifyHost({ type: 'documentRequest' });
   return () => {
     documentHandlers.delete(handler);
   };
@@ -97,9 +95,9 @@ export const startHostMessageBridge = () => {
       return;
     }
     if (message.type === 'document') {
-      latestDocumentMessage = message as HostDocumentMessage;
+      const documentMessage = message as HostDocumentMessage;
       for (const handler of documentHandlers) {
-        handler(latestDocumentMessage);
+        handler(documentMessage);
       }
     }
   });

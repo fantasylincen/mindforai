@@ -56,4 +56,19 @@ describe('read document file', () => {
       expect(loaded.issues[0].code).toBe('jsonSyntax');
     }
   });
+
+  it('opens a file without known extension by falling back to mindforai', async () => {
+    const loaded = await readDocumentFile(buildFile('export', validMindForAIText));
+
+    expect(loaded.ok).toBe(true);
+    if (loaded.ok) {
+      expect(loaded.data.elements).toHaveLength(1);
+    }
+  });
+
+  it('opens a downloaded copy named with a suffix appended after the extension', async () => {
+    const loaded = await readDocumentFile(buildFile('board.mindforai.txt', validMindForAIText));
+
+    expect(loaded.ok).toBe(true);
+  });
 });

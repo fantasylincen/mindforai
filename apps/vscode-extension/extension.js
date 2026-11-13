@@ -194,7 +194,7 @@ class MindForAIEditorProvider {
       }
     };
     try {
-      if (message.type === 'ready') {
+      if (message.type === 'ready' || message.type === 'documentRequest') {
         this.postDocumentToPanel(state, panel);
         return;
       }

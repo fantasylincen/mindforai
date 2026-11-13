@@ -4,12 +4,7 @@ import { PlaitBoard } from '@plait/core';
 import { useBoard, useListRender } from '@plait-board/react-board';
 import { useMindForAI } from '../hooks/use-mindforai';
 import { useI18n } from '../i18n';
-import { fileOpen } from '../data/filesystem';
-import {
-  applyDocumentDataToBoard,
-  getMergeManifest,
-  readFilesForOpen,
-} from '../data/document-open';
+import { isOpenDocumentAbortError, openDocumentFilesViaFileInput } from '../data/document-open';
 import { isMindForAIDocumentFile } from '../data/drop-open';
 import './welcome.scss';
 
@@ -26,10 +21,11 @@ const hasDraggingFiles = (dataTransfer: DataTransfer | null) => {
 export const Welcome = () => {
   const board = useBoard();
   const listRender = useListRender();
-  const { setAppState, showToast } = useMindForAI();
+  const { appState, setAppState, showToast } = useMindForAI();
   const { t } = useI18n();
   const [isBusy, setIsBusy] = useState(false);
   const [isDraggingFile, setIsDraggingFile] = useState(false);
+  const isTouchDevice = !!appState.isMobile;
 
   useEffect(() => {
     const handleDragOver = (event: DragEvent) => {
@@ -65,49 +61,14 @@ export const Welcome = () => {
     }
     setIsBusy(true);
     try {
-      const files = await fileOpen({
-        description: 'MindForAI files',
-        extensions: ['mindforai', 'drawnixlite', 'md'],
-        multiple: true,
+      await openDocumentFilesViaFileInput(board, listRender, setAppState, showToast, {
+        mergedFileNamePrefix: t('toast.mergedFileNamePrefix'),
+        mergedFileNameSuffix: t('toast.mergedFileNameSuffix'),
+        dropFileLoaded: t('toast.dropFileLoaded'),
+        dropFileUnsupported: t('toast.dropFileUnsupported'),
       });
-      const fileList = Array.isArray(files) ? files : [files];
-      if (!fileList.length) {
-        return;
-      }
-      const result = await readFilesForOpen(fileList);
-      if (result.invalid) {
-        setAppState((currentAppState) => ({
-          ...currentAppState,
-          invalidDocument: {
-            fileName: result.invalid!.filePath,
-            fileHandle: null,
-            contents: result.invalid!.contents,
-            format: result.invalid!.format,
-            issues: result.invalid!.issues,
-          },
-        }));
-        return;
-      }
-      if (!result.data) {
-        showToast({ message: t('toast.dropFileUnsupported'), type: 'error' });
-        return;
-      }
-      const isMultiFile = result.isMultiFile;
-      const documentName = isMultiFile
-        ? `${t('toast.mergedFileNamePrefix')}${result.fileCount}${t('toast.mergedFileNameSuffix')}`
-        : fileList[0].name;
-      const manifest = getMergeManifest(result.data, isMultiFile);
-      applyDocumentDataToBoard(board, listRender, result.data, manifest);
-      setAppState((currentAppState) => ({
-        ...currentAppState,
-        filePath: documentName,
-        fileHandle: isMultiFile ? null : (fileList[0] as File & { handle?: any }).handle || null,
-        editingDocument: false,
-        isDirty: false,
-      }));
-      showToast({ message: `${t('toast.dropFileLoaded')}${documentName}`, type: 'success' });
     } catch (error) {
-      if (error && typeof error === 'object' && (error as Error).name === 'AbortError') {
+      if (isOpenDocumentAbortError(error)) {
         return;
       }
       showToast({ message: t('toast.dropFileUnsupported'), type: 'error' });
@@ -125,7 +86,9 @@ export const Welcome = () => {
         <span className="mindforai-welcome__drop-active">{t('welcome.dropActive')}</span>
       ) : (
         <>
-          <span className="mindforai-welcome__drop-text">{t('welcome.dropHere')}</span>
+          <span className="mindforai-welcome__drop-text">
+            {isTouchDevice ? t('welcome.touchDropHere') : t('welcome.dropHere')}
+          </span>
           <button
             type="button"
             className="mindforai-welcome__button"
@@ -135,6 +98,9 @@ export const Welcome = () => {
           >
             {t('welcome.openFile')}
           </button>
+          {isTouchDevice && (
+            <span className="mindforai-welcome__touch-hint">{t('welcome.touchHint')}</span>
+          )}
           <span className="mindforai-welcome__formats">
             {t('welcome.supportedFormats')}
             <span className="mindforai-welcome__format">mindforai</span>

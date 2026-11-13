@@ -40,7 +40,7 @@ content[1]:
               - WEB-03 apps/web/src/main.tsx :: 浏览器入口，以 StrictMode 创建 React 根并渲染 App
               - WEB-04 apps/web/src/app/app.tsx :: 应用主组件，维护内存中的文档状态与轻量偏好
               - WEB-05 apps/web/src/app/preferences.ts :: 应用默认偏好常量（默认暗夜主题、中文），不再写入 localStorage；主题与语言随文档 manifest 记忆
-              - WEB-06 apps/web/src/styles.scss :: 应用全局样式与基础布局
+              - WEB-06 apps/web/src/styles.scss :: 应用全局样式与基础布局（含移动端 viewport-fit 与 body 高度设置）
           - text: 静态资源与站点配置（不拆解二进制）
             children[4]:
               - WEB-08 apps/web/public/_headers / _redirects / robots.txt / sitemap.xml / <IndexNow 密钥>.txt :: 静态托管头信息、SPA 回退、搜索引擎配置与 IndexNow 密钥校验文件
@@ -53,24 +53,24 @@ content[1]:
               - WEB-13 apps/web-e2e/src/example.spec.ts :: 冒烟用例，验证首页标题与画板容器可见
           - text: VS Code / TRAE 扩展 Webview
             children[5]:
-              - WEB-14 apps/web/src/vscode/app.tsx :: Webview 内的 MindForAI 应用，装载宿主文档、防抖回写文本并处理无新窗口场景
-              - WEB-15 apps/web/src/vscode/main.tsx :: Webview 入口，注册宿主文件通道并挂载应用
+              - WEB-14 apps/web/src/vscode/app.tsx :: Webview 内的 MindForAI 应用，按需装载宿主文档、防抖回写文本并处理无新窗口场景；不保留当前文件的任何客户端缓存
+              - WEB-15 apps/web/src/vscode/main.tsx :: Webview 入口，注册宿主文件通道、清除本地文档会话缓存并挂载应用
               - WEB-16 apps/web/src/vscode/styles.scss :: Webview 基础样式与加载占位、错误提示样式
-              - WEB-17 apps/web/src/vscode/bridge.ts :: Webview 与扩展宿主之间的请求响应消息通道、文档订阅与文件读写实现
+              - WEB-17 apps/web/src/vscode/bridge.ts :: Webview 与扩展宿主之间的请求响应消息通道、文档订阅与文件读写实现；订阅时按需向宿主重新读取，不在 Webview 缓存文件内容
               - WEB-18 apps/web/vscode.html / apps/web/vite.vscode.config.ts :: Webview HTML 模板与独立构建配置（相对资源路径、产物 dist/apps/vscode-webview）
       - text: 4. 核心白板库（packages/mindforai）
         children[9]:
           - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
-            children[33]:
+            children[34]:
               - DATA-01 src/data/mindforai-text.ts :: .mindforai 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
               - DATA-02 src/data/toon-document.ts :: 三种格式的保存与加载总入口，并兼容读取旧版 TOON 文档
               - DATA-03 src/data/compact-document.ts :: .drawnixlite 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
-              - DATA-04 src/data/document-format.ts :: 按扩展名优先、文件头类型声明兜底判断文档格式（含 .md 等 Markdown 扩展名）
-              - DATA-05 src/data/document-load.ts :: 统一文档读取入口，识别格式（含 Markdown）并返回内容或可定位的解析错误
+              - DATA-04 src/data/document-format.ts :: 按扩展名优先、文件头类型声明兜底判断文档格式（含 .md 等 Markdown 扩展名）；无法识别时再按首行 content[..]: 结构兜底，并提供 hasDocumentExtension 判断扩展名是否已知
+              - DATA-05 src/data/document-load.ts :: 统一文档读取入口，识别格式（含 Markdown）并返回内容或可定位的解析错误；文件名缺少已知扩展名时按 .mindforai 重新包装后读取
               - DATA-06 src/data/document-save.ts :: 保存 / 另存为流程（.mindforai / .drawnixlite / .md 三种格式）、清单内嵌与保存结果提示的统一处理
               - DATA-07 src/data/document-validation.ts :: 各格式（含 Markdown 转换）的结构校验、错误定位与格式化输出
               - DATA-08 src/data/document-issues.ts :: 解析错误码、行列定位信息与行列换算工具
-              - DATA-09 src/data/drop-open.ts :: 拖拽文件到窗口时打开画板文档的公共逻辑
+              - DATA-09 src/data/drop-open.ts :: 拖拽文件到窗口时打开画板文档的公共逻辑，并提供 isMindForAIDocumentFile 判断文件是否属于可打开文档
               - DATA-10 src/data/blob.ts :: 文件内容解析、DataURL 读取与图片类型判断工具
               - DATA-11 src/data/filesystem.ts :: File System Access 的打开、保存与另存为封装；传入既有文件句柄时直接静默写入，不再弹出选择器
               - DATA-12 src/data/json.ts :: 文档序列化与读写工具，文件句柄路径解析
@@ -81,7 +81,7 @@ content[1]:
               - DATA-17 src/errors.ts :: 统一错误类型（如 AbortError）
               - DATA-18 src/types.ts :: 库级通用类型（指针类型、DataURL 等）
               - DATA-19 src/data/document-manifest.ts :: 清单的采集、应用与内嵌读写：记录节点样式、折叠状态、元数据、视口、文档主题与界面语言，经 DATA-27 压缩为 ZIP+Base64 后写入主文档 manifest 字段，打开时从该字段还原主题与语言；不再生成独立清单文件
-              - DATA-20 src/data/document-session.ts :: 仅把当前文档文本与文件身份写入本地会话用于刷新恢复，视口、主题、语言等文件元数据不再进入会话缓存（由 DATA-19 清单承载）
+              - DATA-20 src/data/document-session.ts :: 仅把当前文档文本与文件身份写入本地会话用于浏览器刷新恢复；IDE 宿主模式不读不写，并由 DATA-34 在启动时主动清除，视口、主题、语言等文件元数据由 DATA-19 清单承载
               - DATA-21 src/data/markdown-to-mindforai.ts :: 将 Markdown 文档解析为 mindforai 树结构，支持标题层级、有序 / 无序列表、嵌套列表、引用、表格、代码块与行内格式清理
               - DATA-22 src/data/document-merge.ts :: 将同时拖入 / 打开的多个文档合并成一张思维导图，以文件名作为分支节点
               - DATA-23 src/data/document-fingerprint.ts :: 统计当前画板或选中子树的所有节点数量，并按默认先序拼接节点文本计算 MD5 指纹
@@ -94,7 +94,8 @@ content[1]:
               - DATA-30 src/data/markdown-document.ts :: mindforai 树与 Markdown 文本互转（标题层级 + 深层列表），并在 Markdown 末尾追加 / 提取内嵌清单字段，供 .md 保存与打开识别
               - DATA-31 src/data/markdown-document-save.ts :: 把画板内容保存为 .md 文件，序列化为 Markdown 并在末尾内嵌 manifest 字段
               - DATA-33 src/data/file-host.ts :: 宿主文件通道注册表：IDE 扩展接管打开与保存对话框，浏览器环境保持默认实现
-              - DATA-34 src/data/ide-bridge.ts :: IDE 集成入口：文本解析、格式推断、画板与文本互转、初始视图还原，供 Webview 与扩展复用
+              - DATA-34 src/data/ide-bridge.ts :: IDE 集成入口：文本解析、格式推断、画板与文本互转、初始视图还原与客户端会话缓存清除，供 Webview 与扩展复用
+              - DATA-35 src/utils/mobile-keyboard-bridge.ts :: 移动端可视视口桥：监听 visualViewport / resize / orientationchange，把可视高度与软键盘遮挡高度写入 --mindforai-viewport-height 与 --mindforai-keyboard-height 两个 CSS 变量，供工具栏、状态栏与 Toast 避让
           - text: 4.2 画板渲染层（BOARD，packages/react-board）
             children[8]:
               - BOARD-01 src/wrapper.tsx :: 白板包装组件，组装 Plait 内核与所有基础插件并渲染
@@ -134,17 +135,19 @@ content[1]:
                 children[4]:
                   - UI-01 src/components/document-title.tsx :: 顶部工具栏中的当前文件名显示，带叉号关闭按钮：调用 DATA-28 彻底清空画板元素、选择、撤销历史、视口、文件句柄与会话缓存并回到欢迎页
                   - UI-02 src/components/document-status-bar.tsx :: 左下角状态栏，显示文件路径、保存状态与自动保存开关；宽度随文字自适应，仅在浏览器宽度不足时收缩
-                  - UI-03 src/components/document-drop-layer.tsx :: 拖拽文件到窗口时显示遮罩并完成打开
+                  - UI-03 src/components/document-drop-layer.tsx :: 拖拽文件到窗口时显示遮罩并完成打开；优先读取带文档扩展名的文件，避免多文件拖入时夹杂无效文件
                   - UI-04 src/components/node-context-menu.tsx :: 节点右键菜单，提供复制 (mindforai) / 复制 (drawnixlite) / 复制 (Markdown) 与粘贴为子节点
               - text: 工具栏
-                children[7]:
+                children[9]:
                   - UI-05 src/components/toolbar/creation-toolbar.tsx :: 顶部中间工具栏，切换手形 / 选择 / 思维导图指针，并提供"编辑"按钮呼出文档文本编辑器
                   - UI-06 src/components/toolbar/pencil-mode-toolbar.tsx :: 画笔模式下的画笔样式工具栏
                   - UI-07 src/components/toolbar/theme-toolbar.tsx :: 主题下拉工具栏（暗夜等主题切换）
                   - UI-08 src/components/toolbar/zoom-toolbar.tsx :: 缩放比例菜单（适配 / 100%），去掉加减号按钮，右上角常显当前缩放比例
-                  - UI-09 src/components/toolbar/app-toolbar/app-toolbar.tsx :: 左上角主菜单工具栏容器
-                  - UI-10 src/components/toolbar/app-toolbar/app-menu-items.tsx :: 主菜单项定义（打开、另存为、导出、新窗口等）
+                  - UI-09 src/components/toolbar/app-toolbar/app-toolbar.tsx :: 左上角主菜单工具栏容器；移动端下移到屏幕底部并允许换行，同时在主菜单内挂载 UI-47 主题切换
+                  - UI-10 src/components/toolbar/app-toolbar/app-menu-items.tsx :: 主菜单项定义（打开、另存为、导出、新窗口等）；打开菜单项复用 DATA-24 的 openDocumentFilesViaFileInput
                   - UI-11 src/components/toolbar/app-toolbar/language-switcher-menu.tsx :: 界面语言切换菜单
+                  - UI-47 src/components/toolbar/app-toolbar/theme-switcher-menu.tsx :: 移动端主菜单内的主题切换子菜单，替代移动端隐藏的右下角主题下拉工具栏
+                  - UI-48 src/styles/mobile.scss :: 移动端统一样式：安全区避让、底部工具栏换行、放大触控尺寸、菜单与弹出层适配以及软键盘位移
               - text: 元素弹出工具栏
                 children[8]:
                   - UI-12 src/components/toolbar/popup-toolbar/popup-toolbar.tsx :: 选中元素后的浮动工具栏容器
@@ -183,10 +186,10 @@ content[1]:
                   - UI-37 src/components/logo 与教程相关图片 :: 见 WEB-09 / WEB-10（不重复拆解）
                   - UI-38 组件样式 :: 每个组件目录下同名 *.scss，随组件修改同步维护
                   - UI-39 src/components/document-node-clipboard.tsx :: 拦截复制与粘贴事件，复制选中节点为 mindforai 文本，Ctrl+V 等效粘贴为子节点
-                  - UI-41 src/components/document-session-sync.tsx :: 同步当前文档到本地会话并在刷新后恢复，会话文本同样内嵌清单
+                  - UI-41 src/components/document-session-sync.tsx :: 浏览器模式下同步当前文档到本地会话并在刷新后恢复，会话文本同样内嵌清单；IDE 宿主模式通过 enableSessionRestore=false 停用
                   - UI-42 src/components/node-more/node-more-hint.tsx :: 节点加减号圆形按钮的 Ctrl 快捷交互：基于真实 DOM 命中折叠 / 展开按钮，悬浮提示（跟随主题配色）与 Ctrl+点击全部展开 / 折叠其全部后代分支（被点击节点本身保持展开，根节点同样可再次展开），并阻止框选
                   - UI-43 src/components/node-fingerprint-status.tsx :: 左下角状态栏显示所有节点或当前选中节点的节点数与文本 MD5（MD5 仅展示前四位与后四位，完整值放入悬浮提示），仅在文档变化且非文字编辑时重算
-                  - UI-44 src/components/welcome.tsx :: 空画布首页拖拽提示面板，与 UI-33 处于同一容器内：显示支持的文件类型（mindforai / markdown / drawnixlite）、打开按钮，并在文件拖入画布时高亮反馈
+                  - UI-44 src/components/welcome.tsx :: 空画布首页提示面板，与 UI-33 处于同一容器内：桌面端显示拖拽提示与支持的文件类型（mindforai / markdown / drawnixlite），移动端显示触控文案与大号“选择文件”按钮，两路均通过 DATA-24 统一打开
           - text: 4.7 画板操作插件（PLUG）
             children[5]:
               - text: 通用插件
@@ -230,7 +233,7 @@ content[1]:
               - I18N-05 src/i18n/translations/index.ts :: 翻译字典汇总导出
               - I18N-06 新增文案规则 :: 先加到 types.ts，再补齐全部 5 个语言文件，避免类型报错
           - text: 4.9 工具函数（UTIL）
-            children[10]:
+            children[11]:
               - UTIL-01 src/utils/common.ts :: 通用工具（平台判断、画板转图片、下载）
               - UTIL-02 src/utils/image.ts :: 选中元素导出 SVG / PNG 与图片数据转换
               - UTIL-03 src/utils/color.ts :: 颜色常量与主题色解析
@@ -241,8 +244,9 @@ content[1]:
               - UTIL-08 src/constants/color.ts :: 颜色与透明 / 无颜色常量
               - UTIL-09 src/libs/image-viewer.ts :: 图片查看器（缩放步进）
               - UTIL-10 src/utils/md5.ts :: 纯 TypeScript 的 MD5 摘要计算，供状态栏节点文本指纹使用
+              - UTIL-12 src/utils/mobile-platform.ts :: 触摸优先平台判定（iPad / iPhone / Android / 触摸屏 Mac），供 CORE-01 与 DATA-11 共用
       - text: 5. 关键约定与常见任务
-        children[11]:
+        children[12]:
           - text: SYS-01 文档格式三选一
             children[4]:
               - .mindforai：行式缩进树状文本，叶子独占一行、文本不加引号；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）
@@ -250,13 +254,14 @@ content[1]:
               - .drawnix：完整 JSON 文档，保留画板与视口（DATA-02 / DATA-12）
               - .md：标准 Markdown 文本，打开时解析为思维导图、保存时把画板写回 Markdown（DATA-30 / DATA-31），末尾同样内嵌 manifest 字段
           - text: SYS-02 常见任务落点
-            children[6]:
+            children[7]:
               - 改 .mindforai 解析 / 序列化 → DATA-01（错误定位在 DATA-08，校验在 DATA-07）；改内嵌清单编解码 → DATA-27
               - 加一种可打开的文件格式 → DATA-04 判断 + DATA-05 读取 + DATA-06 保存 + DATA-16 常量
               - 改菜单项 / 新窗口 → UI-10
               - 改画板交互（缩放、拖拽、快捷键）→ BOARD-01 / BOARD-05 / PLUG-02
               - 加语言 → I18N-04 与 I18N-05，并过一遍 I18N-03 类型
               - 改 Mermaid 导图生成 → MH-01 ~ MH-05 一条链
+              - 改移动端打开文件 / 工具栏布局 → DATA-11（选择器兜底）+ DATA-24（统一打开入口）+ DATA-35（可视视口与键盘）+ UI-47（移动端主题入口）
           - text: SYS-03 解析错误处理流程
             children[3]:
               - DATA-05 读取失败 → 返回 DocumentValidationIssue（行号 + 错误码）
@@ -294,6 +299,7 @@ content[1]:
               - Windows：rundocker.bat 双击即运行，内部用 chcp 65001 + PowerShell（优先 pwsh）调用 rundocker.ps1，避免中文乱码
               - 默认端口 8080，可用环境变量 MINDFORAI_PORT 覆盖；CFPAGE-DEPLOY.md 为 Cloudflare Pages 部署说明，脚本总说明见 deploy/README.md
           - SYS-09 代码内必须标注模块 ID（如 // DATA-01），便于后续 Agent 按 ID 检索；新功能先在本文档登记 ID 再写代码
+          - SYS-32 移动端适配约定：触摸设备（iPad / iPhone / Android / 触摸屏 Mac，判定在 UTIL-12）由 CORE-01 统一打上 mindforai--mobile 类，样式集中在 UI-48（styles/mobile.scss）；打开文件一律走 DATA-24 的统一入口，移动端由 DATA-11 使用不带 accept 过滤的 input 选择文件，规避移动浏览器把 .mindforai 置灰不可选；工具栏、状态栏与 Toast 通过 DATA-35 写入的 CSS 变量避让软键盘与安全区；移动端主题切换入口在 UI-47
           - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .mindforai 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
       - text: 6. 其他脚本与文档
         children[10]:
@@ -335,9 +341,9 @@ content[1]:
               - PUBLIC-01 apps/web/vscode.html :: Webview HTML 模板，由扩展注入 CSP 并把相对资源替换为 webview.asWebviewUri
           - text: 已注册的环境能力
             children[2]:
-              - SYS-30 IDE 嵌入约定：Webview 通过 DATA-33 接管打开与保存对话框；文档文本仍以 .mindforai / .drawnixlite 纯文本落盘，编辑器与 VS Code 文本模型保持一致（保存、撤销、热退出由 IDE 负责）
+              - SYS-30 IDE 嵌入约定：Webview 通过 DATA-33 接管打开与保存对话框；文档文本仍以 .mindforai / .drawnixlite 纯文本落盘，编辑器与 VS Code 文本模型保持一致（保存、撤销、热退出由 IDE 负责）；Webview 不缓存当前编辑文件，内容始终按需从 IDE 宿主读取
               - SYS-31 兼容范围：VS Code 1.74+ 及 TRAE、Cursor 等基于 VS Code 内核的 IDE；扩展为纯 JavaScript，零运行时依赖，无需编译
           - text: 未纳入版本管理的文档
             children[1]:
               - 安装方法与上架流程（本地目录安装、.vsix 安装、市场发布、市场安装）只在交付报告中说明，不写入仓库与公开 GitHub
-manifest: UEsDBBQAAAAIANu2al3el3RUOAUAAJi2AAASAAAAbWFuaWZlc3QubWluZGZvcmFp1Z3NctowFIX3eQo/QGEq+QeFbR8jk+l4wAluwWaMSZs8fXUgDSmJssiifLfdGYM/W9I5V/fKyvi4bebZpu2Wd/1Qt1cPzbBr+26euatF341NN9642/lVlk2ysfk9xlPrrr1rdmM8lGWLVbteDk13Ux7O0b9JtuwX+0384jzbDv2PZjFOTz//95xx1WzidZf18PPl2Lru7vf1fTz8tDqdeLjoQ9v82vbD8aL/XNi/XPh4/lPfbwT/+lg/tPdtV4+H+7qZ+KqYlqFw1awIX4sqzMovk6LKpyHPc+evQ/DB+fL2DKHrl83unetf52cEp9Ozr68+SDIfv9XuvvXrdb3dNct5dlevd82bU56ffzPWy3qszz7+8Oefv//S1O9+vK4f+328QHxYq9ODPr+j6WfvaRz2n7+lYxf86Ja+H879ADsF/van/y/W664KwvJMrJyJVTCxSiZWZVVCKqqIVFQZqahCUlGlpKKKSYWVk5SgXB5sRgULVLBrKphDSn9C9ulW6phG6pg26pgm6pgW6pgGmmhC+kj1Vif8EZwpMgJDyozAkEIjMKTUCIwpNtTJv7casURwqpxAoxaBQeUEGrl4u0FCMky4+BOlDo5ED+Q3dU5t6hzb1FQdzKk6mDPDKqNjNjliDYAzxUZgSLERGFJsBIYUG4ExxYY6hxMYsuIiMGTFRWDIiovAkBWXg8BypR+r/Q4r/g6r/g4r/w6r/w5rAA7rAA5rAQ7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rAR7rATnWA3KsB+RQDzBa/Y3g1EQktPorMGofpCYioSvXBAYNQhw1EemoiUijKwwiOFWAoSsMBAYV4OTih8uDQQXYbOEZulhEYNBRC10sIjDoqKUuFon/oWFT4nnx5aSgyklBlZOCKicFVU4KqpzEXUuYYAksvpyUdhfGRXSqFgoNqoZCg+qh0KCKWNpN20Z07jDBpm6Fhh0m2PSt0KChg9CowQM3iVvazZZGdK7uYTOmQsPqHjZrKjSs7nmu7nmw7lHLV6XdVHhE50oyNh0uNKwkY1PiQsNKMjYtLjSsJOdgSaa+3FTarXREdK5bYKsdQsO6BbbiITSsWxguLiTLC4Cnyh3BRneHPqBzGxy6Q/QRDSvZ0F2ij2hYyYbuFH1Ewwb40N2ik1MiviAn5dgEOtVLhAb1EqFBvURoUC8RGtRLhAb1kmRAZUFcsIsihIYVF7PV4IjObXBsNVhoWDfBVoOFhnUTbDVYaNCZidCoM5OIBi09JDMHFtwCW6gWGtYtzNaaIjq3wbG1JqFBw4OEXPN74ozaD2fUXjjD9kFqgDqjhqczanCaCLH4chKochKochKochKochKochKwckKd6QbqPDdQZ7mBuXu40ZlYchZmAJzptAJDOq3AkE4rMKTTJvMA/MEBrbYJDDo4oK8fC4w6OJhhqMCQYWgyd8eXE2gtV2BQOYHWcZMvBPD7ILRCJDBoH4S+xgh98wO611VhdTFsBKeOWOibCQKDjljoWwkCg4oJ9I0EgSFzoQJD5kIFhsyFFlaL7hGc6gzQorvAoM4ALboXVkvIEZw6OKAlZIFBBwe0hCwwaNjELO5B/zCw0Y0KoJsUQDcoSG4JeWkspLQl99+5NBZyNpjc+uLSWMiZYMmcB5ZM0zSatoQmLaEpS2jCEpquhCYroalKaKISmqaEJikrpjkZzZwm86YGwJm+KjCkswoM6a0CQ7qrwJD+miwq8EctdB2pwKCjFrqONFk/4vdB6OJDgUH7oNE1fhH8kk39B1BLAQIUABQAAAAIANu2al3el3RUOAUAAJi2AAASAAAAAAAAAAAAAAAAAAAAAABtYW5pZmVzdC5taW5kZm9yYWlQSwUGAAAAAAEAAQBAAAAAaAUAAAAA
+manifest: UEsDBBQAAAAIABCTbF0hfTsiUAUAADO6AAASAAAAbWFuaWZlc3QubWluZGZvcmFp1Z1NctpAEIX3PoUOEFOZ0Q8D2xzD5UqpQDZKQKKEcGKfPvPAMQ72eOFF+DrZgUAf0vR7Pd2j8fi4bebZpu2Wd/1Qt1cPzbBr+26euatF341NN9642/lVll1nY/N7jIfWXXvX7Mb4UpYtVu16OTTdTXk4Rv+us2W/2G/iB+fZduh/NItxcvr6v8eMq2YTz7ush58vr63r7n5f38eXn1anAw8nfWibX9t+OJ70nxP7lxMfj3/q+43gX7/WD+1929Xj4XfdXPuqmJShcNW0CF+LKkzLL9dFlU9CnufOz0Lwwfny9gyh65fN7p3zz2ZnBKfDs6+v3kgyHz/V7r7163W93TXLeXZXr3fNm0Oer38z1st6rM/e/vDrnz//cqvffXtdP/b7eIJ4sVanC33+iyaf/U3jsP/8TzoOwY9+0vfDsR9gp8DffvX/xXo9VEFYnomVM7EKJlbJxKqsSkhFFZGKKiMVVUgqqpRUVDGpsHKSEpTLg02pYIEKNqOCOaT0J2SfbqWOaaSOaaOOaaKOaaGOaaCJW0iPVG91wh/BmSIjMKTMCAwpNAJDSo3AmGJDnfx7qxlLBKfKCTRrERhUTqCZi7ebJCTThItfUWpwJEYg/1bn1FudY281VQdzqg7mzLTKaMwmI9YAOFNsBIYUG4EhxUZgSLERGFNsqHM4gSE7LgJDdlwEhuy4CAzZcTkILFf6sdrvsOLvsOrvsPLvsPrvsAbgsA7gsBbgsB7gsR7gsR7gsR7gsR7gsR7gsR7gsR7gsR7gsR7gsR6QYz0gx3pAjvWAHOoBRvvSEZxaIoX2pQUGjQ5oX1pg0PzIUUukjloiddQSqdG1DxGcKsDQtQ8CgwpwclnG5cGgAmy2JQ5dxiIwaNRCl7EIDBq11GUs8T80bUpcL76cFFQ5KahyUlDlpKDKSUGVk7ifChMsgcWXk9Lukr2ITtVCoUHVUGhQPRQaVBFLu2XbiM4NE2zpVmjYMMGWb4UGTR2ERk0euEVcoUHLuEKDNrlLuzXmiM51C2ydWWhYt8DWmoWGdQvPdQvPdQvPdQuzDYSIzpVkbBNBaFhJxjYShIaVZGwzQWhYSc7BksxN4M32hyI61y2wPSKhYd0C2ycSGtYtDLdkkk0ZwFXlRrDR3b4P6NwbDt3x+4iGlWzort9HNKxkQ3f+PqJhE3zo7t/JKRFfkJNybAKd6iVCg3qJ0KBeIjSolwgN6iVCg3pJMqGyIC7YpSRCw4qL2W5wROfecGw3WGhYN8F2g4WGdRNsN1ho0JmJ0Kgzk4gGbT0kKwcW3ALbqBYa1i3M9poiOveGY3tNQoOmBwm55o/EKXUcTqmjcIodg9QEdUpNT6fU5DSRYvHlJFDlJFDlJFDlJFDlJFDlJGDlhDrTDdR5bqDOcgN1N/gosEjpNzpHTM4PDYAzcwCBIXMAgSFzAIEhc4BkhYIfHNA+oMCgwQF9nFxg1OBgJsgCQybIAkMmyMlyJ1/noO1vgUF1Dtr6Tj5DwR+D0KaawKBjEPrkJ/RhGeimaoXV9cMRnBqx0Ic5BAaNWOiDHAKDign0IQ6BQbNj6AMcAkOWjwur6xQiONUZoOsUBAZ1Bug6hcJq1z2CU4MD2nUXGDQ4oF13gUHTJmQ/NJYUoSHJ/MvYRvecgO43Ad1rIrm756WxkJKb3Erp0ljIWWpyF5NLYyFnqCVzfloyzdxoORVaTIWWUqGFVGgZFVpEhZZQoQVUaPkUWjytmOZktKKbrOcaAGf6qsCQziowpLcKDOmuAkP6a7LZwY9a6MJbgUGjFrrwNtnX4o9B6KJIgUHHoNG1hxH8krf6D1BLAQIUABQAAAAIABCTbF0hfTsiUAUAADO6AAASAAAAAAAAAAAAAAAAAAAAAABtYW5pZmVzdC5taW5kZm9yYWlQSwUGAAAAAAEAAQBAAAAAgAUAAAAA

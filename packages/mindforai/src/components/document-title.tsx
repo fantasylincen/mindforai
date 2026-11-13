@@ -4,6 +4,7 @@ import { useBoard, useListRender } from '@plait-board/react-board';
 import { useMindForAI } from '../hooks/use-mindforai';
 import { useI18n } from '../i18n';
 import { resetBoardToInitialState } from '../data/document-reset';
+import { isHostDocumentFileChannel } from '../data/file-host';
 import { CloseIcon } from './icons';
 import './document-title.scss';
 
@@ -14,7 +15,7 @@ export const DocumentTitle = () => {
   const { t } = useI18n();
   const fileName = appState.filePath || '';
 
-  if (!fileName) {
+  if (!fileName || isHostDocumentFileChannel()) {
     return null;
   }
 

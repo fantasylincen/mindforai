@@ -30,3 +30,11 @@ export const setDocumentFileHost = (host: DocumentFileHost | null) => {
 };
 
 export const getDocumentFileHost = (): DocumentFileHost | null => currentDocumentFileHost;
+
+let isHostDocumentFileChannelActive = false;
+
+export const activateHostDocumentFileChannel = () => {
+  isHostDocumentFileChannelActive = true;
+};
+
+export const isHostDocumentFileChannel = () => isHostDocumentFileChannelActive;

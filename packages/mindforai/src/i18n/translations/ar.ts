@@ -160,6 +160,10 @@ const arTranslations: Translations = {
   'welcome.multiFileHint':
     'يمكنك إفلات عدة ملفات معًا، وسيتم تنظيمها في خريطة ذهنية واحدة حسب أسماء الملفات',
   'welcome.openFile': 'اختيار ملف',
+  'welcome.touchDropHere': 'افتح مستند ‎.mindforai‎',
+  'welcome.touchHint':
+    'اضغط الزر أدناه لاختيار مستند. إذا ظهر الملف باهتًا، فاحفظه أولًا على الجهاز أو في iCloud Drive',
+  'theme.switcher': 'السمة',
   'toast.markdownSaveConverted': 'تم تحويل Markdown إلى تنسيق mindforai وحفظه',
   'toast.saveSuccess': 'تم حفظ الملف',
   'toast.saveFailed': 'فشل الحفظ، يرجى المحاولة مرة أخرى',

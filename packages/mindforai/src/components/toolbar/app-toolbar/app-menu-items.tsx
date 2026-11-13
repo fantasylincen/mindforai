@@ -9,11 +9,9 @@ import {
   TrashIcon,
 } from '../../icons';
 import { useBoard, useListRender } from '@plait-board/react-board';
-import { fileOpen } from '../../../data/filesystem';
 import {
-  applyDocumentDataToBoard,
-  getMergeManifest,
-  readFilesForOpen,
+  isOpenDocumentAbortError,
+  openDocumentFilesViaFileInput,
 } from '../../../data/document-open';
 import { saveDocumentAsFormat, saveDocumentToCurrentFile } from '../../../data/document-save';
 import MenuItem from '../../menu/menu-item';
@@ -112,56 +110,17 @@ export const OpenFile = () => {
     <MenuItem
       data-testid="open-button"
       onSelect={() => {
-        fileOpen({
-          description: 'MindForAI files',
-          extensions: ['mindforai', 'drawnixlite', 'md'],
-          multiple: true,
-        })
-          .then(async (files) => {
-            const fileList = Array.isArray(files) ? files : [files];
-            if (!fileList.length) {
-              return;
-            }
-            const result = await readFilesForOpen(fileList);
-            if (result.invalid) {
-              setAppState((currentAppState) => ({
-                ...currentAppState,
-                invalidDocument: {
-                  fileName: result.invalid!.filePath,
-                  fileHandle: null,
-                  contents: result.invalid!.contents,
-                  format: result.invalid!.format,
-                  issues: result.invalid!.issues,
-                },
-              }));
-              return;
-            }
-            if (!result.data) {
-              showToast({ message: t('toast.dropFileUnsupported'), type: 'error' });
-              return;
-            }
-            const isMultiFile = result.isMultiFile;
-            const documentName = isMultiFile
-              ? `${t('toast.mergedFileNamePrefix')}${result.fileCount}${t('toast.mergedFileNameSuffix')}`
-              : fileList[0].name;
-            const manifest = getMergeManifest(result.data, isMultiFile);
-            applyDocumentDataToBoard(board, listRender, result.data, manifest);
-            setAppState((currentAppState) => ({
-              ...currentAppState,
-              fileHandle: isMultiFile
-                ? null
-                : (fileList[0] as File & { handle?: never }).handle || null,
-              filePath: documentName,
-              editingDocument: false,
-              isDirty: false,
-            }));
-          })
-          .catch((error) => {
-            if (error && typeof error === 'object' && (error as Error).name === 'AbortError') {
-              return;
-            }
-            showToast({ message: t('toast.dropFileUnsupported'), type: 'error' });
-          });
+        openDocumentFilesViaFileInput(board, listRender, setAppState, showToast, {
+          mergedFileNamePrefix: t('toast.mergedFileNamePrefix'),
+          mergedFileNameSuffix: t('toast.mergedFileNameSuffix'),
+          dropFileLoaded: t('toast.dropFileLoaded'),
+          dropFileUnsupported: t('toast.dropFileUnsupported'),
+        }).catch((error) => {
+          if (isOpenDocumentAbortError(error)) {
+            return;
+          }
+          showToast({ message: t('toast.dropFileUnsupported'), type: 'error' });
+        });
       }}
       icon={OpenFileIcon}
       aria-label={t('menu.open')}

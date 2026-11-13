@@ -158,6 +158,10 @@ const enTranslations: Translations = {
   'welcome.multiFileHint':
     'Drop multiple files at once; they are organized into one mind map by file name',
   'welcome.openFile': 'Choose file',
+  'welcome.touchDropHere': 'Open a .mindforai document',
+  'welcome.touchHint':
+    'Tap the button below to pick a document. If it is greyed out, first save it to this device or iCloud Drive in the Files app',
+  'theme.switcher': 'Theme',
   'toast.markdownSaveConverted': 'Markdown converted to mindforai format and saved',
   'toast.saveSuccess': 'File saved',
   'toast.saveFailed': 'Save failed, please try again',

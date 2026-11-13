@@ -17,13 +17,19 @@ import { serializeAsMindForAI } from './toon-document';
 import { serializeAsMarkdown } from './markdown-document-save';
 import type { DocumentExportedData, SaveableDocumentFormat } from './types';
 
-export { setDocumentFileHost, getDocumentFileHost } from './file-host';
+export {
+  setDocumentFileHost,
+  getDocumentFileHost,
+  activateHostDocumentFileChannel,
+  isHostDocumentFileChannel,
+} from './file-host';
 export type {
   DocumentFileHost,
   HostFileHandle,
   HostOpenOptions,
   HostSaveOptions,
 } from './file-host';
+export { clearDocumentSession } from './document-session';
 
 export interface LoadedDocumentTextResult {
   ok: boolean;

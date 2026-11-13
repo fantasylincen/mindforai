@@ -160,6 +160,10 @@ const viTranslations: Translations = {
   'welcome.multiFileHint':
     'Có thể kéo nhiều tệp cùng lúc, tự động sắp xếp thành một sơ đồ tư duy theo tên tệp',
   'welcome.openFile': 'Chọn tệp',
+  'welcome.touchDropHere': 'Mở tài liệu .mindforai',
+  'welcome.touchHint':
+    'Nhấn nút bên dưới để chọn tài liệu. Nếu tệp bị mờ, hãy lưu tệp vào máy hoặc iCloud Drive trước',
+  'theme.switcher': 'Giao diện',
   'toast.markdownSaveConverted': 'Markdown đã được chuyển sang định dạng mindforai và lưu',
   'toast.saveSuccess': 'Đã lưu tệp',
   'toast.saveFailed': 'Lưu thất bại, vui lòng thử lại',

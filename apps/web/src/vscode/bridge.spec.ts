@@ -70,13 +70,14 @@ describe('host bridge', () => {
     await expect(pending).rejects.toThrow('磁盘只读');
   });
 
-  it('subscribeHostDocument 能收到 document 消息并回放最新文档', async () => {
+  it('subscribeHostDocument 订阅时向宿主请求最新文档', async () => {
     const bridge = await loadBridge();
     bridge.startHostMessageBridge();
     const received: string[] = [];
     const unsubscribe = bridge.subscribeHostDocument((message) => {
       received.push(message.text);
     });
+    expect(postedMessages.some((message) => message.type === 'documentRequest')).toBe(true);
     window.dispatchEvent(
       new MessageEvent('message', {
         data: { type: 'document', fileName: 'a.mindforai', text: 'AAA' },
@@ -84,11 +85,22 @@ describe('host bridge', () => {
     );
     expect(received).toEqual(['AAA']);
     unsubscribe();
-    const lateReceived: string[] = [];
+  });
+
+  it('不缓存宿主已发送的文档内容', async () => {
+    const bridge = await loadBridge();
+    bridge.startHostMessageBridge();
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'document', fileName: 'a.mindforai', text: 'AAA' },
+      })
+    );
+    const received: string[] = [];
     bridge.subscribeHostDocument((message) => {
-      lateReceived.push(message.text);
+      received.push(message.text);
     });
-    expect(lateReceived).toEqual(['AAA']);
+    expect(received).toEqual([]);
+    expect(postedMessages.some((message) => message.type === 'documentRequest')).toBe(true);
   });
 
   it('openDocumentFilesByHost 构造 File 对象', async () => {

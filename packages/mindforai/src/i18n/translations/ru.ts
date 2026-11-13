@@ -160,6 +160,10 @@ const ruTranslations: Translations = {
   'welcome.multiFileHint':
     'Можно перетащить несколько файлов сразу — они объединятся в одну карту по именам файлов',
   'welcome.openFile': 'Выбрать файл',
+  'welcome.touchDropHere': 'Откройте документ .mindforai',
+  'welcome.touchHint':
+    'Нажмите кнопку ниже, чтобы выбрать документ. Если файл недоступен, сначала сохраните его на устройство или в iCloud Drive',
+  'theme.switcher': 'Тема',
   'toast.markdownSaveConverted': 'Markdown преобразован в формат mindforai и сохранён',
   'toast.saveSuccess': 'Файл сохранён',
   'toast.saveFailed': 'Не удалось сохранить, попробуйте ещё раз',

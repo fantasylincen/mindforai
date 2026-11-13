@@ -4,8 +4,42 @@ import { fileOpen as _fileOpen, fileSave as _fileSave } from 'browser-fs-access'
 import { MIME_TYPES } from '../constants';
 import { getDocumentFileHost } from './file-host';
 import type { HostFileHandle } from './file-host';
+import { isTouchMobilePlatform } from '../utils/mobile-platform';
 
 type FILE_EXTENSION = Exclude<keyof typeof MIME_TYPES, 'binary'> | 'md';
+
+const isAbortError = (error: unknown) => {
+  return !!error && typeof error === 'object' && (error as Error).name === 'AbortError';
+};
+
+const openDocumentFilesUsingFileInput = (options: { multiple: boolean }): Promise<File[]> => {
+  return new Promise((resolve, reject) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.multiple = options.multiple;
+    input.style.display = 'none';
+    document.body.append(input);
+    input.addEventListener('change', () => {
+      const selectedFiles = Array.from(input.files || []);
+      input.remove();
+      resolve(selectedFiles);
+    });
+    input.addEventListener('cancel', () => {
+      input.remove();
+      reject(new DOMException('The user aborted a request.', 'AbortError'));
+    });
+    if ('showPicker' in HTMLInputElement.prototype) {
+      try {
+        input.showPicker();
+        return;
+      } catch {
+        input.click();
+        return;
+      }
+    }
+    input.click();
+  });
+};
 
 export type FileSystemHandle = BrowserFileSystemHandle | FileSystemFileHandle;
 
@@ -45,12 +79,32 @@ export const fileOpen = <M extends boolean | undefined = false>(opts: {
     return acc.concat(`.${ext}`);
   }, [] as string[]);
 
+  const multiple = opts.multiple ?? false;
+  const pickDocumentFilesWithoutAcceptFilter = () => openDocumentFilesUsingFileInput({ multiple });
+  const normalizePickedFiles = (pickedFiles: File | File[] | undefined) => {
+    const pickedFileList = Array.isArray(pickedFiles)
+      ? pickedFiles
+      : pickedFiles
+        ? [pickedFiles]
+        : [];
+    return (opts.multiple ? pickedFileList : pickedFileList[0]) as RetType;
+  };
+  if (isTouchMobilePlatform()) {
+    return pickDocumentFilesWithoutAcceptFilter().then(normalizePickedFiles);
+  }
   return _fileOpen({
     description: opts.description,
     extensions,
     mimeTypes,
-    multiple: opts.multiple ?? false,
-  }) as Promise<RetType>;
+    multiple,
+  })
+    .then(normalizePickedFiles)
+    .catch((error) => {
+      if (isAbortError(error)) {
+        throw error;
+      }
+      return pickDocumentFilesWithoutAcceptFilter().then(normalizePickedFiles);
+    });
 };
 
 export const fileSave = async (
