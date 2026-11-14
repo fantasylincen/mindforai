@@ -1,14 +1,21 @@
 // 提供拖拽文件打开画板文档的公共逻辑
-import { DOCUMENT_FILE_EXTENSIONS, MIME_TYPES } from '../constants';
+import {
+  DOCUMENT_FILE_EXTENSIONS,
+  LEGACY_DOCUMENT_FILE_EXTENSIONS,
+  MIME_TYPES,
+} from '../constants';
 import { readDocumentFile, type LoadedDocumentFile } from './document-load';
 import { isMarkdownFileName } from './markdown-to-mindforai';
 
 export const isMindForAIDocumentFile = (file: File) => {
   const fileName = (file.name || '').toLowerCase();
-  if (fileName.endsWith(`.${DOCUMENT_FILE_EXTENSIONS.mindforai}`)) {
-    return true;
-  }
-  if (fileName.endsWith(`.${DOCUMENT_FILE_EXTENSIONS.drawnixlite}`)) {
+  const knownExtensions = [
+    DOCUMENT_FILE_EXTENSIONS.mindforai,
+    DOCUMENT_FILE_EXTENSIONS.drawnixlite,
+    LEGACY_DOCUMENT_FILE_EXTENSIONS.mindforai,
+    LEGACY_DOCUMENT_FILE_EXTENSIONS.drawnixlite,
+  ];
+  if (knownExtensions.some((extension) => fileName.endsWith(`.${extension}`))) {
     return true;
   }
   if (isMarkdownFileName(fileName)) {

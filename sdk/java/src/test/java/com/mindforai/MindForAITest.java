@@ -9,7 +9,7 @@ public class MindForAITest {
     private static int failed = 0;
 
     public static void main(String[] args) {
-        String templatePath = args.length > 0 ? args[0] : "../../templates/Templets.mindforai";
+        String templatePath = args.length > 0 ? args[0] : "../../templates/Templets.toon";
         run("loads real document", () -> loadsRealDocument(templatePath));
         run("round trip", () -> roundTrip(templatePath));
         run("children copy", MindForAITest::childrenCopy);

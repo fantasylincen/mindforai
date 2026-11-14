@@ -2,7 +2,7 @@
   "name": "@mindforai/mindforai",
   "version": "1.0.0",
   "private": false,
-  "description": "Open-source AI documentation whiteboard: turn mind maps into compact .mindforai documents that AI coding agents can read.",
+  "description": "Open-source AI documentation whiteboard: turn mind maps into compact .toon documents that AI coding agents can read.",
   "keywords": [
     "mindforai",
     "ai-documentation",

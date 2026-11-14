@@ -1,4 +1,4 @@
-// 验证清单以 .mindforai 文本格式序列化并可无损解析回来
+// 验证清单以 .toon 文本格式序列化并可无损解析回来
 import { describe, expect, it } from 'vitest';
 import { serializeDocumentManifestText, parseDocumentManifestText } from './document-manifest-text';
 import type { DocumentManifest } from './document-manifest';
@@ -7,7 +7,7 @@ const buildManifest = () =>
   ({
     type: 'mindforai-manifest',
     version: 1,
-    document: 'folder/board.mindforai',
+    document: 'folder/board.toon',
     theme: 'dark',
     language: 'en',
     viewport: { zoom: 1.5, origination: [20, 40] },
@@ -36,7 +36,7 @@ describe('document manifest text format', () => {
 
     expect(text.startsWith('type: mindforai\nversion: 1\ncontent[1]:')).toBe(true);
     expect(text).toContain('- text: manifest');
-    expect(text).toContain('- document: folder/board.mindforai');
+    expect(text).toContain('- document: folder/board.toon');
     expect(text).toContain('- theme: dark');
     expect(text).toContain('- language: en');
     expect(text).toContain('- zoom: 1.5');

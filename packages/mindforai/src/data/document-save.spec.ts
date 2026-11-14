@@ -69,9 +69,9 @@ beforeEach(() => {
 
 describe('save current document', () => {
   it('overwrites a drawnixlite file with drawnixlite content', async () => {
-    const handle = { name: 'board.drawnixlite' };
-    fileSaveMock.mockResolvedValue({ name: 'board.drawnixlite' } as any);
-    const { board, showToast, getAppState } = buildBoard('board.drawnixlite', handle);
+    const handle = { name: 'board.json' };
+    fileSaveMock.mockResolvedValue({ name: 'board.json' } as any);
+    const { board, showToast, getAppState } = buildBoard('board.json', handle);
 
     const isSaved = await saveDocumentToCurrentFile(board);
 
@@ -80,17 +80,17 @@ describe('save current document', () => {
     expect(payload.type).toBe('drawnixlite');
     expect(payload.content[0].text).toBe('root');
     expect(options.name).toBe('board');
-    expect(options.extension).toBe('drawnixlite');
+    expect(options.extension).toBe('json');
     expect(options.fileHandle).toBe(handle);
     expect(getAppState().isDirty).toBe(false);
-    expect(getAppState().filePath).toBe('board.drawnixlite');
+    expect(getAppState().filePath).toBe('board.json');
     expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ type: 'success' }));
   });
 
   it('overwrites a mindforai file with compact toon content', async () => {
-    const handle = { name: 'board.mindforai' };
-    fileSaveMock.mockResolvedValue({ name: 'board.mindforai' } as any);
-    const { board, showToast, getAppState } = buildBoard('board.mindforai', handle);
+    const handle = { name: 'board.toon' };
+    fileSaveMock.mockResolvedValue({ name: 'board.toon' } as any);
+    const { board, showToast, getAppState } = buildBoard('board.toon', handle);
 
     const isSaved = await saveDocumentToCurrentFile(board);
 
@@ -101,26 +101,26 @@ describe('save current document', () => {
     expect(payload.type).toBe('mindforai');
     expect(payload.content).toEqual(['root']);
     expect(options.name).toBe('board');
-    expect(options.extension).toBe('mindforai');
+    expect(options.extension).toBe('toon');
     expect(options.fileHandle).toBe(handle);
     expect(getAppState().isDirty).toBe(false);
-    expect(getAppState().filePath).toBe('board.mindforai');
+    expect(getAppState().filePath).toBe('board.toon');
     expect(showToast).toHaveBeenCalledWith(expect.objectContaining({ type: 'success' }));
   });
 
   it('uses the real saved file name when saving a new document without a path', async () => {
-    fileSaveMock.mockResolvedValue({ name: 'fresh-board.mindforai' } as any);
+    fileSaveMock.mockResolvedValue({ name: 'fresh-board.toon' } as any);
     const { board, getAppState } = buildBoard(null, null);
 
     await saveDocumentToCurrentFile(board);
 
-    expect(getAppState().filePath).toBe('fresh-board.mindforai');
+    expect(getAppState().filePath).toBe('fresh-board.toon');
   });
 
   it('reports a failure toast without throwing', async () => {
     fileSaveMock.mockRejectedValue(new Error('disk error'));
-    const { board, showToast, getAppState } = buildBoard('board.drawnixlite', {
-      name: 'board.drawnixlite',
+    const { board, showToast, getAppState } = buildBoard('board.json', {
+      name: 'board.json',
     });
 
     const isSaved = await saveDocumentToCurrentFile(board);
@@ -145,8 +145,8 @@ describe('save current document', () => {
 
 describe('save as', () => {
   it('switches the current file to the save as target', async () => {
-    fileSaveMock.mockResolvedValue({ name: 'board.drawnixlite' } as any);
-    const { board, getAppState } = buildBoard('board.mindforai', { name: 'board.mindforai' });
+    fileSaveMock.mockResolvedValue({ name: 'board.json' } as any);
+    const { board, getAppState } = buildBoard('board.toon', { name: 'board.toon' });
 
     const isSaved = await saveDocumentAsFormat(board, 'drawnixlite');
 
@@ -154,24 +154,24 @@ describe('save as', () => {
     const { payload, options } = await getSavedPayload();
     expect(payload.type).toBe('drawnixlite');
     expect(options.name).toBe('board');
-    expect(options.extension).toBe('drawnixlite');
+    expect(options.extension).toBe('json');
     expect(options.fileHandle).toBeNull();
-    expect(getAppState().filePath).toBe('board.drawnixlite');
+    expect(getAppState().filePath).toBe('board.json');
   });
 
   it('uses the real saved file name after save as chooses a new name', async () => {
-    fileSaveMock.mockResolvedValue({ name: 'renamed-board.drawnixlite' } as any);
-    const { board, getAppState } = buildBoard('board.mindforai', { name: 'board.mindforai' });
+    fileSaveMock.mockResolvedValue({ name: 'renamed-board.json' } as any);
+    const { board, getAppState } = buildBoard('board.toon', { name: 'board.toon' });
 
     await saveDocumentAsFormat(board, 'drawnixlite');
 
-    expect(getAppState().filePath).toBe('renamed-board.drawnixlite');
-    expect(getAppState().fileHandle).toEqual({ name: 'renamed-board.drawnixlite' });
+    expect(getAppState().filePath).toBe('renamed-board.json');
+    expect(getAppState().fileHandle).toEqual({ name: 'renamed-board.json' });
   });
 
   it('saves as mindforai from a drawnixlite file', async () => {
-    fileSaveMock.mockResolvedValue({ name: 'board.mindforai' } as any);
-    const { board, getAppState } = buildBoard('board.drawnixlite', { name: 'board.drawnixlite' });
+    fileSaveMock.mockResolvedValue({ name: 'board.toon' } as any);
+    const { board, getAppState } = buildBoard('board.json', { name: 'board.json' });
 
     const isSaved = await saveDocumentAsFormat(board, 'mindforai');
 
@@ -181,13 +181,13 @@ describe('save as', () => {
     expect(payload.content).toEqual(['root']);
     expect(payload.elements).toBeUndefined();
     expect(options.name).toBe('board');
-    expect(options.extension).toBe('mindforai');
-    expect(getAppState().filePath).toBe('board.mindforai');
+    expect(options.extension).toBe('toon');
+    expect(getAppState().filePath).toBe('board.toon');
   });
 
   it('reports a failure toast without throwing', async () => {
     fileSaveMock.mockRejectedValue(new Error('disk error'));
-    const { board, showToast } = buildBoard('board.mindforai', { name: 'board.mindforai' });
+    const { board, showToast } = buildBoard('board.toon', { name: 'board.toon' });
 
     const isSaved = await saveDocumentAsFormat(board, 'drawnixlite');
 
@@ -197,7 +197,7 @@ describe('save as', () => {
 
   it('saves as markdown and embeds the manifest at the end', async () => {
     fileSaveMock.mockResolvedValue({ name: 'board.md' } as any);
-    const { board, getAppState } = buildBoard('board.mindforai', { name: 'board.mindforai' });
+    const { board, getAppState } = buildBoard('board.toon', { name: 'board.toon' });
 
     const isSaved = await saveDocumentAsFormat(board, 'markdown');
 

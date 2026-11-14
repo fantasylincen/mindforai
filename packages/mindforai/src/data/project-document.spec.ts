@@ -1,11 +1,11 @@
-// 校验仓库根目录的设计文档 project.mindforai 与内嵌 manifest 保持一致
+// 校验仓库根目录的设计文档 project.toon 与内嵌 manifest 保持一致
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseMindForAIText } from './mindforai-text';
 import { readDocumentManifestBase64 } from './document-manifest';
 
-const DOCUMENT_PATH = resolve(__dirname, '../../../../project.mindforai');
+const DOCUMENT_PATH = resolve(__dirname, '../../../../project.toon');
 
 const readProjectDocument = () => {
   const content = readFileSync(DOCUMENT_PATH, 'utf8');
@@ -29,7 +29,7 @@ const countNodes = (nodes: unknown[]): number => {
   return total;
 };
 
-describe('project.mindforai 设计文档', () => {
+describe('project.toon 设计文档', () => {
   it('正文可被解析为 mindforai 文本树', () => {
     const { body } = readProjectDocument();
     const parsed = parseMindForAIText(body);
@@ -45,7 +45,7 @@ describe('project.mindforai 设计文档', () => {
 
     expect(manifestBase64.length).toBeGreaterThan(0);
     expect(manifest).not.toBeNull();
-    expect(manifest!.document).toBe('project.mindforai');
+    expect(manifest!.document).toBe('project.toon');
     expect(manifest!.nodes.length).toBe(countNodes(parsed!.content));
   });
 });

@@ -29,7 +29,7 @@ const buildManifest = (): DocumentManifest =>
   ({
     type: 'mindforai-manifest',
     version: 1,
-    document: 'folder/board.mindforai',
+    document: 'folder/board.toon',
     viewport: { zoom: 2, origination: [5, 6] },
     nodes: [
       {
@@ -64,13 +64,13 @@ describe('document manifest embed', () => {
 
   it('collects the board manifest and reads it back', () => {
     const board = createBoard();
-    const encoded = collectDocumentManifestBase64(board, 'demo.mindforai');
+    const encoded = collectDocumentManifestBase64(board, 'demo.toon');
     const decoded = readDocumentManifestBase64(encoded);
 
     expect(decoded).not.toBeNull();
-    expect(decoded?.document).toBe('demo.mindforai');
+    expect(decoded?.document).toBe('demo.toon');
     expect(decoded?.viewport).toEqual({ zoom: 1.5, origination: [10, 20] });
     expect(decoded?.nodes.length).toBeGreaterThan(0);
-    expect(decoded).toEqual(collectDocumentManifest(board, 'demo.mindforai'));
+    expect(decoded).toEqual(collectDocumentManifest(board, 'demo.toon'));
   });
 });

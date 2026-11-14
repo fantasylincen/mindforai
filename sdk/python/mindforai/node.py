@@ -113,7 +113,7 @@ class Node:
         return -1
 
     def mind_for_ai_text(self):
-        # 把自己和全部子孙节点转换为 .mindforai 标准文本
+        # 把自己和全部子孙节点转换为 .toon 标准文本
         from .parser import serialize_document
         return serialize_document([self.to_data()])
 

@@ -40,7 +40,7 @@ export function WebviewApp() {
         return;
       }
       const nextDocument: WebviewDocument = {
-        fileName: message.fileName || 'untitled.mindforai',
+        fileName: message.fileName || 'untitled.toon',
         fileUri: message.fileUri,
         text,
         revision: Date.now(),

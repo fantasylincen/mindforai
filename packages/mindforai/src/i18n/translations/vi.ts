@@ -60,8 +60,8 @@ const viTranslations: Translations = {
   'menu.newWindow': 'Mở cửa sổ mới',
   'menu.saveFile': 'Lưu vào tệp hiện tại',
   'menu.saveAsFile': 'Lưu thành',
-  'menu.saveAsDrawnixLite': 'Tệp DrawnixLite (.drawnixlite, JSON rút gọn)',
-  'menu.saveAsMindForAI': 'Tệp MindForAI (.mindforai, văn bản rút gọn)',
+  'menu.saveAsDrawnixLite': 'Tệp DrawnixLite (.json, JSON rút gọn)',
+  'menu.saveAsMindForAI': 'Tệp MindForAI (.toon, văn bản rút gọn)',
   'menu.saveAsMarkdown': 'Tệp Markdown (.md, markdown tiêu chuẩn)',
   'menu.exportImage': 'Xuất hình ảnh',
   'menu.exportImage.svg': 'SVG',
@@ -123,8 +123,8 @@ const viTranslations: Translations = {
   'popupToolbar.insertMermaidFlowchart': 'Chèn nút lưu đồ Mermaid',
 
   // Node context menu items
-  'contextMenu.copyNode': 'Sao chép (mindforai)',
-  'contextMenu.copyDrawnixLite': 'Sao chép (drawnixlite)',
+  'contextMenu.copyNode': 'Sao chép (toon)',
+  'contextMenu.copyDrawnixLite': 'Sao chép (json)',
   'contextMenu.copyMarkdown': 'Sao chép (Markdown)',
   'contextMenu.pasteNodeAsChild': 'Dán',
   'toast.copySuccess': 'Đã sao chép nút',
@@ -148,7 +148,7 @@ const viTranslations: Translations = {
   'documentTitle.close': 'Đóng tệp hiện tại',
 
   // File drag and drop
-  'toast.dropFileHint': 'Thả tệp .mindforai / .drawnixlite / .md vào đây để mở',
+  'toast.dropFileHint': 'Thả tệp .toon / .json / .md vào đây để mở',
   'toast.dropFileLoaded': 'Đã mở tệp: ',
   'toast.dropFileUnsupported': 'Định dạng tệp không được hỗ trợ',
   'toast.mergedFileNamePrefix': 'Tài liệu hợp nhất (',
@@ -160,11 +160,11 @@ const viTranslations: Translations = {
   'welcome.multiFileHint':
     'Có thể kéo nhiều tệp cùng lúc, tự động sắp xếp thành một sơ đồ tư duy theo tên tệp',
   'welcome.openFile': 'Chọn tệp',
-  'welcome.touchDropHere': 'Mở tài liệu .mindforai',
+  'welcome.touchDropHere': 'Mở tài liệu .toon',
   'welcome.touchHint':
     'Nhấn nút bên dưới để chọn tài liệu. Nếu tệp bị mờ, hãy lưu tệp vào máy hoặc iCloud Drive trước',
   'theme.switcher': 'Giao diện',
-  'toast.markdownSaveConverted': 'Markdown đã được chuyển sang định dạng mindforai và lưu',
+  'toast.markdownSaveConverted': 'Markdown đã được chuyển sang định dạng toon và lưu',
   'toast.saveSuccess': 'Đã lưu tệp',
   'toast.saveFailed': 'Lưu thất bại, vui lòng thử lại',
 
@@ -173,7 +173,7 @@ const viTranslations: Translations = {
     'Không thể phân tích tệp. Hãy sửa các lỗi được đánh dấu bằng đường đỏ bên dưới rồi nhấn "Kiểm tra và mở".',
   'textEditor.editTitle': 'Chỉnh sửa văn bản tài liệu',
   'textEditor.editDescription':
-    'Chỉnh sửa tài liệu hiện tại dưới dạng văn bản .mindforai, sau đó định dạng, kiểm tra và áp dụng thay đổi.',
+    'Chỉnh sửa tài liệu hiện tại dưới dạng văn bản .toon, sau đó định dạng, kiểm tra và áp dụng thay đổi.',
   'textEditor.format': 'Định dạng',
   'textEditor.open': 'Kiểm tra và mở',
   'textEditor.apply': 'Áp dụng thay đổi',
@@ -183,7 +183,7 @@ const viTranslations: Translations = {
   'textEditor.formatFailed': 'Tài liệu vẫn còn lỗi nên không thể định dạng',
   'textEditor.stillInvalid': 'Tài liệu vẫn còn lỗi. Vui lòng tiếp tục sửa.',
   'textEditor.valid': 'Định dạng hợp lệ và có thể mở',
-  'documentError.unknownFormat': 'Unrecognized file format. Expected .mindforai or .drawnixlite',
+  'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
   'documentError.missingType': "Missing 'type: mindforai' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
@@ -228,7 +228,7 @@ const viTranslations: Translations = {
   'tutorial.description':
     'Bảng trắng tất cả trong một, bao gồm sơ đồ tư duy, lưu đồ, vẽ tự do và hơn thế nữa',
   'tutorial.dataDescription':
-    'Tài liệu chỉ nằm trong tệp cục bộ của bạn; hãy mở hoặc lưu dưới dạng .mindforai',
+    'Tài liệu chỉ nằm trong tệp cục bộ của bạn; hãy mở hoặc lưu dưới dạng .toon',
   'tutorial.appToolbar': 'Xuất, cài đặt ngôn ngữ, ...',
   'tutorial.creationToolbar': 'Chọn một công cụ để bắt đầu sáng tạo',
   'tutorial.themeDescription': 'Chuyển đổi giữa chế độ sáng và tối',

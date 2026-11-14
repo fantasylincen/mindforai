@@ -50,7 +50,7 @@ class MindForAI:
             return self.load_text(handle.read())
 
     def load_text(self, contents):
-        # 从 .mindforai 文本加载文档并返回自身
+        # 从 .toon 文本加载文档并返回自身
         data = parse_or_raise(contents)
         self._version = data.get("version", 1)
         self._manifest = data.get("manifest")
@@ -68,12 +68,12 @@ class MindForAI:
         return self
 
     def save(self, path):
-        # 把根节点保存为 .mindforai 文件
+        # 把根节点保存为 .toon 文件
         with open(path, "w", encoding="utf-8") as handle:
             handle.write(self.mind_for_ai_text())
 
     def mind_for_ai_text(self):
-        # 把整篇文档转换为 .mindforai 标准文本
+        # 把整篇文档转换为 .toon 标准文本
         return serialize_document(self._content_data(), self._version, self._manifest)
 
     def _content_data(self):

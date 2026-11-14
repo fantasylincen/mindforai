@@ -30,7 +30,7 @@ const readRootText = (element: any): string => element.data.topic.children[0].te
 
 describe('mergeLoadedDocumentsIntoMindMap', () => {
   it('returns the original data when only one file is provided', () => {
-    const loaded = buildLoaded('alpha.mindforai', 'Alpha');
+    const loaded = buildLoaded('alpha.toon', 'Alpha');
     const merged = mergeLoadedDocumentsIntoMindMap([loaded]);
     expect(merged?.elements).toHaveLength(1);
     expect(readRootText(merged?.elements[0])).toBe('Alpha');
@@ -38,8 +38,8 @@ describe('mergeLoadedDocumentsIntoMindMap', () => {
 
   it('merges multiple files into one root with per-file branches', () => {
     const loaded = [
-      buildLoaded('alpha.mindforai', 'Alpha Root'),
-      buildLoaded('beta.drawnixlite', 'Beta Root'),
+      buildLoaded('alpha.toon', 'Alpha Root'),
+      buildLoaded('beta.json', 'Beta Root'),
     ];
     const merged = mergeLoadedDocumentsIntoMindMap(loaded);
     expect(merged?.elements).toHaveLength(1);
@@ -55,8 +55,8 @@ describe('mergeLoadedDocumentsIntoMindMap', () => {
   it('ignores failed loads and returns null when nothing is valid', () => {
     const invalid: LoadedDocumentFile = {
       ok: false,
-      file: new File(['x'], 'bad.mindforai'),
-      filePath: 'bad.mindforai',
+      file: new File(['x'], 'bad.toon'),
+      filePath: 'bad.toon',
       format: 'mindforai',
       contents: 'bad',
       issues: [],

@@ -60,8 +60,8 @@ const ruTranslations: Translations = {
   'menu.newWindow': 'Открыть новое окно',
   'menu.saveFile': 'Сохранить в текущий файл',
   'menu.saveAsFile': 'Сохранить как',
-  'menu.saveAsDrawnixLite': 'Файл DrawnixLite (.drawnixlite, сжатый JSON)',
-  'menu.saveAsMindForAI': 'Файл MindForAI (.mindforai, компактный текст)',
+  'menu.saveAsDrawnixLite': 'Файл DrawnixLite (.json, сжатый JSON)',
+  'menu.saveAsMindForAI': 'Файл MindForAI (.toon, компактный текст)',
   'menu.saveAsMarkdown': 'Файл Markdown (.md, стандартный markdown)',
   'menu.exportImage': 'Экспортировать',
   'menu.exportImage.svg': 'SVG',
@@ -123,8 +123,8 @@ const ruTranslations: Translations = {
   'popupToolbar.insertMermaidFlowchart': 'Вставить узел блок-схемы Mermaid',
 
   // Node context menu items
-  'contextMenu.copyNode': 'Копировать (mindforai)',
-  'contextMenu.copyDrawnixLite': 'Копировать (drawnixlite)',
+  'contextMenu.copyNode': 'Копировать (toon)',
+  'contextMenu.copyDrawnixLite': 'Копировать (json)',
   'contextMenu.copyMarkdown': 'Копировать (Markdown)',
   'contextMenu.pasteNodeAsChild': 'Вставить',
   'toast.copySuccess': 'Узел скопирован',
@@ -148,7 +148,7 @@ const ruTranslations: Translations = {
   'documentTitle.close': 'Закрыть текущий файл',
 
   // File drag and drop
-  'toast.dropFileHint': 'Перетащите файл .mindforai / .drawnixlite / .md сюда, чтобы открыть',
+  'toast.dropFileHint': 'Перетащите файл .toon / .json / .md сюда, чтобы открыть',
   'toast.dropFileLoaded': 'Открыт файл: ',
   'toast.dropFileUnsupported': 'Неподдерживаемый формат файла',
   'toast.mergedFileNamePrefix': 'Объединённый документ (',
@@ -160,11 +160,11 @@ const ruTranslations: Translations = {
   'welcome.multiFileHint':
     'Можно перетащить несколько файлов сразу — они объединятся в одну карту по именам файлов',
   'welcome.openFile': 'Выбрать файл',
-  'welcome.touchDropHere': 'Откройте документ .mindforai',
+  'welcome.touchDropHere': 'Откройте документ .toon',
   'welcome.touchHint':
     'Нажмите кнопку ниже, чтобы выбрать документ. Если файл недоступен, сначала сохраните его на устройство или в iCloud Drive',
   'theme.switcher': 'Тема',
-  'toast.markdownSaveConverted': 'Markdown преобразован в формат mindforai и сохранён',
+  'toast.markdownSaveConverted': 'Markdown преобразован в формат toon и сохранён',
   'toast.saveSuccess': 'Файл сохранён',
   'toast.saveFailed': 'Не удалось сохранить, попробуйте ещё раз',
 
@@ -173,7 +173,7 @@ const ruTranslations: Translations = {
     'Не удалось разобрать файл. Исправьте отмеченные красным ошибки ниже и нажмите «Проверить и открыть».',
   'textEditor.editTitle': 'Редактирование текста документа',
   'textEditor.editDescription':
-    'Редактируйте текущий документ как текст .mindforai, затем отформатируйте, проверьте и примените изменения.',
+    'Редактируйте текущий документ как текст .toon, затем отформатируйте, проверьте и примените изменения.',
   'textEditor.format': 'Форматировать',
   'textEditor.open': 'Проверить и открыть',
   'textEditor.apply': 'Применить изменения',
@@ -183,7 +183,7 @@ const ruTranslations: Translations = {
   'textEditor.formatFailed': 'В документе ещё есть ошибки, форматирование невозможно',
   'textEditor.stillInvalid': 'В документе ещё есть ошибки. Продолжите исправление.',
   'textEditor.valid': 'Формат корректен, можно открыть',
-  'documentError.unknownFormat': 'Unrecognized file format. Expected .mindforai or .drawnixlite',
+  'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
   'documentError.missingType': "Missing 'type: mindforai' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
@@ -228,7 +228,7 @@ const ruTranslations: Translations = {
   'tutorial.description':
     'Универсальная доска: майнд-карты, блок-схемы, свободное рисование и многое другое',
   'tutorial.dataDescription':
-    'Документы хранятся в ваших локальных файлах; открывайте или сохраняйте как .mindforai',
+    'Документы хранятся в ваших локальных файлах; открывайте или сохраняйте как .toon',
   'tutorial.appToolbar': 'Экспорт, настройки языка, ...',
   'tutorial.creationToolbar': 'Выберите инструмент, чтобы начать творить',
   'tutorial.themeDescription': 'Переключение между светлой и тёмной темами',

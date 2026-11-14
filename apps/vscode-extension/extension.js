@@ -1,21 +1,25 @@
-// VSX-01、VSX-02、VSX-03 VS Code 扩展入口：注册 .mindforai / .drawnixlite 白板编辑器、Webview 资源与命令
+// VSX-01、VSX-02、VSX-03 VS Code 扩展入口：注册 .toon / .json 白板编辑器、Webview 资源与命令
 const fs = require('fs');
 const path = require('path');
 const vscode = require('vscode');
 
 const VIEW_TYPE = 'mindforai.editor';
-const BOARD_FILE_EXTENSIONS = ['mindforai', 'drawnixlite'];
-const OPENABLE_FILE_EXTENSIONS = ['mindforai', 'drawnixlite', 'md'];
+const JSON_VIEW_TYPE = 'mindforai.jsonEditor';
+const BOARD_FILE_EXTENSIONS = ['toon', 'json', 'mindforai', 'drawnixlite'];
+const OPENABLE_FILE_EXTENSIONS = ['toon', 'json', 'md', 'mindforai', 'drawnixlite'];
 const NEW_DOCUMENT_TEXT = 'type: mindforai\nversion: 1\ncontent[1]:\n  - text: MindForAI\n';
 
-const getFileName = (uri) => path.basename(uri.fsPath || uri.path || 'untitled.mindforai');
+const getFileName = (uri) => path.basename(uri.fsPath || uri.path || 'untitled.toon');
 
 const getExtensionName = (uri) => {
   const match = /\.([^.\\/]+)$/.exec(uri.fsPath || uri.path || '');
-  return match ? match[1].toLowerCase() : 'mindforai';
+  return match ? match[1].toLowerCase() : 'toon';
 };
 
 const getWorkspaceFolderUri = () => vscode.workspace.workspaceFolders?.[0]?.uri;
+
+const resolveEditorViewType = (uri) =>
+  getExtensionName(uri) === 'json' ? JSON_VIEW_TYPE : VIEW_TYPE;
 
 class MindForAIEditorProvider {
   constructor(context) {
@@ -132,7 +136,11 @@ class MindForAIEditorProvider {
     }
     for (const selectedUri of selectedUris) {
       if (BOARD_FILE_EXTENSIONS.includes(getExtensionName(selectedUri))) {
-        await vscode.commands.executeCommand('vscode.openWith', selectedUri, VIEW_TYPE);
+        await vscode.commands.executeCommand(
+          'vscode.openWith',
+          selectedUri,
+          resolveEditorViewType(selectedUri)
+        );
       } else {
         await vscode.commands.executeCommand('vscode.open', selectedUri);
       }
@@ -142,7 +150,7 @@ class MindForAIEditorProvider {
 
   async saveDocumentFromHost(state, message) {
     const text = typeof message.text === 'string' ? message.text : '';
-    const extensionName = String(message.extension || 'mindforai').toLowerCase();
+    const extensionName = String(message.extension || 'toon').toLowerCase();
     const handleUri = typeof message.handleUri === 'string' ? message.handleUri : undefined;
     const currentHandle = {
       kind: 'file',
@@ -176,7 +184,11 @@ class MindForAIEditorProvider {
     }
     await vscode.workspace.fs.writeFile(targetUri, Buffer.from(text, 'utf8'));
     if (BOARD_FILE_EXTENSIONS.includes(extensionName)) {
-      await vscode.commands.executeCommand('vscode.openWith', targetUri, VIEW_TYPE);
+      await vscode.commands.executeCommand(
+        'vscode.openWith',
+        targetUri,
+        resolveEditorViewType(targetUri)
+      );
     } else {
       await vscode.commands.executeCommand('vscode.open', targetUri);
     }
@@ -270,16 +282,20 @@ const openWithEditor = async (uri) => {
     }
     targetUri = selectedUris[0];
   }
-  await vscode.commands.executeCommand('vscode.openWith', targetUri, VIEW_TYPE);
+  await vscode.commands.executeCommand(
+    'vscode.openWith',
+    targetUri,
+    resolveEditorViewType(targetUri)
+  );
 };
 
 const newDocument = async () => {
   const workspaceFolderUri = getWorkspaceFolderUri();
   const targetUri = await vscode.window.showSaveDialog({
     defaultUri: workspaceFolderUri
-      ? vscode.Uri.joinPath(workspaceFolderUri, 'untitled.mindforai')
+      ? vscode.Uri.joinPath(workspaceFolderUri, 'untitled.toon')
       : undefined,
-    filters: { MindForAI: ['mindforai'] },
+    filters: { MindForAI: ['toon'] },
     saveLabel: '创建',
   });
   if (!targetUri) {
@@ -293,6 +309,10 @@ const activate = (context) => {
   const provider = new MindForAIEditorProvider(context);
   context.subscriptions.push(
     vscode.window.registerCustomEditorProvider(VIEW_TYPE, provider, {
+      webviewOptions: { retainContextWhenHidden: true },
+      supportsMultipleEditorsPerDocument: true,
+    }),
+    vscode.window.registerCustomEditorProvider(JSON_VIEW_TYPE, provider, {
       webviewOptions: { retainContextWhenHidden: true },
       supportsMultipleEditorsPerDocument: true,
     }),

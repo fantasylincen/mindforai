@@ -1,6 +1,6 @@
 # @mindforai/mindforai
 
-MindForAI 的核心白板库：提供无限画布、思维导图、流程图、自由绘制，以及面向 AI 的文档导出能力（`.mindforai` / `.smalldrawnix` / `.drawnix`）。
+MindForAI 的核心白板库：提供无限画布、思维导图、流程图、自由绘制，以及面向 AI 的文档导出能力（`.toon` / `.json` / `.drawnix`）。
 
 本库由 [Nx](https://nx.dev) 生成并维护。
 

@@ -2,7 +2,7 @@
 import { Node, MindForAI } from '../src/index';
 import { parseOrRaise, serializeDocument } from '../src/parser';
 
-const TEMPLATE = process.cwd() + '/../../templates/Templets.mindforai';
+const TEMPLATE = process.cwd() + '/../../templates/Templets.toon';
 
 describe('mindforai sdk typescript', () => {
   it('loads and round trips a real document', () => {

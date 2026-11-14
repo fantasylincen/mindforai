@@ -39,17 +39,17 @@ describe('host bridge', () => {
     bridge.startHostMessageBridge();
     const pending = bridge.requestHost<{ files: { name: string; text: string }[] }>({
       type: 'openFiles',
-      extensions: ['.mindforai'],
+      extensions: ['.toon'],
       multiple: true,
     });
     const requestMessage = postedMessages.find((message) => message.type === 'openFiles')!;
     dispatchResponse({
       type: 'response',
       requestId: requestMessage.requestId,
-      files: [{ name: 'project.mindforai', text: 'content' }],
+      files: [{ name: 'project.toon', text: 'content' }],
     });
     const result = await pending;
-    expect(result.files[0].name).toBe('project.mindforai');
+    expect(result.files[0].name).toBe('project.toon');
   });
 
   it('宿主返回 cancelled 时抛出 AbortError', async () => {
@@ -80,7 +80,7 @@ describe('host bridge', () => {
     expect(postedMessages.some((message) => message.type === 'documentRequest')).toBe(true);
     window.dispatchEvent(
       new MessageEvent('message', {
-        data: { type: 'document', fileName: 'a.mindforai', text: 'AAA' },
+        data: { type: 'document', fileName: 'a.toon', text: 'AAA' },
       })
     );
     expect(received).toEqual(['AAA']);
@@ -92,7 +92,7 @@ describe('host bridge', () => {
     bridge.startHostMessageBridge();
     window.dispatchEvent(
       new MessageEvent('message', {
-        data: { type: 'document', fileName: 'a.mindforai', text: 'AAA' },
+        data: { type: 'document', fileName: 'a.toon', text: 'AAA' },
       })
     );
     const received: string[] = [];
@@ -107,7 +107,7 @@ describe('host bridge', () => {
     const bridge = await loadBridge();
     bridge.startHostMessageBridge();
     const pending = bridge.hostFileSystemHandlers.openDocumentFilesByHost({
-      extensions: ['.mindforai'],
+      extensions: ['.toon'],
       description: 'MindForAI',
       multiple: true,
     });
@@ -115,11 +115,11 @@ describe('host bridge', () => {
     dispatchResponse({
       type: 'response',
       requestId: requestMessage.requestId,
-      files: [{ name: 'board.mindforai', text: 'TEXT' }],
+      files: [{ name: 'board.toon', text: 'TEXT' }],
     });
     const files = await pending;
     expect(files.length).toBe(1);
-    expect(files[0].name).toBe('board.mindforai');
+    expect(files[0].name).toBe('board.toon');
     expect(await files[0].text()).toBe('TEXT');
   });
 
@@ -130,21 +130,21 @@ describe('host bridge', () => {
       new Blob(['CONTENT'], { type: 'text/plain' }),
       {
         name: 'project',
-        extension: 'mindforai',
+        extension: 'toon',
         description: 'MindForAI',
-        fileHandle: { uri: 'file:///a.mindforai' },
+        fileHandle: { uri: 'file:///a.toon' },
       }
     );
     await new Promise((resolve) => setTimeout(resolve, 0));
     const requestMessage = postedMessages.find((message) => message.type === 'saveFile')!;
-    expect(requestMessage.handleUri).toBe('file:///a.mindforai');
+    expect(requestMessage.handleUri).toBe('file:///a.toon');
     expect(requestMessage.text).toBe('CONTENT');
     dispatchResponse({
       type: 'response',
       requestId: requestMessage.requestId,
-      handle: { kind: 'file', name: 'project.mindforai', uri: 'file:///a.mindforai' },
+      handle: { kind: 'file', name: 'project.toon', uri: 'file:///a.toon' },
     });
     const handle = await pending;
-    expect(handle?.name).toBe('project.mindforai');
+    expect(handle?.name).toBe('project.toon');
   });
 });

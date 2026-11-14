@@ -1,7 +1,7 @@
-// 实现 .drawnixlite 精简 JSON 树与 Plait 元素之间的互转与保存
+// 实现 .json 精简 JSON 树与 Plait 元素之间的互转与保存
 import { PlaitBoard, PlaitElement, Viewport } from '@plait/core';
 import { MindLayoutType } from '@plait/layouts';
-import { MIME_TYPES, VERSIONS } from '../constants';
+import { DOCUMENT_FILE_EXTENSIONS, MIME_TYPES, VERSIONS } from '../constants';
 import { fileSave } from './filesystem';
 import { parseFileContents } from './blob';
 import { MindForAIFileHandle, getDefaultName } from './json';
@@ -151,7 +151,7 @@ export const saveAsCompactDocument = async (
   });
   const fileHandle = await fileSave(blob, {
     name,
-    extension: 'drawnixlite',
+    extension: DOCUMENT_FILE_EXTENSIONS.drawnixlite,
     description: 'DrawnixLite file',
     fileHandle: existingFileHandle,
   });

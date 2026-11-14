@@ -1,4 +1,4 @@
-// 实现 .mindforai 文本的转义、序列化与解析
+// 实现 .toon 文本的转义、序列化与解析
 import { ParseError } from './errors';
 import type {
   MindForAIBranchNodeData,

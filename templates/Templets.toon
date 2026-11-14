@@ -5,16 +5,16 @@ content[1]:
     children[4]:
       - text: 示例项目A: mindforai
         children[6]:
-          - text: 《系统详细设计文档》(Detailed Design Document, DDD): project.mindforai
+          - text: 《系统详细设计文档》(Detailed Design Document, DDD): project.toon
             children[7]:
               - text: 1. 项目概述
                 children[7]:
                   - SYS-11 项目名称：`MindForAI`（内部包名 @mindforai/source，基于 Drawnix 演进）
-                  - SYS-12 一句话目标：用思维导图 / 流程图 / 自由画笔梳理项目，并导出 AI 可直接阅读的 `.mindforai` 紧凑文本文档。
+                  - SYS-12 一句话目标：用思维导图 / 流程图 / 自由画笔梳理项目，并导出 AI 可直接阅读的 `.toon` 紧凑文本文档。
                   - SYS-13 产品定位：AI 时代人类与 AI 的最佳沟通数据结构。用结构化树状文档消除自然语言歧义、概念混淆与目标漂移，让 AI 按图施工、行为不跑偏。
-                  - SYS-14 核心价值：`.mindforai` 比 JSON 小、比 Markdown 更好编辑；人易读、AI 更易读；节点可复制复用；AI 可沿树快速定位修改点，减少全仓库搜索与上下文污染；适用于产品设计、项目拆解与任务派发。
+                  - SYS-14 核心价值：`.toon` 比 JSON 小、比 Markdown 更好编辑；人易读、AI 更易读；节点可复制复用；AI 可沿树快速定位修改点，减少全仓库搜索与上下文污染；适用于产品设计、项目拆解与任务派发。
                   - SYS-15 技术架构：Nx monorepo + React 19 + TypeScript + Vite；画板内核基于 Plait（@plait/core / mind / draw / layouts / common），富文本基于 Slate；零后端，文档与当前文件句柄仅存内存，浏览器只保存语言与主题，文件读写走本地文件系统。
-                  - SYS-16 核心任务：维护三种文档格式（.mindforai / .smalldrawnix / .drawnix）的读写与校验，在无限画布上提供思维导图、流程图、自由画笔与 Mermaid 思维导图能力，并提供多窗口、多语言、主题切换与 Docker 静态部署。
+                  - SYS-16 核心任务：维护三种文档格式（.toon / .json / .drawnix）的读写与校验，在无限画布上提供思维导图、流程图、自由画笔与 Mermaid 思维导图能力，并提供多窗口、多语言、主题切换与 Docker 静态部署。
                   - text: SYS-17 目标结构（Agent 生成代码时须按此落盘）
                     children[9]:
                       - apps/web/ : Web 应用（Vite + React 19），唯一对外产物；构建产物在 dist/apps/web
@@ -24,7 +24,7 @@ content[1]:
                       - packages/react-text/ : 基于 Slate 的富文本渲染层
                       - scripts/ : 构建辅助脚本（图标生成、发版、发布）
                       - deploy/ : 启动与部署脚本说明文档（脚本本体在仓库根目录：runsrc* / rundocker*）
-                      - docs/ : 人类阅读的文档（brand.md 等），非 Agent 首选资料；.mindforai 文档解析器实现在 packages/mindforai/src/data/
+                      - docs/ : 人类阅读的文档（brand.md 等），非 Agent 首选资料；.toon 文档解析器实现在 packages/mindforai/src/data/
                       - 禁止读取目录：node_modules/、dist/、.nx/、.git/、apps/web/public/（仅静态图片与图标资源）
               - text: 2. 模块编号规则
                 children[5]:
@@ -57,12 +57,12 @@ content[1]:
                 children[9]:
                   - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
                     children[31]:
-                      - DATA-01 src/data/mindforai-text.ts :: .mindforai 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
+                      - DATA-01 src/data/mindforai-text.ts :: .toon 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
                       - DATA-02 src/data/toon-document.ts :: 三种格式的保存与加载总入口，并兼容读取旧版 TOON 文档
-                      - DATA-03 src/data/compact-document.ts :: .drawnixlite 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
+                      - DATA-03 src/data/compact-document.ts :: .json 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
                       - DATA-04 src/data/document-format.ts :: 按扩展名优先、文件头类型声明兜底判断文档格式（含 .md 等 Markdown 扩展名）
                       - DATA-05 src/data/document-load.ts :: 统一文档读取入口，识别格式（含 Markdown）并返回内容或可定位的解析错误
-                      - DATA-06 src/data/document-save.ts :: 保存 / 另存为流程（.mindforai / .drawnixlite / .md 三种格式）、清单内嵌与保存结果提示的统一处理
+                      - DATA-06 src/data/document-save.ts :: 保存 / 另存为流程（.toon / .json / .md 三种格式）、清单内嵌与保存结果提示的统一处理
                       - DATA-07 src/data/document-validation.ts :: 各格式（含 Markdown 转换）的结构校验、错误定位与格式化输出
                       - DATA-08 src/data/document-issues.ts :: 解析错误码、行列定位信息与行列换算工具
                       - DATA-09 src/data/drop-open.ts :: 拖拽文件到窗口时打开画板文档的公共逻辑
@@ -81,7 +81,7 @@ content[1]:
                       - DATA-22 src/data/document-merge.ts :: 将同时拖入 / 打开的多个文档合并成一张思维导图，以文件名作为分支节点
                       - DATA-23 src/data/document-fingerprint.ts :: 统计当前画板或选中子树的所有节点数量，并按默认先序拼接节点文本计算 MD5 指纹
                       - DATA-24 src/data/document-open.ts :: 统一多文件读取、合并与应用到画板的打开流程，供拖拽、菜单与首页复用；从主文档 manifest 字段还原节点状态，无内嵌清单时按 DATA-26 折叠到默认可见层级
-                      - DATA-25 src/data/document-manifest-text.ts :: 清单与 .mindforai 文本树的互相转换：manifest 根节点下含 document / theme / language 字段与 viewport / nodes 段落，节点状态写成 node 路径 + key: value 行
+                      - DATA-25 src/data/document-manifest-text.ts :: 清单与 .toon 文本树的互相转换：manifest 根节点下含 document / theme / language 字段与 viewport / nodes 段落，节点状态写成 node 路径 + key: value 行
                       - DATA-26 src/data/document-expansion.ts :: 没有内嵌清单时按可见层级折叠节点，默认只展开到第三级（一~三级可见，三级节点收起）
                       - DATA-27 src/data/document-manifest-embed.ts :: 清单文本与主文档 manifest 字段的编解码：先 ZIP 压缩再转 Base64，读取时 Base64 解码再解压还原为清单文本
                       - DATA-28 src/data/document-reset.ts :: 关闭 / 清空当前文件时把画板元素、选择、撤销历史、视口与会话缓存重置到初始欢迎态，供 UI-01 与快捷键 Ctrl+N 复用
@@ -238,13 +238,13 @@ content[1]:
                 children[11]:
                   - text: SYS-01 文档格式三选一
                     children[4]:
-                      - .mindforai：行式缩进树状文本，叶子独占一行、文本不加引号；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）
-                      - .smalldrawnix：精简 JSON 树（DATA-03）
+                      - .toon：行式缩进树状文本，叶子独占一行、文本不加引号；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）
+                      - .json：精简 JSON 树（DATA-03）
                       - .drawnix：完整 JSON 文档，保留画板与视口（DATA-02 / DATA-12）
                       - .md：标准 Markdown 文本，打开时解析为思维导图、保存时把画板写回 Markdown（DATA-30 / DATA-31），末尾同样内嵌 manifest 字段
                   - text: SYS-02 常见任务落点
                     children[6]:
-                      - 改 .mindforai 解析 / 序列化 → DATA-01（错误定位在 DATA-08，校验在 DATA-07）；改内嵌清单编解码 → DATA-27
+                      - 改 .toon 解析 / 序列化 → DATA-01（错误定位在 DATA-08，校验在 DATA-07）；改内嵌清单编解码 → DATA-27
                       - 加一种可打开的文件格式 → DATA-04 判断 + DATA-05 读取 + DATA-06 保存 + DATA-16 常量
                       - 改菜单项 / 新窗口 → UI-10
                       - 改画板交互（缩放、拖拽、快捷键）→ BOARD-01 / BOARD-05 / PLUG-02
@@ -286,7 +286,7 @@ content[1]:
                       - Windows：rundocker.bat 双击即运行，内部用 chcp 65001 + PowerShell（优先 pwsh）调用 rundocker.ps1，避免中文乱码
                       - 默认端口 8080，可用环境变量 MINDFORAI_PORT 覆盖；CFPAGE-DEPLOY.md 为 Cloudflare Pages 部署说明，脚本总说明见 deploy/README.md
                   - SYS-09 代码内必须标注模块 ID（如 // DATA-01），便于后续 Agent 按 ID 检索；新功能先在本文档登记 ID 再写代码
-                  - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .mindforai 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
+                  - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .toon 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
               - text: 6. 其他脚本与文档
                 children[10]:
                   - SCR-01 scripts/generate-icons.mjs :: 生成 10 个候选图标、预览页、生效 favicon 与横版文字标志
@@ -302,7 +302,7 @@ content[1]:
               - text: 7. 产品亮点（对外传播与使用建议）
                 children[10]:
                   - SYS-18 消除歧义：用树状层级明确概念边界与目标关系，避免自然语言的歧义、概念混淆与目标漂移，让 AI 的行为与人的意图保持一致。
-                  - SYS-19 节省 Token：`.mindforai` 以缩进表达层级，无括号、引号与重复字段，相同信息量下体积更小，显著降低上下文成本。
+                  - SYS-19 节省 Token：`.toon` 以缩进表达层级，无括号、引号与重复字段，相同信息量下体积更小，显著降低上下文成本。
                   - SYS-20 最佳沟通结构：为 AI 时代设计的人机沟通数据结构，人类易读、AI 更易解析。
                   - SYS-21 优于 Markdown：节点即段落，增删、折叠、调层级与复制都更直接；没有标题层级和列表符号的维护负担。
                   - SYS-22 节点级复用：AI 规则、行为约束、任务模板可以整节点复制到其他项目或窗口，复用成本接近零。
@@ -341,8 +341,8 @@ content[1]:
                       - 清除画布的功能无需二次确认提示
               - text: 修改mindforai文档的形态
                 children[3]:
-                  - .mindforai 文档主要用于描述思维导图。
-                  - text: 修改 .mindforai 的文档格式,使其更加标准、易阅读。
+                  - .toon 文档主要用于描述思维导图。
+                  - text: 修改 .toon 的文档格式,使其更加标准、易阅读。
                     children[2]:
                       - 1.思维导图节点 底层toon文档是否使用双引号括起来格式不统一: 文档中一些节点的文本使用双引号包括起来。一些又未使用双引号包括起来。（例如示例中的children[7]：           - "AAAAAAAAA"  和 - BBBBBBBBBBB）
                       - text: 2.思维导图节点中的最终叶子节点。目前是直接使用逗号进行连接。
@@ -354,7 +354,7 @@ content[1]:
                 children[2]:
                   - text: 需求描述
                     children[1]:
-                      - 我经常会遇到 .mindforai 文件被Agent改坏了\\n然后我使用我们的工具打开这个文件的时候。前端页面直接显示“不支持的文件”，然而这个文件往往非常大，我不知道哪里出了问题。\\n你需要报错提示
+                      - 我经常会遇到 .toon 文件被Agent改坏了\\n然后我使用我们的工具打开这个文件的时候。前端页面直接显示“不支持的文件”，然而这个文件往往非常大，我不知道哪里出了问题。\\n你需要报错提示
                   - text: 我们项目所支持的所有文件类型,请加入编译报错功能
                     children[2]:
                       - 如果说用户打开了一个文件。优先根据文件名或者文件中的最开头头的文件类型。确定文件的格式。
@@ -363,7 +363,7 @@ content[1]:
                           - 页面弹出文本编辑框,并提示这个文本格式错误，需要手动进行修正。这个文本编辑框，对我们工具所支持的所有文件。具有代码着色的功能，具有格式化的功能，具有用红线勾画出错误位置的功能。该文本编辑框可以对整个文档文本进行编辑、保存、格式化。
               - text: 生成更加标准的项目核心文档
                 children[2]:
-                  - text: 按照文档的模板。为本项目生成更加标准的 mindforai 格式的核心项目文档  ./project.mindforai，不要求完全按照文档模板的格式进行编写文档。本次重制项目核心文档的作用是为了方便后续的Agent做开发工作，思路更加清晰，目标更加明确，翻阅资料更少。
+                  - text: 按照文档的模板。为本项目生成更加标准的 mindforai 格式的核心项目文档  ./project.toon，不要求完全按照文档模板的格式进行编写文档。本次重制项目核心文档的作用是为了方便后续的Agent做开发工作，思路更加清晰，目标更加明确，翻阅资料更少。
                     children[4]:
                       - 要求按照逐步求精的思路，把大模块拆成小模块
                       - 拆解至最小粒度为1个程序文件（模块）即可，不要再继续往下拆解。
@@ -832,7 +832,7 @@ content[1]:
                             children[1]:
                               - text: 我无法执行该目录下的start.sh脚本,请你动手进行修复
                                 children[1]:
-                                  - /workspace/drawnix # ls\\nCFPAGE-DEPLOY.md    LICENSE             deploy              nx.json             scripts\\nCHANGELOG.md        README.md           dist                package-lock.json   start.sh\\nCODE_OF_CONDUCT.md  README_en.md        docker-compose.yml  package.json        tsconfig.base.json\\nCONTRIBUTING.md     SECURITY.md         docs                packages\\nDockerfile          apps                node_modules        project.mindforai\\n/workspace/drawnix # ./start.sh\\n': No such file or directory\\n/workspace/drawnix #
+                                  - /workspace/drawnix # ls\\nCFPAGE-DEPLOY.md    LICENSE             deploy              nx.json             scripts\\nCHANGELOG.md        README.md           dist                package-lock.json   start.sh\\nCODE_OF_CONDUCT.md  README_en.md        docker-compose.yml  package.json        tsconfig.base.json\\nCONTRIBUTING.md     SECURITY.md         docs                packages\\nDockerfile          apps                node_modules        project.toon\\n/workspace/drawnix # ./start.sh\\n': No such file or directory\\n/workspace/drawnix #
               - text: 彻底移除该功能的全部逻辑代码
                 children[2]:
                   - text: 按住Shift进行多选的功能,原功能逻辑：
@@ -903,7 +903,7 @@ content[1]:
                 children[10]:
                   - F5刷新页面，不应该让正在编辑的文件消失。
                   - 自动保存功能测试没生效，没有成功保存。
-                  - text: 自动保存功能应该同时保存*.manifest.mindforai文件。
+                  - text: 自动保存功能应该同时保存*.manifest.toon文件。
                     children[1]:
                       - 如果manifest需要用户授权保存。那请弹出另存为窗口的时候，明确提示授权请求。同时也提示Manifest这个文件的作用。如果可以把另存为框的标题直接改为提示消息，可以直接把另存为窗的标题改掉来提示用户
                   - text: 顶部中部的工具栏默认选择"鼠标箭头"(选择)模式。。
@@ -914,7 +914,7 @@ content[1]:
                       - 错误表现：粘贴为了一段  .mindforaI 文本作为了1个子节点。
                   - 7.左下角的状态中。增加自动保存的功能。默认不勾选，勾选之后，节点修改完毕时。鼠标的焦点回到画布时。进行自动保存。
                   - 14.可按住Ctrl键对节点进行多选。目前尚未支持。
-                  - text: 15.保存文件的时候。生成一个名为 "文件名" + "_manifest.mindforai" 的文件,对文件的状态元数据进行保存。
+                  - text: 15.保存文件的时候。生成一个名为 "文件名" + "_manifest.toon" 的文件,对文件的状态元数据进行保存。
                     children[3]:
                       - text: 该文件需要保存的节点状态。
                         children[4]:
@@ -1009,15 +1009,15 @@ content[1]:
                       - 为全部折叠和全部展开两个功能分配合适的快捷键。最好是能够适配思维导图老用户的操作习惯。
               - text: 本轮任务
                 children[2]:
-                  - text: 把 *_manifest.mindforai 文件的内部格式。修改为mindforai的文件格式，
+                  - text: 把 *_manifest.toon 文件的内部格式。修改为mindforai的文件格式，
                     children[1]:
                       - 错误：目前的文件格式是JSON。
-                  - text: 对于不存在 *_manifest.mindforai 的主文档，打开之后，默认只展开至三级节点，大于三级节点的节点设置为折叠状态不展开。
+                  - text: 对于不存在 *_manifest.toon 的主文档，打开之后，默认只展开至三级节点，大于三级节点的节点设置为折叠状态不展开。
                     children[1]:
                       - 说明： 根节点（一级节点） --  二级节点 -- 三级节点
               - text: 本轮任务
                 children[4]:
-                  - 把 *_manifest.mindforai 文件的内容压缩成ZIP然后转成Base64编码:base64_data
+                  - 把 *_manifest.toon 文件的内容压缩成ZIP然后转成Base64编码:base64_data
                   - text: 然后把base64编码 base64_data 插入到现有主文档中
                     children[2]:
                       - text: 现有的主文档格式为
@@ -1134,12 +1134,12 @@ content[1]:
                   - 全面支持Markdown文档。支持打开、保存、另存为。把它的优先级放在第三个。
                   - text: 目前支持3个文件格式
                     children[3]:
-                      - text: .mindforai
+                      - text: .toon
                         children[1]:
                           - 首选格式
-                      - .drawnixlite
+                      - .json
                       - .md
-                  - 3个文件格式均需要保存 manifest , 保存的位置和方式与 .mindforai 完全相同，放到文件的最末尾
+                  - 3个文件格式均需要保存 manifest , 保存的位置和方式与 .toon 完全相同，放到文件的最末尾
                   - text: 节点的右键菜单中增加：“复制 (Markdown)”
                     children[1]:
                       - 该选项会把节点复制为Markdown文本
@@ -1168,7 +1168,7 @@ content[1]:
                   - 使用GitHub的标准版本号规则设立第一个版本号
               - text: 根据以下错误提示内容，修复这个文档
                 children[1]:
-                  - 文件格式错误\nproject.mindforai\n当前文件无法解析。请修复下方用红线标出的错误，然后点击“校验并打开”。\n第 55 行 · children 数量与实际子节点数量不一致 (28/31)\n第 127 行 · 该行缩进过深或缺少 children 定义\n第 127 行 · 缩进层级不匹配 (18)\n第 123 行 · children 数量与实际子节点数量不一致 (4/3)\n第 236 行 · children 数量与实际子节点数量不一致 (3/4)\n第 284 行 · 该行缩进过深或缺少 children 定义\n第 284 行 · 缩进层级不匹配 (10)
+                  - 文件格式错误\nproject.toon\n当前文件无法解析。请修复下方用红线标出的错误，然后点击“校验并打开”。\n第 55 行 · children 数量与实际子节点数量不一致 (28/31)\n第 127 行 · 该行缩进过深或缺少 children 定义\n第 127 行 · 缩进层级不匹配 (18)\n第 123 行 · children 数量与实际子节点数量不一致 (4/3)\n第 236 行 · children 数量与实际子节点数量不一致 (3/4)\n第 284 行 · 该行缩进过深或缺少 children 定义\n第 284 行 · 缩进层级不匹配 (10)
               - text: 本次工作
                 children[1]:
                   - text: 扫一遍代码, 确保下面的内容达标
@@ -1194,7 +1194,7 @@ content[1]:
             children[2]:
               - text: 基本要求
                 children[7]:
-                  - 首先请读取《系统详细设计文档》(Detailed Design Document, DDD)，当前项目目录下: ./project.mindforai
+                  - 首先请读取《系统详细设计文档》(Detailed Design Document, DDD)，当前项目目录下: ./project.toon
                   - text: 规则
                     children[6]:
                       - 最终给用户的报告需要使用中文,其余场景不做严格要求
@@ -1273,7 +1273,7 @@ content[1]:
                               - 可能会导致上下文累加10000 token 以上的任务
               - text: 本次工作
                 children[2]:
-                  - text: 给 .mindforai 文档的数据结构制作各种程序版本的API程序库
+                  - text: 给 .toon 文档的数据结构制作各种程序版本的API程序库
                     children[2]:
                       - text: 支持语言
                         children[4]:
@@ -1290,7 +1290,7 @@ content[1]:
                                   - MindForAI文档类
                                   - text: 用法和接口
                                     children[2]:
-                                      - doc = new MindForAI()\ndoc.load("./xxx/example.mindforai") // 从文件加载文档
+                                      - doc = new MindForAI()\ndoc.load("./xxx/example.toon") // 从文件加载文档
                                       - text: node = doc.root
                                         children[1]:
                                           - 获取根节点
@@ -1334,7 +1334,7 @@ content[1]:
                                           - 父节点
                                       - text: text = node.mindForAIText()
                                         children[1]:
-                                          - 把自己和全部子孙节点转换为 .mindforai 文本标准格式
+                                          - 把自己和全部子孙节点转换为 .toon 文本标准格式
                   - 对实现的程序库做大规模的测试。覆盖所有用法和可能存在的问题。
           - text: 使用说明
             children[6]:
@@ -1352,7 +1352,7 @@ content[1]:
               - 6.审查完成后，提交代码, 把 “任务节点XXX” 拖到已完成
       - text: 示例项目B: BeamStreamS3
         children[6]:
-          - text: 《系统详细设计文档》(Detailed Design Document, DDD): project.mindforai
+          - text: 《系统详细设计文档》(Detailed Design Document, DDD): project.toon
             children[1]:
               - text: BeamStreamS3 · Wi-Fi 麦克风
                 children[5]:
@@ -1762,7 +1762,7 @@ content[1]:
                       - text: 参照固件烧写页面WEB-03
                         children[2]:
                           - 在只要是前端用户能够看见的页面当中。都应该参照本页，给每个页面功能点标签页,都打上模块ID、功能ID(例如 这样的标记<span class="idtag" title="WEB-03-01 连接设备">WEB-03-01</span> )。方便用户描述问题，能够让Agent迅速的定位到具体的功能点，特别是需要提出新的需求，比如说只需要修改某个功能点的时候，用这样的方式就能够非常快速精确的定位。
-                          - project.smalldrawnix 项目的核心文档中，也请你在没有ID的功能项上，生成具体的模块ID、功能ID。
+                          - project.json 项目的核心文档中，也请你在没有ID的功能项上，生成具体的模块ID、功能ID。
               - text: 音频链路调优20261029
                 children[1]:
                   - text: 修改功能
@@ -1805,7 +1805,7 @@ content[1]:
                 children[3]:
                   - WEB-01 配置页面当中
                   - 在原只有串口配置通道下，新增WiFi配置通道
-                  - 修改完成后，同步更新 project.mindforai 文档，描述简要即可，不要描述细节
+                  - 修改完成后，同步更新 project.toon 文档，描述简要即可，不要描述细节
               - text: 降噪模块和压缩模块交换位置
                 children[1]:
                   - text: 功能修改
@@ -1841,7 +1841,7 @@ content[1]:
                     children[2]:
                       - 问题焦点
                       - 如果打开“分数延时（关闭 = 只用整数延时，零附加延迟）”，扬声器会听到杂音。我使用的扬声器是耳机。
-              - text: 修复project.mindforai文档
+              - text: 修复project.toon文档
                 children[1]:
                   - text: Bug report
                     children[1]:
@@ -1914,13 +1914,13 @@ content[1]:
                               - WEB-01-09WEB-01-13降噪
                               - WEB-01-15带通滤波
                           - 后端代码：波束成型模块 FW-03
-                          - 同步更新 ./project.smalldrawnix
+                          - 同步更新 ./project.json
               - text: 检查Agents文档移除重复内容
                 children[1]:
                   - text: 修改
                     children[3]:
-                      - 以./project.smalldrawnix为主
-                      - 检查AGENTS.md文档，移除AGENTS.md中与./project.smalldrawnix文档重复的内容。
+                      - 以./project.json为主
+                      - 检查AGENTS.md文档，移除AGENTS.md中与./project.json文档重复的内容。
                       - 把AGENTS.md文档, 转换为中文, 要求内容简要，不啰嗦冗长
               - text: 卡顿排查-任务与CPU负载
                 children[2]:
@@ -1931,8 +1931,8 @@ content[1]:
                           - text: 本文用途
                             children[3]:
                               - 供后续 Agent 排查「设备卡顿」问题，重点是「WebSocket 音频流卡顿」（丢帧、断续、爆音、延迟抖动、波形缺口）。
-                              - 主文档 project.mindforai 是 ID 的唯一真相源；本文所有代码位置都用 `文件:行号` 形式给出，可直接 grep 定位。
-                              - 本文只描述「现状事实」，不是修改方案；动手前仍以 project.mindforai / docs/config.schema.json / AGENTS.md 为准。
+                              - 主文档 project.toon 是 ID 的唯一真相源；本文所有代码位置都用 `文件:行号` 形式给出，可直接 grep 定位。
+                              - 本文只描述「现状事实」，不是修改方案；动手前仍以 project.toon / docs/config.schema.json / AGENTS.md 为准。
                           - 本次基线版本：firmware/main/app_main.c 启动顺序 NVS → 事件锁 → LittleFS → config_init → chain_config_init → rgb_led_start → factory_state → wifi_link_start → serial_channel_start → wifi_config_channel_start → pipeline_start。
                           - 排查前建议先确认三件事：output.mode（websocket 还是 usb）、audio.sample_rate（8000~96000，默认 16000）、beamforming 实际生效算法（默认 coherence）。
                           - 红线：禁止读取 access-denied/、firmware/build/、firmware/managed_components/、node_modules/；禁止读第三方源码，只读官方文档；禁止无限制的日志/ls 命令；禁止大规模读日志文件。
@@ -2262,7 +2262,7 @@ content[1]:
                           - 事件总线：firmware/main/event_signal.c、event_names.h。
                           - 配置：firmware/main/chain_config.c、serial_protocol.c、serial_channel.c、wifi_config_channel.c；schema 见 docs/config.schema.json。
                           - 系统任务参数：firmware/sdkconfig（行号已在第 4 节标注）；默认值来源 firmware/sdkconfig.defaults。
-                          - 项目文档：project.mindforai（ID 真相源）、AGENTS.md（实现约束与坑）、README.md（模块行为说明与实测步骤）。
+                          - 项目文档：project.toon（ID 真相源）、AGENTS.md（实现约束与坑）、README.md（模块行为说明与实测步骤）。
                       - text: 7. 一句话速记（贴在最上面也够用）
                         children[1]:
                           - 全链只有 fw02_cap 一个音频线程（优先级 8、绑 core 0、160 MHz CPU），与 wifi（core 0，约 23）、esp_timer（core 0）、mdns（core 0，100 ms）同核竞争；WebSocket 发送在 fw02_cap 里同步执行，send 用 MSG_DONTWAIT，失败即断流；先排除 ws_gate（安静不发帧）与 Wi-Fi 掉线重连，再查 core 0 的 CPU 余量与 lwIP 缓冲。
@@ -2344,7 +2344,7 @@ content[1]:
                       - text: 仅移除这个模块的固件端逻辑代码，留下空壳，等待后续实现
                         children[2]:
                           - WebSocket 输出模块（FW-05）
-                          - text: 移除 ./project.mindforai 中 WebSocket 输出模块（FW-05）的子项的全部功能实现，保留空壳
+                          - text: 移除 ./project.toon 中 WebSocket 输出模块（FW-05）的子项的全部功能实现，保留空壳
                             children[1]:
                               - text: WebSocket 输出模块（FW-05）
                                 children[7]:
@@ -2394,7 +2394,7 @@ content[1]:
             children[2]:
               - text: 基本要求
                 children[7]:
-                  - 首先请读取《系统详细设计文档》(Detailed Design Document, DDD)，当前项目目录下: ./project.mindforai
+                  - 首先请读取《系统详细设计文档》(Detailed Design Document, DDD)，当前项目目录下: ./project.toon
                   - text: 规则
                     children[6]:
                       - 最终给用户的报告需要使用中文,其余场景不做严格要求
@@ -2730,7 +2730,7 @@ content[1]:
             children[1]:
               - text: 请根据模板生成标准的项目核心文档
                 children[2]:
-                  - text: 按照文档的模板。\n为本项目生成更加标准的 mindforai 格式的核心项目文档  ./project.mindforai，不要求完全按照文档模板的格式进行编写文档。\n本次制作项目核心文档的作用是为了方便后续的Agent做开发工作，\n思路清晰，目标明确，翻阅资料更少。
+                  - text: 按照文档的模板。\n为本项目生成更加标准的 mindforai 格式的核心项目文档  ./project.toon，不要求完全按照文档模板的格式进行编写文档。\n本次制作项目核心文档的作用是为了方便后续的Agent做开发工作，\n思路清晰，目标明确，翻阅资料更少。
                     children[5]:
                       - 要求按照自顶向下逐步求精的软件工程标准思路，把大模块拆成小模块
                       - 拆解至最小粒度为1个程序文件（模块），不要继续往下拆解。
@@ -3122,4 +3122,4 @@ content[1]:
             children[1]:
               - ```\ntype: mindforai\nversion: 1\ncontent[1]:\n- text: 本次工作\nchildren[1]:\n- text: xxxx：..............\nchildren[3]:\n- AAAAAAAA。\n- BBBBBBBB。\n- CCCCCCCC。\n```
       - 我们的终极目标：“1文档 + 1Agent = 1项目”
-manifest: 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
+manifest: UEsDBBQAAAAIAKE4bV03GV90ECYAAD52BgANAAAAbWFuaWZlc3QudG9vbu2dTW8cR5JA7/4VBHxdC13VH9XNm71jXn1ZwAdjsGhIlEWIIgWyNbuaX78ZlV1d3ZKyKLct6b302rA9tunRi6zMiMj4yt37t9eXF29u7l68vH/Y3nz3r+uHx5v7u8uL5rvn93e767vdb80/L7+7uPjhYnf9v7v0o9u7m5fXj7v0jy4unr+6uX3xcH3327L/mfjth4sX98/fvUn/4eXFf12/eXt7vXt8tru/vzv8+92r6zfp13yxfXh9+Ge327vf321/T//436/GH+x/wX/dXP/P2/uH/Aue/KLt4RfNP//v+/s3lxezZ8vVbNVsVm3bNJtFs2xPfuj+4eb3m7vtrhfytx8W3exZN0s/1izabrVedP/xw7JbPOu65XqT/q7t5t0/PwC6u39x/fgJmsWy+wBo/PmL2dG/KIqQ/6ubx/+8v73dvn28fnF58XJ7+3j90Y/sP8X1bvtiu9t+8K8n/+/3//3hq3/yX99u39+/S79AWqpX47p/KNGzc2XaPbw7X6S8G6dE+u/+ZyewS+CLT4A/7h7uX18n+PuHy4vvm583s6urwg/98nb7/Gb3Ph2d2ekvAFwA8bcrw3/8f//10Rou2rEehKHNuWgLLtqSi7Yyq5cVWcGsyCpmRVYyK7KaWZEVzQqtakrKhgHXkeHWVLiCjjPYj4ZrPRqu7Wi4lqPh2o2GazUKn9Nwglvz7TjBcxVQwGFVUMBhlVDAYdVQwHEVEfmm3Jo9nQRPVjVgbyfgwKoG7PG0bsei6FogVpZ7YAr70fDR52ZvMsFzd2zAcXcs2ZsMOKyKDzisNxlwWG8y4LDB0IDDBkMDDhsMDbgNGa5hmwi0jWjQRqJBW4kGbSYatJ1o0IaiQVuKBm0qGrStaNG2okXbihZtK1q0rWjRtqJF24oWbStatK1o0baiRduKOdhWiPM2CZ4c1APnbQIObIPBeZuAA1vghhzUa8hBvYYc1BPnChM8WUmTc4XlJDEDDqykW7KSVieBi2lgxMqST3NRjTPgwKd5jj7NZJersG4OVbMgq5oFWdUsyKpmQVY1C7KqWZBVTQHNoWqW7uK2hE/WlYEH1paBB9aXgQfWmEt3CDnhs48OOowceOijgw4lBx7Y3Qg8ssPBDigv3VHbhM/Wi+jIbeCh9SI6eht4aL3YsvViC9eL5FTb0h2eT/hstY0O0QceWm2jw/SBh1bb6FB94KHV9hyutsmNT0t3Jibhs60KOhsTeGirgs7IBB7aqsgTH8XUB2R12SdbPCC2x2d/fPCQ2IyHVuvgQbEZD63WwcNiMx76sgAeGFu8ZjmUdlFla/DJNifwwDYn8MA2J/DANifwwDYn8MA2p+iMWRQPutAj8NCKR53NTvjsj4/OZgce2uqgs9mBh7Y66Gx24IFvOoFHvukkPHBapBihsFgVdLI98NBWRZ0TS/jsj4/OiQUe2KUoqHTHzuzI+7Ij78oOvSfJTm5HdnE7soNbcM8cqmZNVjVrsqpZk1XNmqxq1mRVs0arGvJNek2+R6/Jt+g1d6q6+IZXvN1J4LmWOeCwljngsJY54LCWuRhvcBwYcHYw4MAHBtwCHnDkA8N1ZQMO68oWY4cOVQPORQccWNWA89DFJgrHngRnsgIOvCfBLaPgzhnwLLOFuUA4wZNPMrijI+DAJxnczRFwYEUD7uQIOGxMNuCwMdmFOUef4MlKGpyjDziwkgbn6BfmTHOCJx8YcKY54MAHBpxpDjiwV8PN+YHfURbPagDPaQDPaChO4SSgYVVfcVwRAQ17mStOAyGgYS9yS25pzZJrZMURSnB8EhydBMcmwZFJcFwSHJUExyTBEckV15CtqIasoG4Xn8B63D3cv75Opuz+4fLi+7Zd/9SeasTxh355u31+s3t/edHMTk0NzxwWq874ljyhUy15oGmLEXt49MpSvaQMB/WTMhzUUyp+UsNxUevQCS2qwecqq4yHVVcZD6uw5FpBrhfQ/lXGAx8ssJMSv2PPvLawPqFzj0uxqN6xruDrSMDJ15a+ulxNim0HKV70DHuy2Aoigecep2Ifi2NlwYoq4ORrC15d7RiHhG5WZuAxDhkO6xmAxzhkOGwgWDzGoYd3n3d5OHgvAFlpwUPCAyBYeWVAsgLLdej+Y4SdMHyMiD9K2EnDx4j840QtpTtGhJbUHSNCS+sGRLvzh75GT5fPmNa4AjdbX3txIoZg1xscb3xNxikm3GsYMOGew4AJ9x7QqbgRUXB0BMdGcGQEx4XubKffof0sx4jQvpYRUVy0dBCB78BhJ4MeI+Ktj7gw5CACf69iJ4YeI/L3Kt9TmvM9pTnfU9LnSiYKPUCrzFdK+FyJ3tUrOnoqEeiHLRD1YfZeCMVK0xVbQNagOWrRHhMaRCjIlziiHy/Dk6DjD73Z3r3b3v5682L36vKim6UheN1s3S1m7Xwx746d0Sdlq0KHavSoR5eyJy18CAq/xY6g8LvsAFqLKeVHXUdQiVbAR2BHUIlWaDVagR7nGkHhecHJE2/TshLPS+J3Sbwuic8l8bjwtRYDpkOv0msuBkx43cWku2ezUpKbgOQeILkFSO4AkhuAxP+XeP8t30pVcEGpoI+lF4JvvdDzAo8h8ZYr/oy3W/FnvNWqoBVvcoCcToyKBKlKFIN5GVAFRmZAFZiaAVVgcBQNpiOo5uNLPn0tptyQMBlAK1pz06pblJygHfgY1aLoDGmrERUfFBxR8YHBEZUfHDyg4tNYIyr1mbxPmQCNuaogQ3gQxeMkCDKFI6rGSRBkDEdUjZMgyByOqBonwZBBPKBqnITW4yRoVJVGUUnUVDUel8bf0nhbGl9L42lp/CyNl6XxsTQeln7o1EEQi0FQP/X1kSiiVbcY4kCVmOJAlRjjQJWY40CVGGT8qLoRVLNPJbtUPxnuIIjFhvkfYDsWRbTqFs8h/k6ij+PvJBo5/s6ikz2eA3+e5AFUs08lu7SwQ31WbFlPKX8SxWKQl/W4QUkU0apb3KBAlRiXQJWYlzQr0gKqWVGLwbY4lUtLfqiA6bNgK4v9Wlms16qeIo0kimd7SIzGymE0KnHRJe65xDWXuOUSl1wSlZREJCU9XpL+Lklvl6SvqxKH8Is4g3/dcxjreUJetZ/5CobGTAiMRBX7W3HVUVSjKyrRqyicLRbN6sSoSBC2lWyaxebZsv3Dr0YNwgn0TwY16CDLFKYMKvBEAlSyQyX7U7I7FXuziqCqpGlE0jAiaRaRNIpImkQmGkR8uqBYRIdbcYs+UFTqZFCJTlBU6mRQQbJF0TRWRXuTorWp2NbEgqwiSJ3EcGwJRaA6MA2qzDEyJTAFZjYwBUY2MAUVDYEpqGgoNoHZ1L9iTEpgKtS/w5N1DD8oti/ajpjE6Za43Yo+4cB0HDGHh1VFcDOJwU7lrzbds8Wi28y7WdN0zfq4ZHNSsio+jyLuXEmvs6TPWdLjLOlvlvQ2B6bAKCqSOoqETjGZY9OpiotGYCp0quKiEZiOI+bQqYJArmKmwdIQxF0amtKWhpa05DMJTE8VQzYUAzYUwzWKgzVYkALzrphBsTIY95XBuBdMu0uPdgY92tUR7ktiSFbbYLc6g93qDHYrpTsMkAK71SnsFv1Sqq8pwlcTVdAzJ+iXE/TKCfrkBD1ygv44weNJgQg3n8XCRpPexLc6BCJcb+pTpfgkKTg9Kq7zAld3qWu6Jiq5NPgVCIDe3ew5TwMg9jaQAe06ogY9MaErMNuEf9TUw+APIvA3AjgGMyLStS45BjMiYmMwIyI2BjMiYmMwIyI2gTEiYmvqRkRsRd2R6oabF3E4cC8A3YAXQ4GmNca7SeCBLQMg3P8oDmkx7VNwVHhEhLvzgYg9TOLa72LFtwRej8/VDRkPqxcyHlcn9HhY85rxsFf7jIe91mc87JU+42Gv84GHVivi+2ePz7Yp4DKUjIe2KeArW+Ch4dDmTlz/0uOzlQ54nn7Gk9ucJAB9A8DtTgCiLY87yuGPdFQQ7YBHPMS9x8WOYwk8eFN8mdvqXzdZczlbn0zWfOqRzGLf97df60J637CH1+YDmOD1+BUIwFWCGVBcM7AXgL7C4lvgXgD6Covb4PcC+BXdxBPqlG0iLjvZC+DfJkkE9jaR20N108xegCpEgO/yKnY63febbF7iIModVHhxdkaEbwJskmLtVlNoBYXeleg9qdaYaF0JTugGHHhPqoMg8gDIRPBDJABZL4Dfcy00hxo+/Ib7yTfgD262/wme/NHFVizBk1dWHP1O8OSVxba0bLjtLBtzYVaCN7t7PT75QH2h8qy/Eg97Ecx42JaNwEN/WvCHxQ7K2bjvQMVbkAa/AgHI9gh8Fy2NfTJ8+Qb80RMb+JubAxBBj/7u4BRET4f1UHo6rOfZ02G7hXs6bCChp8PGEhIdedeR95y4QT3o0XYE3J7e07l9CHRzes8nTmVkfvj6ovWqXrOydat4bkHQo9cWO2OsEZeCNuBK0MTmXll100vmZ+8O/f6Anz61L97zw9fX7Iv3/HoNh+4P7gnFBVKZX79H0M3BPSE3Qmu3IUUL4uGvQQL0+QtCtyfaS8BfY3DkOhPqdR3cYybnwIOOmwM370y3DZ6wwIR9obZc6IfZGvPtnpxlKzZdSlbWHRfu+dm7Q78/0FoN7OXMwRVX5jieO4Y3Eb/z8IM1Qubj3syKL45Kvj7ZGgQd98ubq52KlU4Wej8/+NwFn1mr9fz09SVrtv4vXE8883G98czHrdUNPvbX5X5bcxWu+umwoPfzg60S/J30PR9Xb008B63Zn+7o8V4C+BmbmEMPIoSfswpOGvmGspKvL3ltxUPgmuIMOMC6ih9dbIqvLhLWFWytimPpAWyF+WDfnqwV+3jt+XfAl9vbRwJ+BQJwtVXPd67vgllgsPuy58OahD0f1iy0Yse6VYcHgt7PD9YMmY+rGeQPAGZ++PcnW4bMx7UM4jaKVt1GEfTgc6Vuowh68NqK2yha9YCEoPfzk3c23BvLfFxrLC6pb8FPByU2szWbKJj28LN3B1hnBR1YY6HZzJ5WokefGbetYluror2C0JHPfPHUA+jE7Tutun0n6MEnfqL5BULHPfHo0v2ezmwpe37wyRG3RrTg8eSJjauPVmBttALrInERaAsuAm3FRaBtsQjUQk/eF2ivLui4ejTouJo06LCttj0ddIByYcPNP4H1uHu4f32dFM79w+XF9+sf259+Pv2vxx/65e32+c3u/eVFMzvVBl9bvMKOXTwp3tXVP7pPsH+GeCydfH56+NvXwaqTw+jMcMBpE3A9PHVlC0boaYWznsXvfoVTjE08vQTNz5vZ1VUVS4DdnuaD38OjV9a+tvTVpd7eBjzo9W3Ag97fMh567dArp01n7PHZSgeb+h/w0AcHm/wf8KBRo4wHDRoFnLZPpYf3xhX2+GSdOfFaFQUPrDMDD6wztRWcPbz73IOfEg28s2NfV1eLZQ3B9n4RSl/o6ZTK+cvw9YUs6Pe6hDw7OWYSsqDQ6xKyoJrqErJwW6hLyEJ9YV1CFgrD6hKyUKVVk5Da9oIenuxrLsk3zCX5frkk3y6X5HjckhyPW5YsIwFO2xTQw5P1oHhG8x7fHZLpBYBvEHY4NgOCDWYA6g9ZBcdMcNDQBSoZkH7Q3AmGvQj8fQp2swNQnV3uBeBuAbEtO9+KfftuhsmhS5LFJ1tg9ODhAQ9rfTMeNjKkntq8x7ef/QrUl0CFTaox1zqDuwmOIStZa8FqV7DShlWuY52rsJfwqNUxZiWbxnFAzQGOEzEcqy2OKZ6I4VhtcT/aiRiO1RbXGJ2I4VhtcSXDiRiO1dYOyPtADMdqa8fmfSCGY7ULLwPbVnvjWO2mkstkY7lN1nKdRN8nodmugkv6OY2A8Zu/ERDrzGLL5rEl88Vyeb4mS+jcfTj3Bhx7ePTKck85tO4M2tohPSLFw/F3mQEpLpWYLJGQwDN18wCH1M0DHNILG+CQ5WkDnDTrccBnHxroFL4RD31woFP4RjykWzjiMZ3DAx6y81ddyIguYJQXLj5ZsCgSoAoR4Luc7jQPiGAPYEAEewEDItgTGBDB3gC2BXnEgx8T+BGBHw/40SA7yuVyJwpeoT6IgSctqD7gs52wlm1VWrZVkWaQD/jsvVnMJFPw2HuT7fHM2R7PnO3xqHMS2A6MEQ+teNA5CbW7pn0+5oBPPlgTz8d41hedOsiAYOU18USPZwtUoCUmNIVMiC9xHD9egichxx96s717t7399ebF7tXlRTdL9c/dbN0tZu18Me+OncpJufR6UqErHfqS+4rqh5DgG+cICb53DpA1mEh25HOEFJx+dBR0hBSc/lZx+smxpxESnHObPNkmLSrwoAT+k8B7EvhOAs8JXacwIPL1JrleYUAE1yxMumwm6yPw4AX+u8B7F/juAs9d4LcLvPaWbX3klwp5b0YvANsq9QOG6IBoixR/Rduj+CvaGslbyHoB/IpK30Z2EKIaMeimQzBK4hgTbkYE4yVGTMUnV3xwweeuwTzTkxMDZCVrbVltgyKDt6seYxqUGT01NGKiA3QjJjpIN2KyA3UHTHSqaMQszI2nYZYGrrM45dm3gxgOow/Pwo2YCqMPz8aNmAqjD8/KjZgKo0/Pzh0wFUa/dRh9hTpSKCOBKqrCc1L4TQqvSeEzKTwmhb+k8JYUvpLCU1IPMDoIYVD22mdxPhJDstoG4xqYAvMamAIDG5gCExuYAiOLHm82Qir2pWBXqieKHYQw2KbidDHbWis8Aexrqh9jCvRtYAo0bmAadK7DE2DPGzxAKvalYFcWdqTLOhUfataJYTCyxdenbautcGkCU+DSBKbAcASmwHRA31H/EFKxkgYjbHAMl4Y8TAHRZZlWBru0MlilVR0FDkkMx5YQGIQV3yBU4F4LXGuBWy1wqQXutCA6KIgMCvqUBD1Kgv4kQW9SBU7dF3Ho/rqnDNbzhLpqP+MFA4UJgBsA/X7GX0/w1df4ymt98WixcFQlQiVCsK1f0yw2z5btH3rJZxAMrmcyJF3XGCb7ZEi4ZxGQgh0p2I+C3Yjfi/rApqAhQtAMIWiEEDRBCBogJpofXGe+WGCGWmnDucdXtmRIwdnHV7ZkSHhiA9/4pG/VwbfpFFt0OID6AHESgb8N8EHiQKSrK/54jkCEm85AhBvOQIRXBAQivCKg2MhkUu34kRyBiFftfE+U34BfbLkzHSeBwyxwmfF9rIHIP058T0kfYEwisNPhq033bLHoNvNu1jRdsz4uYSxKpf8s+JhvBX24gh5cQf+toPdW0HcbiHBjh0+e4BMnxaSJSWfiLwiBiNeZ+AtCIPKPE19nwgOp+L76JT2IuqQ3VS3pLVXJ94GbFP1gB/xQB/xAh+IwBw4g3FzjZx+s6MZ6RTfWBVPt0ZMdXU92/rBbEkGwynR71NHtUUe3RymtQAeE26MOb4/Il0d17Q266kbe6wXv84L3eMH7u+C9XfC+LviDNoEHNonFIj+LXkSX8QceWC+qU4/opCM23VjAWnwC63H3cP/6On32+4fLi+/bdv1Te6orxh/65e32+c3ufRpUMjv9KLytU/Sj+Lu+31pqeOqRzXDUIzs1Icfy4bFmWjzdWK7MJtQZYFOQ9UHAQe+zGQ56m81w0LuseOrmxLxNCTxXEQUcVhEFnHvXkh2TjIf9+NpkhXr06uTQVcCmIKuricmOlg8PVlcZj/3xuW5zxsM6zhkP6zpnPGgaaMCDpoHEI70mhnlJ4PX4XHuU8bD2KOOJ3ZG9APQNAHZJBkCsUzIAYt0S7VCHiXEOEviz8V9ubx+/PT9WKWgby8AtZeI2FHADyp9pPSEoAWy/RPFRRsN2XZvtWoLnnrZCz7ZhXTfmTZHgwZuCfMcNOKyOLU0YMGzJRh04CnruierpzEVhPT99fblKa88H1ls9HzYms+fD5ooa89l2V3yySz7FsfhGXYAX9OR9QXaxG3EZVqOuwwp68K4VJ/UbdVY/6MH7Qpwya9Q5s6An7wu0lQs67o1MnLNrikk7Cz34TAUd90yJc6JNMSlqoffz1yBBHTKANeDACNaCe0Kud5EJ2SvIpROXUjTqWoqgB2umoAPvWrRGEleiNOpSlKD384O1Qubj6oXMB9YM8tqJnp+7P1vx2W/Vmivo/fw1SFCHDGQdQ7+zHwixdvBAiK3SOhBi67T2hPRdyN2DYj+sVde5BT1Yv6NnG/Z03DMlrhFs1TWCQe/nr0ECsGYbCLnabSAEazjFCtLXj+v3Zz6u15/5sKO89nziiq9BArwexz4AfERI10PQx+4OfNCH0g980HfS93zmG37Pr/eH5W+yjDLArQH8hZYjRrZFmHxnFMXI9lAzI9tLnYjzqXQTOR8/MvJ1E3imwREjXzeBZxscGOVx6iyD4NyDp8seMfLPPXjG7BGj4NwLfBLxxIJRBoFuKr55j2Lk6ybxJIVRBsF+5T6afMwo2K8CWyqeQjHKIDhT4EHnR4z8M7UUnCl7TrKXQXCm6HnJzMg/U+zcpPph8EGCCnJT7FrakZGuE+B1tXvGGs4cP18xsdIoRv5+9cfZJx5vJ62zYL/645oTL2OT1lmwF/wxw4m3VUnrbNgLAjvmj8dNvKhIWmfBfvXHkdBPER4x8veCeEboKINgL4in1I0yGNYZf+b8N0p/n3EvA343o98lOWKke7/F2IJqv/KjjsHI36816F9+RC8Y+XuBnvP3Rxz58UZ+tJFfQznHnyR/vJYfreXHavmRWn+clh+l5cdo+RWT9HpJu5fvj7HwIyz8+Ao/uhJ/wDUBftZA/MHu6os/CllDECG73jj+YE9Dij/Y85B6jS0wKnyrUnoMH4NoD9nzA/b8cH0Q0vep/6JBTybwUwlBSN+n9lRCkgC/T+mphCDE71P8dXKOv07akx1JAvxZpyc7gpB91u0WqWiPTBLAz1kQss9ZEMLPGT5EG4Rsm1r07ERnnR6PCEL6WafHI4KQftbtEZMkAf4k0SMmQUg/SfTy0CCkW02/j0+POgUh/azTo05BSD/r9phOkgB/kugxnSCknyT6cNK5vsQ2SYA/SfQS2yCknyR6ie1cP0giSYA/SfQhEkFIP0n2IRdJAvw+7eD71O4/F71nkwTwXRyE8F2MzzYFIdtvCUJ23CwI2Q0BQchuCCje5UX6kp6xC0K6vqRn7IKQri/pDyIGIV1fFscuYgjtedkkAV5f0vOyQUjXl/S8bBDS9aU9L5skwJ91el42COlnnZ6XDUL6WfdHvuiZ4yCkn3V65jgI6WfdnjlOEuBPEj1zHITsk2TfpcU9apIAfs6CkH3OghB+zvCZjiBke6dFbS866/QofRDSzzo9Sh+E9LNOj9IHITtKX/TsRNqIHgMPQro28k/16WXA7wR7FDpJwF9j/GmjR6GDkG776VHopT4KnSTAn3V6FDoI6WedHoUOQvpZ90cg6XHyIKSfdXycHN9hFYT4s46/09u71JIEeG1E71ILQrY2su9S+h6l71D8/oTbyhXcUq7gdnIFr09fwZ/3sPcYszuMubrbHMN2T7CdmF7r4QefuswHPnk9H9drynxcrynzcb0mc8bAPa2BPamBPaWBPaHBHJknx+TN0Zti5MZC7+cn72x1hW6iB6+tOWZQjBdY6P384J1deOhWsbZr9c5I9H5+8s6GR0UyH/cGkvm4UZHMx42KFB7oVpztjVozJXo/P1izZj6uZs18XM2a+biaNfNhNetcfLbnas0U9H5+rmbd82E1654Pq1n3fFjNOhdH6ObF+JyF3s8P1lyZT76/Q4IKdsnEXufsFLSdGxm5tm5kBNu7AyP3NjEyYut+jxixtb9z8SSGeXECg4Xezw+2WJmPa60yH9dSZT6ulcp8XAuV+cQVYYME+DMO7tU+EHLPubjDYq7usAh6P38NEtQhQy1SgO3NSGmOmR1JAV9rqF0vGPP5J7Aedw/3r6/TBrh/uLz4/urqH93sdMnHH/rl7fb5ze795UXziR/5muIVPIKnxVv/2P708+niAMUrXBkWT4s3i9/PEe9EBbzc3j5+Wx1wfvsUgp2qtCY6p/h2oYdHr6x9bemrS7W2Ax70Cj3gQSNlGQ+9duiV07ZJ7/HZSgc7UnXAQx8c7DDVAQ8anc940MTxRIe7Q+mI07J7fLLODDywzgw8sM4MPLDO1OZienj3uZ/IxhC2xtlRq6urxfK8mCPvGxW92c8JvZ67DF9fyIJ+r0vIPxFE9wh5dijdJGRBNdUlZOG2UJeQhTrVuoQsjIWpS8jChJCahNSW1vXwZF8TW1CX4cD3S+yTJxkOHI/DPnSS4aAdHAGnHY7Yw5P1oHg43x7fHZLpBYBvEHY4NgOCDWYA6g9ZBcdMcNDQBSoZkH7Q3AmGvQj8fQp2swNQnV3uBeBugXNtGaGwFlugWLgZfk7uK37z576w0SJspAgbJSpGiPjqN97Bx+7DuVj19vTopeUec6ivBQ1nSl0/bUmheMjL5HwXCbwen2kURjykWRjxvOpuEIC+AaBvxx4DIi8Cx4DSC8GJCH5N2wvBP27n33NQK61NmXwkhmLLCEz1HhOvrZEXzmNAaV3ciQj8Q1WMfLrWuQo93ItB3jLqrSLfIvStUcH2oAavjwErWGPDKpPdzAER7GJmRHXYai+C32j0QvCPXDEC51ppgXILSLx6Q/afHANKByqdiMDfq+dXoqHWWaAVArKStZasdgXuUS9GDS7SXhDJxqnloArcJf0hreB4Cg7mxDgz1zrzDyQ7uTYgwu8vFZgQg/Hg37QDEX+c8OGAQAQn1AdEZi33CSJyQMWEdf+c5q1zH0uh6d2ivn16EZqfNzN/B9t+Ef5/GfbLwLW/ky/CU/DEd8u9APQNAC7rHgCxztdERcffZVrvYRnqntc7iln1xN5RzKpn9o5iVj21dxSz6rm9o5hVT+4dxax6du8oZtXTewcxz9az59+Tvr6QBS37d7sMQmdqjHjom8CcfQ+YcwOwgXe2B2DSM2fbf4+Qf+K6WcOArP0ikBWpukasxzeXQ+wFgG8QduC1ij0M1xHqwDZ2LueIhz5exZC25/Ora+YOItB3sboG6SACf5XBN0vtJO8DPvvzg6MehV35OXe9n+Y//VjDXa9oZj4nCnzuInxNEbX6XXxLBN8PwTdD8Mgm8XVVHW5Bh1rQYZYMxz1O3PaMDAetJM9w0BryDAetHs9whZQ/A67w0C4DbsOFA6tgrALWxgfBoWF1Vzi6E3wiok1Aw3oyxRGzjv2IHY6T4aB2R6vaxSkfcKpHPRYBPQ5hsmCKAQc1mhkOajYzHDQAkOGgAYCJnJJD1WCvFhnO+izhgf9sAw+SAL5FuCHpERBslTIg2DJhL8ITE5ccyh9bRyKOKoFjSn8mq0swR+AKZHRYHh2Yz3BY8xNw2ItRwGEvRgEHzYxmOGhmFDwbT+vsiF/YnHhXUwJPtdkZDmqzMxxVD/RwUJud4aA2O+C0V5se3q2MJqJZIgHIGhU9A3EEBGvWDAjWrhlQW2dxJAL/IGFrLo4R8YdpIThOaJdljwgNNhwjQkMOA6Ld+eOGYEfACta4Ajd7spNJJ4Zg1xsc7wET7jEMmHCvYcCEew4DJtx7AGfwjhEFR0dwbARHRnBc6M42N8t3jAjtghwRtRWuRyLwHTjshLVjRLz1MeeoBxH4exU74ukYkb9X+Z7SnO8pzfmekj5XEi9n45USPlcSiHClpHf1xC21RyLQD5u6xfZECMVK0xWbug3yRIg6tMeEBhEK8iWO6MfL8CTo+ENvtnfvtre/3rzYvbq86GbLZ203W3eLWTtfzLtjZ/RJ2arQoRo96tGl5FEGH4PCb7EjKPwuO4DWYkr5UdcRVKIV8BHYEVSiFYoTw3ig8DjXCArPC/652SIwLSvxvCR+l8TrkvhcEo8LX2sxYDr0Kr3mYsCE111Muns2KyW5CUjuAZJbgOQOILkBSPx/ifff8q1UBReUCvpY0CMQTyHxtgs8CvEUEm+34s94q1VBK578ObEPxKhIkKpEMZiXAVVgZAZUgakZUAUGR9FgOoJqPr7k09diyg0JkwG0ojU3rbpFyQnagY9RLYrOkLYaUfFBwREVHxgcUfnBwQMqPo01okKfVP2kCdCYqwoyhAdRPE6CIFM4omqcBEHGcETVOAmCzOGIqnESDBnEA6rGSWg9ToJGVWkUlURNVeNxafwtjbel8bU0npbGz9J4WRofS+Nh6YdOHQSxGITiACrjmmtyI4EqMcSBKjHFgSoxxoEqMceBKjHI+FF1I6hmn0p2qX4y3EEQiw0rTokzrrnGcwhUiecQqBJ9HKgSjRyoFp3s8Rz48yQPoJp9KtmlhR3qs2LLekr5kygWg7ysxw1KoohW3eIGBarEuASqxLykWZEWUM2KWgy2xalcWvJDBUyfBVtZ7NfKYr1W9RRpJFE820NiNFYOo1GJiy5xzyWuucQtl7jkkqikJCIp6fGS9HdJerskfV2VOIRfxBn8657DWM9TCHTVfuYrGBozITASVexvxVVHUY2uqESvonC2WDSrE6MiQdhWsmkWm2fL9g+/GjUIJ9A/GdSggyxTmDKowBPp/7cDU7I/JbtTsTerCKpKmkYkDSOSZhFJo4ikSWSiQcSnC4pFdLgVt+gDRaVOBpXoBEWlTgYVJFsUTWNVtDcpWpuKbU0syCqC1EkMx5ZQBKoD06DKHCNTAlNgZgNTYGQDU1DREJiCioZiE5hN/SvGpASmQv07PFnH8INi+6LtiEmcbonbregTDkzHEXN4WFUEN5MY7FT+atM9Wyy6zbybNU3XrI9LNiclq+LzKOLOlfQ6S/qcJT3Okv5mSW9zYAqMoiKpo0joFJM5Np2quGgEpkKnKi4agek4Yg6dKgjkKmYaLA1B3KWhKW1paElLPpPA9FQxZEMxYEMxXKM4WIMFKTDvihkUK4NxXxmMe8G0u/RoZ9CjXR3hviSGZLUNdqsz2K3OYLdSusMAKbBbncJu0S+l+poifDVRBT1zgn45Qa+coE9O0CMn6I8TPJ4UiHDzWSxsNOlNfKtDIML1pj5Vik+SYtOj2k8P/eTf0Lb/H1BLAQIUABQAAAAIAKE4bV03GV90ECYAAD52BgANAAAAAAAAAAAAAAAAAAAAAABtYW5pZmVzdC50b29uUEsFBgAAAAABAAEAOwAAADsmAAAAAA==

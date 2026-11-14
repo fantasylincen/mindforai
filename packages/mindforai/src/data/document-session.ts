@@ -1,5 +1,5 @@
 // DATA-20 在浏览器本地只保存当前打开的文档文本与文件身份，避免刷新页面后丢失正在编辑的文件
-import { DOCUMENT_FILE_EXTENSIONS } from '../constants';
+import { DOCUMENT_FILE_EXTENSIONS, LEGACY_DOCUMENT_FILE_EXTENSIONS } from '../constants';
 
 export interface DocumentSessionFileIdentity {
   fileName: string;
@@ -149,7 +149,11 @@ export const createDocumentSessionFileIdentity = (file: File | null | undefined)
     return null;
   }
   const fileName = file.name || '';
-  if (!fileName.toLowerCase().endsWith(`.${DOCUMENT_FILE_EXTENSIONS.mindforai}`)) {
+  const lowerCaseFileName = fileName.toLowerCase();
+  const isMindForAIFile =
+    lowerCaseFileName.endsWith(`.${DOCUMENT_FILE_EXTENSIONS.mindforai}`) ||
+    lowerCaseFileName.endsWith(`.${LEGACY_DOCUMENT_FILE_EXTENSIONS.mindforai}`);
+  if (!isMindForAIFile) {
     return null;
   }
   return {

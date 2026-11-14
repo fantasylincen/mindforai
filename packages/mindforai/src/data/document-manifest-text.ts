@@ -1,4 +1,4 @@
-// DATA-25 把“文件名_manifest.mindforai”清单与 .mindforai 文本树互相转换
+// DATA-25 把清单文本与 .toon 文本树互相转换
 import type { Point, Viewport } from '@plait/core';
 import { DOCUMENT_MANIFEST_TYPE, VERSIONS } from '../constants';
 import { parseMindForAIText, serializeMindForAIText } from './mindforai-text';

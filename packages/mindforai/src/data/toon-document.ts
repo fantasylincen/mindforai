@@ -1,7 +1,12 @@
-// 提供 .mindforai 文本树的序列化、保存与加载能力，并兼容读取旧版 TOON 文档
+// 提供 .toon 文本树的序列化、保存与加载能力，并兼容读取旧版 TOON 文档
 import { PlaitBoard } from '@plait/core';
 import { decode } from '@toon-format/toon';
-import { DOCUMENT_FILE_EXTENSIONS, MIME_TYPES, VERSIONS } from '../constants';
+import {
+  DOCUMENT_FILE_EXTENSIONS,
+  LEGACY_DOCUMENT_FILE_EXTENSIONS,
+  MIME_TYPES,
+  VERSIONS,
+} from '../constants';
 import { parseFileContents } from './blob';
 import { fileSave } from './filesystem';
 import { MindForAIFileHandle, getDefaultName } from './json';
@@ -39,6 +44,7 @@ export const isMindForAIFile = (file: File) => {
   const fileName = (file.name || '').toLowerCase();
   return (
     fileName.endsWith(`.${DOCUMENT_FILE_EXTENSIONS.mindforai}`) ||
+    fileName.endsWith(`.${LEGACY_DOCUMENT_FILE_EXTENSIONS.mindforai}`) ||
     (file.type || '') === MIME_TYPES.mindforai
   );
 };

@@ -10,7 +10,7 @@ from mindforai.parser import parse_text, serialize_document
 TEMPLATE = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),
     "templates",
-    "Templets.mindforai",
+    "Templets.toon",
 )
 
 
@@ -40,7 +40,7 @@ class TestMindForAI(unittest.TestCase):
         doc = MindForAI()
         doc.load(TEMPLATE)
         with tempfile.TemporaryDirectory() as directory:
-            path = os.path.join(directory, "out.mindforai")
+            path = os.path.join(directory, "out.toon")
             doc.save(path)
             reloaded = MindForAI().load(path)
         self.assertEqual(reloaded.root.mind_for_ai_text(), doc.root.mind_for_ai_text())

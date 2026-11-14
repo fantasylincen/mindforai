@@ -11,7 +11,7 @@ MindForAI 的 Issue、Pull Request、Discussion、Code Review、提交信息以�
 - 先搜索已有的 Issue 与 Discussion。
 - 缺陷请基于最新的 `main` 分支复现。
 - 每个 Issue / PR 只聚焦一个问题。
-- 大型功能、架构调整或 `.mindforai` 格式变更，请先讨论再动手。
+- 大型功能、架构调整或 `.toon` 格式变更，请先讨论再动手。
 - AI 辅助得出的结论需要自行验证，不要直接提交未经验证的 AI 审计输出或批量 Issue。
 
 ## 本地开发 / Local Development
@@ -47,7 +47,7 @@ npx nx e2e web-e2e
 - 行为变更请补充或更新测试。
 - 界面变更请附上截图或录屏。
 - 必要时同步更新文档与翻译。
-- 修改导入、导出、剪贴板或序列化行为时，保持对既有 `.drawnix` / `.smalldrawnix` 文件的兼容。
+- 修改导入、导出、剪贴板或序列化行为时，保持对既有 `.drawnix` / `.json` 文件的兼容。
 - 避免夹带无关的格式化、重构或依赖变更。
 
 ## AI 辅助贡献 / AI-Assisted Contributions

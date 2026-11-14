@@ -1,10 +1,10 @@
 # MindForAI SDK
 
-`.mindforai` 文档数据结构的多种语言 API 程序库，支持 Python / JavaScript / TypeScript / Java。
+`.toon` 文档数据结构的多种语言 API 程序库，支持 Python / JavaScript / TypeScript / Java。
 
 ## 文档格式
 
-`.mindforai` 为行式缩进树状文本：叶子独占一行、文本不加引号，分支节点写 `- text:` 后跟 `children[n]:`；末尾可选 `manifest:` 字段（ZIP+Base64 清单），解析时被读取为文档的 `manifest`。
+`.toon` 为行式缩进树状文本：叶子独占一行、文本不加引号，分支节点写 `- text:` 后跟 `children[n]:`；末尾可选 `manifest:` 字段（ZIP+Base64 清单），解析时被读取为文档的 `manifest`。
 
 ```
 type: mindforai
@@ -27,7 +27,7 @@ content[1]:
 - `loadText(text)` / `load_text(text)`：从字符串加载
 - `save(path)` / `save_text`：保存到文件
 - `root` / `getRoot()`：获取根节点
-- `mindForAIText()` / `mind_for_ai_text()`：整篇文档导出为 `.mindforai` 文本
+- `mindForAIText()` / `mind_for_ai_text()`：整篇文档导出为 `.toon` 文本
 
 `Node`
 
@@ -40,7 +40,7 @@ content[1]:
 - `remove(index | node)`：删除并返回被删除节点
 - `text`：节点文本
 - `parent`：父节点
-- `mindForAIText()` / `mind_for_ai_text()`：自身和子孙节点导出为 `.mindforai` 文本
+- `mindForAIText()` / `mind_for_ai_text()`：自身和子孙节点导出为 `.toon` 文本
 
 ## 各语言用法
 
@@ -50,7 +50,7 @@ content[1]:
 from mindforai import MindForAI, Node
 
 doc = MindForAI()
-doc.load("./example.mindforai")
+doc.load("./example.toon")
 node = doc.root
 print(node.text, node.child_count)
 node.add(Node("新节点"))
@@ -65,7 +65,7 @@ print(doc.root.descendants)
 const { MindForAI, Node } = require('./sdk/js/dist/src/index.js');
 
 const doc = new MindForAI();
-doc.load('./example.mindforai');
+doc.load('./example.toon');
 console.log(doc.root.text, doc.root.childCount);
 doc.root.add(new Node('new node'));
 ```
@@ -78,7 +78,7 @@ doc.root.add(new Node('new node'));
 import { MindForAI, Node } from './src/index';
 
 const doc = new MindForAI();
-doc.load('./example.mindforai');
+doc.load('./example.toon');
 const node: Node = doc.root.get(0);
 console.log(node.mindForAIText());
 ```
@@ -93,7 +93,7 @@ import com.mindforai.MindForAI;
 import com.mindforai.Node;
 
 MindForAI doc = new MindForAI();
-doc.load("./example.mindforai");
+doc.load("./example.toon");
 Node root = doc.getRoot();
 root.add("new node");
 System.out.println(root.getDescendants().size());

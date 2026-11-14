@@ -1,4 +1,4 @@
-// 实现 .mindforai 文本的转义、序列化与解析
+// 实现 .toon 文本的转义、序列化与解析
 package com.mindforai;
 
 import java.util.ArrayList;

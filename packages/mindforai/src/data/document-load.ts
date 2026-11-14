@@ -1,4 +1,5 @@
 // 提供统一的文档读取入口，识别格式并返回内容或可定位的解析错误
+import { DOCUMENT_FILE_EXTENSIONS } from '../constants';
 import { parseFileContents } from './blob';
 import { type FileSystemHandle } from './filesystem';
 import { detectDocumentFormat, hasDocumentExtension } from './document-format';
@@ -22,7 +23,7 @@ const resolveReadableDocumentFile = (file: File, filePath: string): File => {
   if (hasDocumentExtension(filePath)) {
     return file;
   }
-  return new File([file], `${filePath}.mindforai`, {
+  return new File([file], `${filePath}.${DOCUMENT_FILE_EXTENSIONS.mindforai}`, {
     type: file.type,
     lastModified: file.lastModified,
   });

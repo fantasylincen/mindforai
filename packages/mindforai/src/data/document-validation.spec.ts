@@ -33,12 +33,12 @@ const validDrawnixLiteText = JSON.stringify(
 
 describe('document format detection', () => {
   it('prefers the file extension', () => {
-    expect(resolveDocumentFormatByName('board.mindforai')).toBe('mindforai');
-    expect(resolveDocumentFormatByName('board.drawnixlite')).toBe('drawnixlite');
+    expect(resolveDocumentFormatByName('board.toon')).toBe('mindforai');
+    expect(resolveDocumentFormatByName('board.json')).toBe('drawnixlite');
     expect(resolveDocumentFormatByName('board.drawnix')).toBeNull();
     expect(resolveDocumentFormatByName('board.smalldrawnix')).toBeNull();
     expect(resolveDocumentFormatByName('board.txt')).toBeNull();
-    expect(detectDocumentFormat(buildFile('board.mindforai'))).toEqual({
+    expect(detectDocumentFormat(buildFile('board.toon'))).toEqual({
       format: 'mindforai',
       source: 'name',
     });

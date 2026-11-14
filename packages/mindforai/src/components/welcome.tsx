@@ -103,9 +103,9 @@ export const Welcome = () => {
           )}
           <span className="mindforai-welcome__formats">
             {t('welcome.supportedFormats')}
-            <span className="mindforai-welcome__format">mindforai</span>
+            <span className="mindforai-welcome__format">toon</span>
             <span className="mindforai-welcome__format">markdown</span>
-            <span className="mindforai-welcome__format">drawnixlite</span>
+            <span className="mindforai-welcome__format">json</span>
           </span>
         </>
       )}

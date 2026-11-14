@@ -15,18 +15,18 @@ const buildFile = (name: string, contents: string, type = '') =>
 
 describe('read document file', () => {
   it('loads a valid mindforai file', async () => {
-    const loaded = await readDocumentFile(buildFile('board.mindforai', validMindForAIText));
+    const loaded = await readDocumentFile(buildFile('board.toon', validMindForAIText));
 
     expect(loaded.ok).toBe(true);
     if (loaded.ok) {
       expect(loaded.data.elements).toHaveLength(1);
-      expect(loaded.filePath).toBe('board.mindforai');
+      expect(loaded.filePath).toBe('board.toon');
     }
   });
 
   it('returns original contents and issues for a broken mindforai file', async () => {
     const broken = validMindForAIText.replace('    children[1]:', '    children[3]:');
-    const loaded = await readDocumentFile(buildFile('board.mindforai', broken));
+    const loaded = await readDocumentFile(buildFile('board.toon', broken));
 
     expect(loaded.ok).toBe(false);
     if (!loaded.ok) {
@@ -47,7 +47,7 @@ describe('read document file', () => {
 
   it('returns json syntax issues for a broken drawnixlite file', async () => {
     const loaded = await readDocumentFile(
-      buildFile('board.drawnixlite', '{\n  "type": "drawnixlite",')
+      buildFile('board.json', '{\n  "type": "drawnixlite",')
     );
 
     expect(loaded.ok).toBe(false);
@@ -67,7 +67,7 @@ describe('read document file', () => {
   });
 
   it('opens a downloaded copy named with a suffix appended after the extension', async () => {
-    const loaded = await readDocumentFile(buildFile('board.mindforai.txt', validMindForAIText));
+    const loaded = await readDocumentFile(buildFile('board.toon.txt', validMindForAIText));
 
     expect(loaded.ok).toBe(true);
   });

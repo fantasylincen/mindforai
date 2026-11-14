@@ -1,6 +1,10 @@
 // 文档序列化与读写工具，负责保存路径解析、格式推断与打开入口
 import { PlaitBoard } from '@plait/core';
-import { DOCUMENT_FILE_EXTENSIONS } from '../constants';
+import {
+  DOCUMENT_FILE_EXTENSIONS,
+  DOCUMENT_OPEN_EXTENSIONS,
+  LEGACY_DOCUMENT_FILE_EXTENSIONS,
+} from '../constants';
 import { isMarkdownFileName } from './markdown-to-mindforai';
 import { fileOpen, type FileSystemHandle } from './filesystem';
 import type { HostFileHandle } from './file-host';
@@ -41,7 +45,11 @@ export const resolveDocumentFormat = (filePath: string | null): SaveableDocument
   }
   const extension = getFileExtension(filePath || '');
   return (
-    DOCUMENT_FORMATS.find((format) => DOCUMENT_FILE_EXTENSIONS[format] === extension) || 'mindforai'
+    DOCUMENT_FORMATS.find(
+      (format) =>
+        DOCUMENT_FILE_EXTENSIONS[format] === extension ||
+        LEGACY_DOCUMENT_FILE_EXTENSIONS[format] === extension
+    ) || 'mindforai'
   );
 };
 
@@ -84,7 +92,7 @@ export type OpenDocumentResult =
 export const loadFromJSON = async (): Promise<OpenDocumentResult> => {
   const file = await fileOpen({
     description: 'MindForAI files',
-    extensions: ['mindforai', 'drawnixlite', 'md'],
+    extensions: [...DOCUMENT_OPEN_EXTENSIONS],
   });
   const fileHandle = (file as FileWithHandle).handle || null;
   const filePath = file.name || buildDocumentPath(getDefaultName(), 'mindforai');

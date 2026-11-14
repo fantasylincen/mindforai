@@ -58,8 +58,8 @@ const enTranslations: Translations = {
   'menu.newWindow': 'Open New Window',
   'menu.saveFile': 'Save to current file',
   'menu.saveAsFile': 'Save As',
-  'menu.saveAsDrawnixLite': 'DrawnixLite File (.drawnixlite, compact JSON)',
-  'menu.saveAsMindForAI': 'MindForAI File (.mindforai, compact text)',
+  'menu.saveAsDrawnixLite': 'DrawnixLite File (.json, compact JSON)',
+  'menu.saveAsMindForAI': 'MindForAI File (.toon, compact text)',
   'menu.saveAsMarkdown': 'Markdown File (.md, standard markdown)',
   'menu.exportImage': 'Export Image',
   'menu.exportImage.svg': 'SVG',
@@ -121,8 +121,8 @@ const enTranslations: Translations = {
   'popupToolbar.insertMermaidFlowchart': 'Insert Mermaid flowchart node',
 
   // Node context menu items
-  'contextMenu.copyNode': 'Copy (mindforai)',
-  'contextMenu.copyDrawnixLite': 'Copy (drawnixlite)',
+  'contextMenu.copyNode': 'Copy (toon)',
+  'contextMenu.copyDrawnixLite': 'Copy (json)',
   'contextMenu.copyMarkdown': 'Copy (Markdown)',
   'contextMenu.pasteNodeAsChild': 'Paste',
   'toast.copySuccess': 'Node copied',
@@ -146,7 +146,7 @@ const enTranslations: Translations = {
   'documentTitle.close': 'Close current file',
 
   // File drag and drop
-  'toast.dropFileHint': 'Drop .mindforai / .drawnixlite / .md file here to open',
+  'toast.dropFileHint': 'Drop .toon / .json / .md file here to open',
   'toast.dropFileLoaded': 'Opened file: ',
   'toast.dropFileUnsupported': 'Unsupported file format',
   'toast.mergedFileNamePrefix': 'Merged document (',
@@ -158,11 +158,11 @@ const enTranslations: Translations = {
   'welcome.multiFileHint':
     'Drop multiple files at once; they are organized into one mind map by file name',
   'welcome.openFile': 'Choose file',
-  'welcome.touchDropHere': 'Open a .mindforai document',
+  'welcome.touchDropHere': 'Open a .toon document',
   'welcome.touchHint':
     'Tap the button below to pick a document. If it is greyed out, first save it to this device or iCloud Drive in the Files app',
   'theme.switcher': 'Theme',
-  'toast.markdownSaveConverted': 'Markdown converted to mindforai format and saved',
+  'toast.markdownSaveConverted': 'Markdown converted to toon format and saved',
   'toast.saveSuccess': 'File saved',
   'toast.saveFailed': 'Save failed, please try again',
 
@@ -171,7 +171,7 @@ const enTranslations: Translations = {
     'The file could not be parsed. Fix the errors marked with a red line below, then click "Validate and open".',
   'textEditor.editTitle': 'Edit document text',
   'textEditor.editDescription':
-    'Edit the current document as .mindforai text, then format, validate and apply the changes.',
+    'Edit the current document as .toon text, then format, validate and apply the changes.',
   'textEditor.format': 'Format',
   'textEditor.open': 'Validate and open',
   'textEditor.apply': 'Apply changes',
@@ -181,7 +181,7 @@ const enTranslations: Translations = {
   'textEditor.formatFailed': 'The document still has errors and cannot be formatted',
   'textEditor.stillInvalid': 'The document still has errors. Please keep fixing it.',
   'textEditor.valid': 'Format is valid and ready to open',
-  'documentError.unknownFormat': 'Unrecognized file format. Expected .mindforai or .drawnixlite',
+  'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
   'documentError.missingType': "Missing 'type: mindforai' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
@@ -226,7 +226,7 @@ const enTranslations: Translations = {
   'tutorial.description':
     'Turn mind maps into AI-ready docs: core documents, TODO lists and bug reports',
   'tutorial.dataDescription':
-    'Documents stay in your local files; open or save as .mindforai to feed your AI',
+    'Documents stay in your local files; open or save as .toon to feed your AI',
   'tutorial.appToolbar': 'Export, language settings, ...',
   'tutorial.creationToolbar': 'Select a tool to start your creation',
   'tutorial.themeDescription': 'Switch between light and dark themes',

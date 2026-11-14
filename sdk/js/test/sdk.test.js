@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { MindForAI, Node, ParseError, parseText, parseOrRaise, serializeDocument } from '../src/index.js';
 
-const TEMPLATE = new URL('../../../templates/Templets.mindforai', import.meta.url).pathname;
+const TEMPLATE = new URL('../../../templates/Templets.toon', import.meta.url).pathname;
 
 test('loads a real document from file', () => {
   const doc = new MindForAI();

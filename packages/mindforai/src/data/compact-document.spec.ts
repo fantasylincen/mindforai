@@ -124,8 +124,8 @@ describe('drawnixlite', () => {
   });
 
   it('extracts file name without extension for save as', () => {
-    expect(getFileNameWithoutExtension('todo03.mindforai')).toBe('todo03');
-    expect(getFileNameWithoutExtension('B.drawnixlite')).toBe('B');
+    expect(getFileNameWithoutExtension('todo03.toon')).toBe('todo03');
+    expect(getFileNameWithoutExtension('B.json')).toBe('B');
     expect(getFileNameWithoutExtension('noext')).toBe('noext');
     expect(getFileNameWithoutExtension('a.b.c')).toBe('a.b');
   });

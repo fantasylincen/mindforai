@@ -1,6 +1,6 @@
 // DATA-34 为 IDE 扩展与 Webview 提供不依赖浏览器文件 API 的文档打开与序列化入口
 import { ListRender, PlaitBoard, PlaitElement, ThemeColorMode, Viewport } from '@plait/core';
-import { DOCUMENT_FILE_EXTENSIONS, MIME_TYPES } from '../constants';
+import { DOCUMENT_FILE_EXTENSIONS, LEGACY_DOCUMENT_FILE_EXTENSIONS, MIME_TYPES } from '../constants';
 import type { Language } from '../i18n/types';
 import { applyDocumentDataToBoard, getMergeManifest } from './document-open';
 import {
@@ -43,7 +43,10 @@ export const resolveSaveableDocumentFormatByPath = (fileName: string): SaveableD
   if (extension === 'md') {
     return 'markdown';
   }
-  if (extension === DOCUMENT_FILE_EXTENSIONS.drawnixlite) {
+  if (
+    extension === DOCUMENT_FILE_EXTENSIONS.drawnixlite ||
+    extension === LEGACY_DOCUMENT_FILE_EXTENSIONS.drawnixlite
+  ) {
     return 'drawnixlite';
   }
   return 'mindforai';

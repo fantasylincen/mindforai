@@ -46,6 +46,7 @@ export const IMAGE_MIME_TYPES = {
 
 export const MIME_TYPES = {
   json: 'application/json',
+  toon: 'application/vnd.mindforai+toon',
   drawnixlite: 'application/vnd.drawnixlite+json',
   mindforai: 'application/vnd.mindforai+toon',
   ...IMAGE_MIME_TYPES,
@@ -58,11 +59,22 @@ export const NODE_MORE_HINT_DELAY_MS = 500;
 export const NODE_MORE_HINT_VISIBLE_MS = 3200;
 
 export const DOCUMENT_FILE_EXTENSIONS = {
+  drawnixlite: 'json',
+  mindforai: 'toon',
+} as const;
+
+export const LEGACY_DOCUMENT_FILE_EXTENSIONS = {
   drawnixlite: 'drawnixlite',
   mindforai: 'mindforai',
 } as const;
 
-export const DOCUMENT_OPEN_EXTENSIONS = ['mindforai', 'drawnixlite', 'md'] as const;
+export const DOCUMENT_OPEN_EXTENSIONS = [
+  DOCUMENT_FILE_EXTENSIONS.mindforai,
+  DOCUMENT_FILE_EXTENSIONS.drawnixlite,
+  'md',
+  LEGACY_DOCUMENT_FILE_EXTENSIONS.mindforai,
+  LEGACY_DOCUMENT_FILE_EXTENSIONS.drawnixlite,
+] as const;
 
 // DATA-35 移动端浏览器地址栏与软键盘遮挡画板时，把可视视口尺寸写入 CSS 变量
 
@@ -79,7 +91,9 @@ export const DOCUMENT_MANIFEST_TYPE = 'mindforai-manifest';
 
 export const DOCUMENT_MANIFEST_FIELD = 'manifest';
 
-export const DOCUMENT_MANIFEST_ARCHIVE_NAME = 'manifest.mindforai';
+export const DOCUMENT_MANIFEST_ARCHIVE_NAME = 'manifest.toon';
+
+export const LEGACY_DOCUMENT_MANIFEST_ARCHIVE_NAME = 'manifest.mindforai';
 
 export const VERSIONS = {
   drawnixlite: 1,

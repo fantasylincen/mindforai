@@ -26,11 +26,11 @@ const SAMPLE_DRAWNIXLITE = JSON.stringify({
 
 describe('resolveSaveableDocumentFormatByPath', () => {
   it('识别 mindforai 扩展名', () => {
-    expect(resolveSaveableDocumentFormatByPath('project.mindforai')).toBe('mindforai');
+    expect(resolveSaveableDocumentFormatByPath('project.toon')).toBe('mindforai');
   });
 
   it('识别 drawnixlite 扩展名', () => {
-    expect(resolveSaveableDocumentFormatByPath('board.drawnixlite')).toBe('drawnixlite');
+    expect(resolveSaveableDocumentFormatByPath('board.json')).toBe('drawnixlite');
   });
 
   it('识别 markdown 扩展名', () => {
@@ -43,22 +43,22 @@ describe('resolveSaveableDocumentFormatByPath', () => {
 });
 
 describe('loadDocumentText', () => {
-  it('解析 .mindforai 文本', () => {
-    const loaded = loadDocumentText('project.mindforai', SAMPLE_MIND_FOR_AI);
+  it('解析 .toon 文本', () => {
+    const loaded = loadDocumentText('project.toon', SAMPLE_MIND_FOR_AI);
     expect(loaded.ok).toBe(true);
     expect(loaded.format).toBe('mindforai');
     expect(loaded.data?.elements.length).toBe(1);
   });
 
-  it('解析 .drawnixlite 文本', () => {
-    const loaded = loadDocumentText('board.drawnixlite', SAMPLE_DRAWNIXLITE);
+  it('解析 .json 文本', () => {
+    const loaded = loadDocumentText('board.json', SAMPLE_DRAWNIXLITE);
     expect(loaded.ok).toBe(true);
     expect(loaded.format).toBe('drawnixlite');
     expect(loaded.data?.elements.length).toBe(1);
   });
 
   it('非法文本返回错误但不抛异常', () => {
-    const loaded = loadDocumentText('project.mindforai', '{]');
+    const loaded = loadDocumentText('project.toon', '{]');
     expect(loaded.ok).toBe(false);
     expect(loaded.issues.length).toBeGreaterThan(0);
   });
@@ -66,12 +66,12 @@ describe('loadDocumentText', () => {
 
 describe('documentTextToInitialValue', () => {
   it('读取清单内记录的主题与语言', () => {
-    const initialValue = documentTextToInitialValue('project.mindforai', SAMPLE_MIND_FOR_AI);
+    const initialValue = documentTextToInitialValue('project.toon', SAMPLE_MIND_FOR_AI);
     expect(initialValue?.elements.length).toBe(1);
   });
 
   it('文本非法时返回 null', () => {
-    expect(documentTextToInitialValue('project.mindforai', 'not a document')).toBeNull();
+    expect(documentTextToInitialValue('project.toon', 'not a document')).toBeNull();
   });
 });
 
@@ -91,21 +91,21 @@ describe('serializeBoardDocumentText', () => {
     }) as any;
 
   it('按 mindforai 格式序列化并保留清单', () => {
-    const text = serializeBoardDocumentText(createBoardStub(), 'mindforai', 'project.mindforai');
+    const text = serializeBoardDocumentText(createBoardStub(), 'mindforai', 'project.toon');
     expect(text).toContain('type: mindforai');
     expect(text).toContain('manifest:');
   });
 
   it('按 drawnixlite 格式序列化', () => {
-    const text = serializeBoardDocumentText(createBoardStub(), 'drawnixlite', 'board.drawnixlite');
+    const text = serializeBoardDocumentText(createBoardStub(), 'drawnixlite', 'board.json');
     expect(JSON.parse(text).type).toBe('drawnixlite');
   });
 });
 
 describe('buildDocumentFileName', () => {
   it('按目标格式生成文件名', () => {
-    expect(buildDocumentFileName('docs/project.mindforai', 'mindforai')).toBe('project.mindforai');
-    expect(buildDocumentFileName('docs/project.mindforai', 'markdown')).toBe('project.md');
+    expect(buildDocumentFileName('docs/project.toon', 'mindforai')).toBe('project.toon');
+    expect(buildDocumentFileName('docs/project.toon', 'markdown')).toBe('project.md');
   });
 });
 

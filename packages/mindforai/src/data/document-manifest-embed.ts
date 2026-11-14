@@ -1,6 +1,9 @@
 // DATA-27 把清单文本压缩成 ZIP 再转 Base64 写入主文档，并从主文档还原清单
 import { unzipSync, zipSync, strFromU8, strToU8 } from 'fflate';
-import { DOCUMENT_MANIFEST_ARCHIVE_NAME } from '../constants';
+import {
+  DOCUMENT_MANIFEST_ARCHIVE_NAME,
+  LEGACY_DOCUMENT_MANIFEST_ARCHIVE_NAME,
+} from '../constants';
 import type { DocumentManifest } from './document-manifest';
 import {
   parseDocumentManifestText,
@@ -46,7 +49,8 @@ export const decodeDocumentManifestFromBase64 = (
   let manifestText: string;
   try {
     const unzipped = unzipSync(base64ToBytes(base64));
-    const archiveBytes = unzipped[DOCUMENT_MANIFEST_ARCHIVE_NAME];
+    const archiveBytes =
+      unzipped[DOCUMENT_MANIFEST_ARCHIVE_NAME] || unzipped[LEGACY_DOCUMENT_MANIFEST_ARCHIVE_NAME];
     if (!archiveBytes) {
       return null;
     }

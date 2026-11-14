@@ -39,7 +39,7 @@ Sketch your project as a mind map, and MindForAI compresses it into a **compact 
 
 We believe project delivery in the AI era can be reduced to this equation: one document that is clear enough, plus one agent that can understand it, is enough to ship a project.
 
-MindForAI exists to rewrite the foundational documents agents work from with `.mindforai`: documents stop being background material for humans and become stricter, clearer, more explicit operating instructions for agents. Compared with Markdown, the tree structure puts goals, boundaries, constraints and acceptance criteria in deterministic positions, reducing ambiguity and goal drift — and giving agents noticeably stronger execution.
+MindForAI exists to rewrite the foundational documents agents work from with `.toon`: documents stop being background material for humans and become stricter, clearer, more explicit operating instructions for agents. Compared with Markdown, the tree structure puts goals, boundaries, constraints and acceptance criteria in deterministic positions, reducing ambiguity and goal drift — and giving agents noticeably stronger execution.
 
 ## Why MindForAI
 
@@ -53,7 +53,7 @@ MindForAI makes intent explicit as a tree. Each node carries exactly one concept
 
 - 🎯 **Ambiguity removed**: structured nodes replace prose. Goals, constraints and acceptance criteria each live in their own place, so the agent stays on track.
 - 🧩 **Human–AI isomorphism**: a mind-map tree mirrors the branching structure of neurons. Both people and models build the big picture quickly.
-- ⚡ **Token-efficient by design**: `.mindforai` uses indentation instead of brackets and commas — several times smaller than JSON and tighter than long-form Markdown.
+- ⚡ **Token-efficient by design**: `.toon` uses indentation instead of brackets and commas — several times smaller than JSON and tighter than long-form Markdown.
 - ✂️ **Cheaper reading**: the agent follows only the branch it needs to locate the change, avoiding full-repo searching and context pollution.
 - 👀 **Readable by humans, even more readable by AI**: people see the whole picture at a glance; models parse the tree directly without guessing how paragraphs relate.
 - 📝 **Easier to edit *and* easier to read than Markdown**: add, remove, re-level and duplicate branches like an outline — no heading hierarchy or list markers to maintain.
@@ -64,7 +64,7 @@ MindForAI makes intent explicit as a tree. Each node carries exactly one concept
 
 ## Use Cases
 
-MindForAI is more than a drawing tool: it is a **specification an AI can execute directly**. Each of the following can be built as one tree and exported as a single `.mindforai` file.
+MindForAI is more than a drawing tool: it is a **specification an AI can execute directly**. Each of the following can be built as one tree and exported as a single `.toon` file.
 
 | Scenario | What you structure in MindForAI | What the AI receives |
 | --- | --- | --- |
@@ -83,7 +83,7 @@ MindForAI is more than a drawing tool: it is a **specification an AI can execute
 ## Features
 
 - 🗺️ **Mind maps and flowcharts** in one whiteboard
-- 🤖 **AI-native export format**: `.mindforai` (line-based tree text) is several times smaller than raw JSON and far more token-efficient
+- 🤖 **AI-native export format**: `.toon` (line-based tree text) is several times smaller than raw JSON and far more token-efficient
 - 🧠 **Structured context**: hierarchy replaces long prose; goals, constraints and steps are stated once, cutting the risk of misread intent
 - 🎯 **Precise change targeting**: module IDs plus branch paths let the agent navigate the tree instead of searching the whole repository
 - 📦 **Reusable document templates**: project core document / task board / bug report / working methods / code review — see the [template library](./templates/)
@@ -91,7 +91,7 @@ MindForAI is more than a drawing tool: it is a **specification an AI can execute
 - 🔗 **Mermaid mind maps**: paste Mermaid text and get an editable map — ideal for migrating existing docs
 - 🩹 **Broken-file recovery**: parse errors are highlighted with a one-click formatter, so files damaged by an AI can be rescued
 - 💾 **Local-first**: documents only live in the local files you open, nothing is uploaded to a server; the browser only caches the current document text for refresh recovery (cleared when the file is closed)
-- 🖼️ **Multiple export formats**: PNG / SVG / `.mindforai` / `.drawnixlite`
+- 🖼️ **Multiple export formats**: PNG / SVG / `.toon` / `.json`
 - ⌨️ **Multi-window editing**: open several documents side by side
 - 🌐 **Multilingual UI**: English / 中文 / Русский / العربية / Tiếng Việt
 - 📱 **Mobile-friendly with an infinite canvas**: zoom, pan and theme switching
@@ -175,10 +175,10 @@ MindForAI supports two document formats, selectable from the **Save As** menu:
 
 | Format | Extension | Content | Best for |
 | --- | --- | --- | --- |
-| **MindForAI** | `.mindforai` | Compact text tree | **Preferred** — feed it to an AI: small, and the hierarchy is obvious |
-| **DrawnixLite** | `.drawnixlite` | Slimmed-down JSON tree | Intermediate format for programmatic parsing |
+| **MindForAI** | `.toon` | Compact text tree | **Preferred** — feed it to an AI: small, and the hierarchy is obvious |
+| **DrawnixLite** | `.json` | Slimmed-down JSON tree | Intermediate format for programmatic parsing |
 
-Here is what a `.mindforai` file looks like (a TODO list):
+Here is what a `.toon` file looks like (a TODO list):
 
 ```text
 type: mindforai
@@ -186,7 +186,7 @@ version: 1
 content[1]:
   - text: TODOS
     children[2]:
-      - Read the project core document first ./project.mindforai
+      - Read the project core document first ./project.toon
       - text: Rules
         children[1]:
           - The final report to the user must be written in Chinese
@@ -198,7 +198,7 @@ Format rules: node text is never wrapped in double quotes and follows `-` direct
 
 ## Template Library
 
-[`templates/Templets.mindforai`](./templates/Templets.mindforai) is a single template collection you can drop straight into MindForAI. It puts real project documents, task boards, everyday working methods and code review flows into one tree:
+[`templates/Templets.toon`](./templates/Templets.toon) is a single template collection you can drop straight into MindForAI. It puts real project documents, task boards, everyday working methods and code review flows into one tree:
 
 - **Example project A: mindforai**: project core document, completed / in-progress tasks, TODO and usage instructions
 - **Example project B: BeamStreamS3**: an ESP32-S3 Wi-Fi microphone — hardware conventions, firmware modules, configuration protocol and task records
@@ -209,9 +209,9 @@ Download the file, drop it into your project root, or open it directly in MindFo
 
 ## When a file is broken
 
-When you open or drop a file, MindForAI first detects the format by extension, then falls back to the type declaration at the top of the file. If the content cannot be parsed (for example, a `.mindforai` file damaged by an AI), a text repair dialog appears:
+When you open or drop a file, MindForAI first detects the format by extension, then falls back to the type declaration at the top of the file. If the content cannot be parsed (for example, a `.toon` file damaged by an AI), a text repair dialog appears:
 
-- Syntax highlighting for both `.mindforai` and `.drawnixlite`
+- Syntax highlighting for both `.toon` and `.json`
 - Broken lines are underlined in red with “line N + reason”; click to jump to the line
 - One-click **Format**, **Save** back to the same file, or **Validate and open** after fixing
 
@@ -219,13 +219,13 @@ When you open or drop a file, MindForAI first detects the format by extension, t
 
 1. **Break it down** — split the project into a tree of modules → files → responsibilities, tagging key nodes with module IDs and file paths
 2. **Draw it** — open MindForAI and complete the structure with the mind map tool; each rule, constraint and acceptance criterion gets its own node
-3. **Save it** — *Save As* → `MindForAI File (.mindforai)`
-4. **Feed the AI** — put the `.mindforai` file in your project root, or paste it straight into your assistant; the agent follows the tree instead of searching the whole repo
+3. **Save it** — *Save As* → `MindForAI File (.toon)`
+4. **Feed the AI** — put the `.toon` file in your project root, or paste it straight into your assistant; the agent follows the tree instead of searching the whole repo
 
 Kick off a Claude Code / Cursor session like this:
 
 ```
-Please read ./project.mindforai first, locate change points by module ID and file path instead of searching the whole repo, then ...
+Please read ./project.toon first, locate change points by module ID and file path instead of searching the whole repo, then ...
 ```
 
 > Recommended workflow: break the project down into modules first, then dispatch the work. The clearer the tree, the faster the agent finds the change point and the fewer tokens are wasted.
@@ -274,7 +274,7 @@ mindforai/
 │   ├── mindforai/            # Core whiteboard library (components + plugins + serialisation)
 │   ├── react-board/          # React rendering layer for the board
 │   └── react-text/           # Rich text rendering module
-├── templates/                # Reusable .mindforai document templates
+├── templates/                # Reusable .toon document templates
 ├── .github/workflows/        # Automated GitHub Pages deployment
 ├── runsrc.sh / runsrc.ps1 + runsrc.bat        # One-click local dev launcher
 ├── rundocker.sh / rundocker-*.sh / rundocker.ps1 + .bat  # One-click Docker deploy

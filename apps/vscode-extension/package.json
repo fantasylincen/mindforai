@@ -1,7 +1,7 @@
 {
   "name": "mindforai",
   "displayName": "MindForAI",
-  "description": "在 VS Code、TRAE 等兼容 IDE 中直接打开 .mindforai / .drawnixlite 白板文档，支持保存与格式化编辑。",
+  "description": "在 VS Code、TRAE 等兼容 IDE 中直接打开 .toon / .json 白板文档，支持保存与格式化编辑。",
   "version": "1.0.0",
   "publisher": "mindforai",
   "license": "MIT",
@@ -22,15 +22,30 @@
   "main": "./extension.js",
   "activationEvents": [
     "onCustomEditor:mindforai.editor",
+    "onCustomEditor:mindforai.jsonEditor",
     "onCommand:mindforai.openWithEditor",
     "onCommand:mindforai.newDocument"
   ],
   "contributes": {
     "languages": [
       {
-        "id": "mindforai",
+        "id": "toon",
         "aliases": [
           "MindForAI",
+          "toon"
+        ],
+        "extensions": [
+          ".toon"
+        ],
+        "icon": {
+          "light": "./media/icon.png",
+          "dark": "./media/icon.png"
+        }
+      },
+      {
+        "id": "mindforai",
+        "aliases": [
+          "MindForAI Legacy",
           "mindforai"
         ],
         "extensions": [
@@ -44,7 +59,7 @@
       {
         "id": "drawnixlite",
         "aliases": [
-          "DrawnixLite"
+          "DrawnixLite Legacy"
         ],
         "extensions": [
           ".drawnixlite"
@@ -61,6 +76,9 @@
         "displayName": "MindForAI 白板",
         "selector": [
           {
+            "filenamePattern": "*.toon"
+          },
+          {
             "filenamePattern": "*.mindforai"
           },
           {
@@ -68,6 +86,16 @@
           }
         ],
         "priority": "default"
+      },
+      {
+        "viewType": "mindforai.jsonEditor",
+        "displayName": "MindForAI 白板（JSON）",
+        "selector": [
+          {
+            "filenamePattern": "*.json"
+          }
+        ],
+        "priority": "option"
       }
     ],
     "commands": [
@@ -88,7 +116,7 @@
       "explorer/context": [
         {
           "command": "mindforai.openWithEditor",
-          "when": "resourceExtname == .mindforai || resourceExtname == .drawnixlite",
+          "when": "resourceExtname == .toon || resourceExtname == .json || resourceExtname == .mindforai || resourceExtname == .drawnixlite",
           "group": "navigation"
         }
       ]

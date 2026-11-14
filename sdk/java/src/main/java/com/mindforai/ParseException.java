@@ -1,4 +1,4 @@
-// 提供 .mindforai 文本解析失败时使用的异常类型
+// 提供 .toon 文本解析失败时使用的异常类型
 package com.mindforai;
 
 public class ParseException extends MindForAIException {

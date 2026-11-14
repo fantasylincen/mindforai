@@ -39,10 +39,10 @@ const buildElements = () => [
 
 describe('document manifest', () => {
   it('collects node styles, collapsed state and viewport', () => {
-    const manifest = collectDocumentManifest(buildBoard(buildElements()), 'board.mindforai');
+    const manifest = collectDocumentManifest(buildBoard(buildElements()), 'board.toon');
 
     expect(manifest.type).toBe('mindforai-manifest');
-    expect(manifest.document).toBe('board.mindforai');
+    expect(manifest.document).toBe('board.toon');
     expect(manifest.viewport).toEqual({ zoom: 1.5, origination: [20, 40] });
     expect(manifest.theme).toBe('default');
     expect(manifest.language).toBe('zh');
@@ -57,7 +57,7 @@ describe('document manifest', () => {
   });
 
   it('applies collected styles to freshly loaded elements', () => {
-    const manifest = collectDocumentManifest(buildBoard(buildElements()), 'board.mindforai');
+    const manifest = collectDocumentManifest(buildBoard(buildElements()), 'board.toon');
     const loadedElements = [
       {
         id: 'new-root',
@@ -86,9 +86,9 @@ describe('document manifest', () => {
 
   it('round-trips the manifest through the embedded base64 field', () => {
     const board = buildBoard(buildElements());
-    const manifest = collectDocumentManifest(board, 'folder/board.mindforai');
+    const manifest = collectDocumentManifest(board, 'folder/board.toon');
 
-    const encoded = collectDocumentManifestBase64(board, 'folder/board.mindforai');
+    const encoded = collectDocumentManifestBase64(board, 'folder/board.toon');
     expect(readDocumentManifestBase64(encoded)).toEqual(manifest);
     expect(readDocumentManifestBase64('')).toBeNull();
   });

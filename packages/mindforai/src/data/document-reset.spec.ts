@@ -27,7 +27,7 @@ describe('reset board to initial state', () => {
       version: 1,
       documentText: 'root',
       isDirty: true,
-      fileIdentity: { fileName: 'a.mindforai', filePath: 'a.mindforai' },
+      fileIdentity: { fileName: 'a.toon', filePath: 'a.toon' },
     });
     board.history.undos = [[{ type: 'remove_node' }] as any];
 

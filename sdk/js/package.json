@@ -1,7 +1,7 @@
 {
   "name": "mindforai-sdk",
   "version": "1.0.0",
-  "description": "JavaScript API library for .mindforai documents",
+  "description": "JavaScript API library for .toon documents",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "exports": {

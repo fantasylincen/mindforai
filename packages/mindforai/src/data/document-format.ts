@@ -1,5 +1,9 @@
 // 统一判断文档格式：优先依据文件名扩展名，其次依据文件开头的类型声明
-import { DOCUMENT_FILE_EXTENSIONS, MIME_TYPES } from '../constants';
+import {
+  DOCUMENT_FILE_EXTENSIONS,
+  LEGACY_DOCUMENT_FILE_EXTENSIONS,
+  MIME_TYPES,
+} from '../constants';
 import { isMarkdownFileName } from './markdown-to-mindforai';
 import { DocumentFormat, SaveableDocumentFormat } from './types';
 
@@ -8,13 +12,22 @@ export type DocumentFormatDetection = {
   source: 'name' | 'header' | 'mime' | 'fallback';
 };
 
-const FORMAT_EXTENSIONS = DOCUMENT_FILE_EXTENSIONS;
+type JsonDocumentFormat = Exclude<SaveableDocumentFormat, 'markdown'>;
+
+const FORMAT_EXTENSIONS: Record<JsonDocumentFormat, string[]> = {
+  mindforai: [DOCUMENT_FILE_EXTENSIONS.mindforai, LEGACY_DOCUMENT_FILE_EXTENSIONS.mindforai],
+  drawnixlite: [
+    DOCUMENT_FILE_EXTENSIONS.drawnixlite,
+    LEGACY_DOCUMENT_FILE_EXTENSIONS.drawnixlite,
+  ],
+};
+
 const DOCUMENT_FILE_EXTENSIONS_WITH_DOT = [
-  `.${DOCUMENT_FILE_EXTENSIONS.mindforai}`,
-  `.${DOCUMENT_FILE_EXTENSIONS.drawnixlite}`,
-  '.md',
-  '.markdown',
-];
+  ...FORMAT_EXTENSIONS.mindforai,
+  ...FORMAT_EXTENSIONS.drawnixlite,
+  'md',
+  'markdown',
+].map((extension) => `.${extension}`);
 
 const FORMAT_MIME_TYPES: Record<string, DocumentFormat> = {
   [MIME_TYPES.drawnixlite]: 'drawnixlite',
@@ -41,9 +54,9 @@ export const resolveDocumentFormatByName = (fileName: string): DocumentFormat | 
   if (!extension) {
     return null;
   }
-  const matched = (
-    Object.keys(FORMAT_EXTENSIONS) as Exclude<SaveableDocumentFormat, 'markdown'>[]
-  ).find((format) => FORMAT_EXTENSIONS[format] === extension);
+  const matched = (Object.keys(FORMAT_EXTENSIONS) as JsonDocumentFormat[]).find((format) =>
+    FORMAT_EXTENSIONS[format].includes(extension)
+  );
   return matched || null;
 };
 

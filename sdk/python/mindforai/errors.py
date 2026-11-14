@@ -7,7 +7,7 @@ class MindForAIError(Exception):
 
 
 class ParseError(MindForAIError):
-    # .mindforai 文本解析失败时抛出的异常
+    # .toon 文本解析失败时抛出的异常
     pass
 
 

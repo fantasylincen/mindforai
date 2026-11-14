@@ -20,7 +20,7 @@ node_modules
 apps/vscode-extension/webview/
 
 # 私有汇总文档，禁止提交
-ALL.mindforai
+ALL.toon
 
 # 本地推广资料，禁止提交
 docs/promotion.md

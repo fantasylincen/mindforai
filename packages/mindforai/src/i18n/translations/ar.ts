@@ -60,8 +60,8 @@ const arTranslations: Translations = {
   'menu.newWindow': 'فتح نافذة جديدة',
   'menu.saveFile': 'حفظ إلى الملف الحالي',
   'menu.saveAsFile': 'حفظ باسم',
-  'menu.saveAsDrawnixLite': 'ملف DrawnixLite (.drawnixlite، JSON مضغوط)',
-  'menu.saveAsMindForAI': 'ملف MindForAI (.mindforai، نص مضغوط)',
+  'menu.saveAsDrawnixLite': 'ملف DrawnixLite (.json، JSON مضغوط)',
+  'menu.saveAsMindForAI': 'ملف MindForAI (.toon، نص مضغوط)',
   'menu.saveAsMarkdown': 'ملف Markdown (.md، Markdown قياسي)',
   'menu.exportImage': 'تصدير صورة',
   'menu.exportImage.svg': 'SVG',
@@ -123,8 +123,8 @@ const arTranslations: Translations = {
   'popupToolbar.insertMermaidFlowchart': 'إدراج عقدة مخطط Mermaid',
 
   // Node context menu items
-  'contextMenu.copyNode': 'نسخ (mindforai)',
-  'contextMenu.copyDrawnixLite': 'نسخ (drawnixlite)',
+  'contextMenu.copyNode': 'نسخ (toon)',
+  'contextMenu.copyDrawnixLite': 'نسخ (json)',
   'contextMenu.copyMarkdown': 'نسخ (Markdown)',
   'contextMenu.pasteNodeAsChild': 'لصق',
   'toast.copySuccess': 'تم نسخ العقدة',
@@ -148,7 +148,7 @@ const arTranslations: Translations = {
   'documentTitle.close': 'إغلاق الملف الحالي',
 
   // File drag and drop
-  'toast.dropFileHint': 'أفلت ملف ‎.mindforai / .drawnixlite / .md هنا لفتحه',
+  'toast.dropFileHint': 'أفلت ملف ‎.toon / .json / .md هنا لفتحه',
   'toast.dropFileLoaded': 'تم فتح الملف: ',
   'toast.dropFileUnsupported': 'تنسيق ملف غير مدعوم',
   'toast.mergedFileNamePrefix': 'مستند مدمج (',
@@ -160,11 +160,11 @@ const arTranslations: Translations = {
   'welcome.multiFileHint':
     'يمكنك إفلات عدة ملفات معًا، وسيتم تنظيمها في خريطة ذهنية واحدة حسب أسماء الملفات',
   'welcome.openFile': 'اختيار ملف',
-  'welcome.touchDropHere': 'افتح مستند ‎.mindforai‎',
+  'welcome.touchDropHere': 'افتح مستند ‎.toon‎',
   'welcome.touchHint':
     'اضغط الزر أدناه لاختيار مستند. إذا ظهر الملف باهتًا، فاحفظه أولًا على الجهاز أو في iCloud Drive',
   'theme.switcher': 'السمة',
-  'toast.markdownSaveConverted': 'تم تحويل Markdown إلى تنسيق mindforai وحفظه',
+  'toast.markdownSaveConverted': 'تم تحويل Markdown إلى تنسيق toon وحفظه',
   'toast.saveSuccess': 'تم حفظ الملف',
   'toast.saveFailed': 'فشل الحفظ، يرجى المحاولة مرة أخرى',
 
@@ -173,7 +173,7 @@ const arTranslations: Translations = {
     'تعذر تحليل الملف. أصلح الأخطاء المحددة بالخط الأحمر أدناه ثم انقر على «التحقق والفتح».',
   'textEditor.editTitle': 'تحرير نص المستند',
   'textEditor.editDescription':
-    'حرّر المستند الحالي كنص .mindforai ثم قم بالتنسيق والتحقق وتطبيق التغييرات.',
+    'حرّر المستند الحالي كنص .toon ثم قم بالتنسيق والتحقق وتطبيق التغييرات.',
   'textEditor.format': 'تنسيق',
   'textEditor.open': 'التحقق والفتح',
   'textEditor.apply': 'تطبيق التغييرات',
@@ -183,7 +183,7 @@ const arTranslations: Translations = {
   'textEditor.formatFailed': 'لا يزال المستند يحتوي على أخطاء ولا يمكن تنسيقه',
   'textEditor.stillInvalid': 'لا يزال المستند يحتوي على أخطاء. يرجى متابعة الإصلاح.',
   'textEditor.valid': 'التنسيق صحيح وجاهز للفتح',
-  'documentError.unknownFormat': 'Unrecognized file format. Expected .mindforai or .drawnixlite',
+  'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
   'documentError.missingType': "Missing 'type: mindforai' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
@@ -227,7 +227,7 @@ const arTranslations: Translations = {
   'tutorial.title': 'MindForAI',
   'tutorial.description':
     'سبورة شاملة تتضمن الخرائط الذهنية والمخططات الانسيابية والرسم الحر وغير ذلك',
-  'tutorial.dataDescription': 'تُحفظ المستندات في ملفاتك المحلية؛ افتحها أو احفظها بصيغة .mindforai',
+  'tutorial.dataDescription': 'تُحفظ المستندات في ملفاتك المحلية؛ افتحها أو احفظها بصيغة .toon',
   'tutorial.appToolbar': 'تصدير، إعدادات اللغة، ...',
   'tutorial.creationToolbar': 'اختر أداة لبدء الإنشاء',
   'tutorial.themeDescription': 'التبديل بين السمة الفاتحة والداكنة',

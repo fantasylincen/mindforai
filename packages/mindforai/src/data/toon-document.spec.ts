@@ -32,7 +32,7 @@ const elements = [
       {
         id: 'child-1',
         type: 'mind_child',
-        data: { topic: buildTopic('1.优先读取项目核心文档 ./docs/project.drawnixlite') },
+        data: { topic: buildTopic('1.优先读取项目核心文档 ./docs/project.json') },
         children: [],
       },
       {
@@ -68,7 +68,7 @@ describe('mindforai text document', () => {
         {
           text: 'TODOS',
           children: [
-            '1.优先读取项目核心文档 ./docs/project.drawnixlite',
+            '1.优先读取项目核心文档 ./docs/project.json',
             { text: '规则', children: ['最终给用户的报告需要使用中文,其余场景不做严格要求'] },
           ],
         },
@@ -89,7 +89,7 @@ describe('mindforai text document', () => {
     expect(serialized).not.toContain('"');
     expect(serialized.length).toBeLessThan(JSON.stringify({ type: 'drawnixlite', elements }).length);
 
-    expect(serialized).toContain('      - 1.优先读取项目核心文档 ./docs/project.drawnixlite');
+    expect(serialized).toContain('      - 1.优先读取项目核心文档 ./docs/project.json');
     expect(serialized).toContain('          - 最终给用户的报告需要使用中文,其余场景不做严格要求');
   });
 
@@ -121,7 +121,7 @@ describe('mindforai text document', () => {
     expect(root.data.topic.children[0].text).toBe('TODOS');
     expect(root.children).toHaveLength(2);
     expect(root.children[0].data.topic.children[0].text).toBe(
-      '1.优先读取项目核心文档 ./docs/project.drawnixlite'
+      '1.优先读取项目核心文档 ./docs/project.json'
     );
     expect(root.children[1].children[0].data.topic.children[0].text).toBe(
       '最终给用户的报告需要使用中文,其余场景不做严格要求'
@@ -170,21 +170,21 @@ describe('mindforai text document', () => {
   });
 
   it('recognizes mindforai files by name or mime type', () => {
-    expect(isMindForAIFile(new File([''], 'board.mindforai'))).toBe(true);
+    expect(isMindForAIFile(new File([''], 'board.toon'))).toBe(true);
     expect(
       isMindForAIFile(new File([''], 'board', { type: 'application/vnd.mindforai+toon' }))
     ).toBe(true);
     expect(isMindForAIFile(new File([''], 'board.drawnix'))).toBe(false);
-    expect(isMindForAIFile(new File([''], 'board.drawnixlite'))).toBe(false);
-    expect(resolveDocumentFormat('board.mindforai')).toBe('mindforai');
-    expect(resolveDocumentFormat('board.drawnixlite')).toBe('drawnixlite');
+    expect(isMindForAIFile(new File([''], 'board.json'))).toBe(false);
+    expect(resolveDocumentFormat('board.toon')).toBe('mindforai');
+    expect(resolveDocumentFormat('board.json')).toBe('drawnixlite');
     expect(resolveDocumentFormat('board.smalldrawnix')).toBe('mindforai');
     expect(resolveDocumentFormat('board.drawnix')).toBe('mindforai');
     expect(resolveDocumentFormat(null)).toBe('mindforai');
   });
 
   it('opens mindforai files through the shared document loader', async () => {
-    const file = new File([serializeAsMindForAI(mockBoard(elements))], 'board.mindforai', {
+    const file = new File([serializeAsMindForAI(mockBoard(elements))], 'board.toon', {
       type: 'application/vnd.mindforai+toon',
     });
 

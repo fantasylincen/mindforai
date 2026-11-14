@@ -1,4 +1,4 @@
-// 提供 .mindforai 文本树的序列化与解析能力，叶子节点独占一行且节点文本默认不带引号
+// 提供 .toon 文本树的序列化与解析能力，叶子节点独占一行且节点文本默认不带引号
 import { DOCUMENT_MANIFEST_FIELD } from '../constants';
 import { DocumentExportedType, MindForAIExportedData, MindForAINode } from './types';
 import type { DocumentValidationErrorCode, DocumentValidationIssue } from './document-issues';

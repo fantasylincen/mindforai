@@ -18,7 +18,7 @@ describe('markdown to mindforai', () => {
   it('recognizes markdown file names', () => {
     expect(isMarkdownFileName('README.md')).toBe(true);
     expect(isMarkdownFileName('AGENTS.MD')).toBe(true);
-    expect(isMarkdownFileName('board.mindforai')).toBe(false);
+    expect(isMarkdownFileName('board.toon')).toBe(false);
   });
 
   it('builds heading hierarchy with nested sections', () => {
