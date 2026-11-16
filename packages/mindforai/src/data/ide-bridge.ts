@@ -30,6 +30,7 @@ export type {
   HostSaveOptions,
 } from './file-host';
 export { clearDocumentSession } from './document-session';
+export type { MindForAIBoard } from '../hooks/use-mindforai';
 
 export interface LoadedDocumentTextResult {
   ok: boolean;

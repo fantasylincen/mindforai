@@ -240,7 +240,7 @@ Please read ./project.toon first, locate change points by module ID and file pat
 
 ### Requirements
 
-- Node.js 20+ ([nvm](https://github.com/nvm-sh/nvm) recommended; the repo ships an `.nvmrc`)
+- Node.js 22.12+ (the current LTS is recommended; `.nvmrc` pins 26.13.1, manage it with [nvm](https://github.com/nvm-sh/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows))
 - npm 10+
 
 ### Common commands

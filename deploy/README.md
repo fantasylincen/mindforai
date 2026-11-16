@@ -9,7 +9,7 @@
 
 ## 前置条件
 
-- 本地源码开发：Node.js 20 或更高版本（npm 随附）
+- 本地源码开发：Node.js 22.12 或更高版本（推荐当前 LTS，仓库 `.nvmrc` 为 26.13.1；npm 随附）
 - Docker 部署：Docker（含 Docker Desktop），不需要 Docker Compose
 
 ## 本地源码启动（runsrc）

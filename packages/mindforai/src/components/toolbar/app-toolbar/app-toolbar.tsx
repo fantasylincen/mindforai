@@ -28,63 +28,68 @@ import { saveDocumentToCurrentFile } from '../../../data/document-save';
 import Menu from '../../menu/menu';
 import MenuSeparator from '../../menu/menu-separator';
 import { useI18n } from '../../../i18n';
+import { useMindForAI } from '../../../hooks/use-mindforai';
 import { DocumentTitle } from '../../document-title';
 import { isHostDocumentFileChannel } from '../../../data/file-host';
 
 export const AppToolbar = () => {
   const board = useBoard();
   const { t } = useI18n();
+  const { appState } = useMindForAI();
   const container = PlaitBoard.getBoardContainer(board);
   const selectedElements = getSelectedElements(board);
   const [appMenuOpen, setAppMenuOpen] = useState(false);
   const isUndoDisabled = board.history.undos.length <= 0;
   const isRedoDisabled = board.history.redos.length <= 0;
   const isHostChannel = isHostDocumentFileChannel();
+  const showAppMenu = !appState.systemMenu;
   return (
     <Island padding={1} className={classNames('app-toolbar', ATTACHED_ELEMENT_CLASS_NAME)}>
       <Stack.Row gap={1}>
-        <Popover
-          key={0}
-          sideOffset={12}
-          open={appMenuOpen}
-          onOpenChange={(open) => {
-            setAppMenuOpen(open);
-          }}
-          placement="bottom-start"
-        >
-          <PopoverTrigger asChild>
-            <ToolButton
-              type="icon"
-              visible={true}
-              selected={appMenuOpen}
-              icon={MenuIcon}
-              title={t('general.menu')}
-              aria-label={t('general.menu')}
-              onPointerDown={() => {
-                setAppMenuOpen(!appMenuOpen);
-              }}
-            />
-          </PopoverTrigger>
-          <PopoverContent container={container}>
-            <Menu
-              onSelect={() => {
-                setAppMenuOpen(false);
-              }}
-            >
-              {!isHostChannel && <OpenFile></OpenFile>}
-              {!isHostChannel && <OpenNewWindow></OpenNewWindow>}
-              <SearchNodes></SearchNodes>
-              {!isHostChannel && <SaveToFile></SaveToFile>}
-              {!isHostChannel && <SaveAsFile></SaveAsFile>}
-              <SaveAsImage></SaveAsImage>
-              <CleanBoard></CleanBoard>
-              <MenuSeparator />
-              <OpenHelp></OpenHelp>
-              <LanguageSwitcherMenu />
-              <Socials />
-            </Menu>
-          </PopoverContent>
-        </Popover>
+        {showAppMenu && (
+          <Popover
+            key={0}
+            sideOffset={12}
+            open={appMenuOpen}
+            onOpenChange={(open) => {
+              setAppMenuOpen(open);
+            }}
+            placement="bottom-start"
+          >
+            <PopoverTrigger asChild>
+              <ToolButton
+                type="icon"
+                visible={true}
+                selected={appMenuOpen}
+                icon={MenuIcon}
+                title={t('general.menu')}
+                aria-label={t('general.menu')}
+                onPointerDown={() => {
+                  setAppMenuOpen(!appMenuOpen);
+                }}
+              />
+            </PopoverTrigger>
+            <PopoverContent container={container}>
+              <Menu
+                onSelect={() => {
+                  setAppMenuOpen(false);
+                }}
+              >
+                {!isHostChannel && <OpenFile></OpenFile>}
+                {!isHostChannel && <OpenNewWindow></OpenNewWindow>}
+                <SearchNodes></SearchNodes>
+                {!isHostChannel && <SaveToFile></SaveToFile>}
+                {!isHostChannel && <SaveAsFile></SaveAsFile>}
+                <SaveAsImage></SaveAsImage>
+                <CleanBoard></CleanBoard>
+                <MenuSeparator />
+                <OpenHelp></OpenHelp>
+                <LanguageSwitcherMenu />
+                <Socials />
+              </Menu>
+            </PopoverContent>
+          </Popover>
+        )}
         <ToolButton
           key={1}
           type="icon"

@@ -1,4 +1,4 @@
-// 左下角文档状态栏，显示当前文件路径、保存状态与自动保存开关
+// 左下角文档状态栏，显示当前文件路径、保存状态与自动保存开关（宿主系统菜单接管时隐藏开关）
 import classNames from 'classnames';
 import { ATTACHED_ELEMENT_CLASS_NAME, PlaitBoard } from '@plait/core';
 import { useBoard } from '@plait-board/react-board';
@@ -121,7 +121,7 @@ export const DocumentStatusBar = () => {
       )}
       {!isHostChannel && <span className="document-status-bar__status">{statusText}</span>}
       <NodeFingerprintStatus />
-      {!isHostChannel && (
+      {!isHostChannel && !appState.systemMenu && (
         <label className="document-status-bar__auto-save" title={t('statusBar.autoSaveHint')}>
           <input
             className="document-status-bar__auto-save-input"

@@ -1,0 +1,10 @@
+{
+  "name": "mindforai-desktop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MindForAI 桌面版：本地打开与保存 .toon / .json / .md 白板文档",
+  "license": "MIT",
+  "author": "MindForAI",
+  "main": "main.js",
+  "productName": "MindForAI"
+}

@@ -59,6 +59,7 @@ export type MindForAIState = {
   openSearch?: boolean;
   openHelp?: boolean;
   language?: Language | null;
+  systemMenu?: boolean;
 };
 
 export const MindForAIContext = createContext<{

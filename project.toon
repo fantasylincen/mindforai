@@ -2,7 +2,7 @@ type: mindforai
 version: 1
 content[1]:
   - text: MindForAI
-    children[8]:
+    children[9]:
       - text: 1. 项目概述
         children[7]:
           - SYS-11 项目名称：`MindForAI`（内部包名 @mindforai/source，基于 Drawnix 演进）
@@ -12,7 +12,7 @@ content[1]:
           - SYS-15 技术架构：Nx monorepo + React 19 + TypeScript + Vite；画板内核基于 Plait（@plait/core / mind / draw / layouts / common），富文本基于 Slate；零后端，文档与当前文件句柄仅存内存，浏览器只保存语言与主题，文件读写走本地文件系统。
           - SYS-16 核心任务：维护三种文档格式（.toon / .json / .md）的读写与校验（保存只用新扩展名，读取兼容旧扩展名 .mindforai / .drawnixlite），在无限画布上提供思维导图、流程图、自由画笔与 Mermaid 思维导图能力，并提供多窗口、多语言、主题切换与 Docker 静态部署。
           - text: SYS-17 目标结构（Agent 生成代码时须按此落盘）
-            children[11]:
+            children[13]:
               - apps/web/ : Web 应用（Vite + React 19），唯一对外产物；构建产物在 dist/apps/web
               - apps/web-e2e/ : Playwright 端到端测试
               - packages/mindforai/ : 核心白板库（全部业务组件、插件、文档序列化），业务改动主要在此
@@ -23,6 +23,8 @@ content[1]:
               - docs/ : 人类阅读的文档（brand.md 等），非 Agent 首选资料；.toon 文档解析器实现在 packages/mindforai/src/data/
               - apps/vscode-extension/ : VS Code / TRAE 扩展宿主（纯 JavaScript，零运行时依赖），图标在 media/，构建产物在 webview/ 与 dist/vscode-extension/
               - apps/web/src/vscode/ : 扩展 Webview 入口与宿主消息桥（复用核心库渲染白板）
+              - apps/desktop/ : 桌面版 Electron 宿主（main.js 主进程、preload.js 隔离桥、electron-builder.config.js 打包配置、renderer/ 构建产物）
+              - apps/web/src/desktop/ : 桌面版渲染进程（多标签应用、宿主文件通道、标签栏与拖拽打开）
               - 禁止读取目录：node_modules/、dist/、.nx/、.git/、apps/web/public/（仅静态图片与图标资源）
       - text: 2. 模块编号规则
         children[5]:
@@ -61,7 +63,7 @@ content[1]:
       - text: 4. 核心白板库（packages/mindforai）
         children[9]:
           - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
-            children[34]:
+            children[35]:
               - DATA-01 src/data/mindforai-text.ts :: .toon 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
               - DATA-02 src/data/toon-document.ts :: 三种格式（.toon / .json / .md）的保存与加载总入口；保存只写新扩展名，读取兼容旧版 TOON 与 .mindforai 文档
               - DATA-03 src/data/compact-document.ts :: .json 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
@@ -96,6 +98,7 @@ content[1]:
               - DATA-33 src/data/file-host.ts :: 宿主文件通道注册表：IDE 扩展接管打开与保存对话框，浏览器环境保持默认实现
               - DATA-34 src/data/ide-bridge.ts :: IDE 集成入口：文本解析、格式推断、画板与文本互转、初始视图还原与客户端会话缓存清除，供 Webview 与扩展复用
               - DATA-35 src/utils/mobile-keyboard-bridge.ts :: 移动端可视视口桥：监听 visualViewport / resize / orientationchange，把可视高度与软键盘遮挡高度写入 --mindforai-viewport-height 与 --mindforai-keyboard-height 两个 CSS 变量，供工具栏、状态栏与 Toast 避让
+              - DATA-36 src/data/board-commands.ts :: 供宿主系统菜单调用的画板命令：打开节点搜索、打开帮助对话框、清空画板、设置自动保存、设置透明背景导出、切换界面语言
           - text: 4.2 画板渲染层（BOARD，packages/react-board）
             children[8]:
               - BOARD-01 src/wrapper.tsx :: 白板包装组件，组装 Plait 内核与所有基础插件并渲染
@@ -115,9 +118,9 @@ content[1]:
               - TEXT-05 src/styles/index.scss :: 富文本层样式
           - text: 4.4 库主体入口（CORE）
             children[6]:
-              - CORE-01 src/mindforai.tsx :: 对外主组件 MindForAI，组装画板、工具栏、拖拽层与状态栏
+              - CORE-01 src/mindforai.tsx :: 对外主组件 MindForAI，组装画板、工具栏、拖拽层与状态栏；新增 systemMenu / initialAutoSave 属性供宿主接管主菜单，并经 onSystemMenuStateChange 上报自动保存、透明导出与界面语言状态
               - CORE-02 src/hooks/use-mindforai.tsx :: MindForAI 的 React Context（板对象、状态、指针类型、工具状态）
-              - CORE-03 src/index.ts :: 库公开导出入口
+              - CORE-03 src/index.ts :: 库公开导出入口（含 DATA-36 的宿主菜单画板命令）
               - CORE-05 src/mermaid-mind-editing.ts :: Mermaid 思维导图节点的文本编辑辅助
               - CORE-06 testing/index.ts / setup-testing-board.ts :: 单元测试用的画板测试环境搭建
               - CORE-07 src/css.d.ts :: 样式属性与自定义 CSS 变量的类型声明
@@ -143,7 +146,7 @@ content[1]:
                   - UI-06 src/components/toolbar/pencil-mode-toolbar.tsx :: 画笔模式下的画笔样式工具栏
                   - UI-07 src/components/toolbar/theme-toolbar.tsx :: 主题下拉工具栏（暗夜等主题切换）
                   - UI-08 src/components/toolbar/zoom-toolbar.tsx :: 缩放比例菜单（适配 / 100%），去掉加减号按钮，右上角常显当前缩放比例
-                  - UI-09 src/components/toolbar/app-toolbar/app-toolbar.tsx :: 左上角主菜单工具栏容器；移动端下移到屏幕底部并允许换行，同时在主菜单内挂载 UI-47 主题切换
+                  - UI-09 src/components/toolbar/app-toolbar/app-toolbar.tsx :: 左上角主菜单工具栏容器；移动端下移到屏幕底部并允许换行，同时在主菜单内挂载 UI-47 主题切换；桌面版启用系统菜单（systemMenu）时隐藏该主菜单弹层，功能全部交给顶部系统菜单
                   - UI-10 src/components/toolbar/app-toolbar/app-menu-items.tsx :: 主菜单项定义（打开、另存为、导出、新窗口等）；打开菜单项复用 DATA-24 的 openDocumentFilesViaFileInput
                   - UI-11 src/components/toolbar/app-toolbar/language-switcher-menu.tsx :: 界面语言切换菜单
                   - UI-47 src/components/toolbar/app-toolbar/theme-switcher-menu.tsx :: 移动端主菜单内的主题切换子菜单，替代移动端隐藏的右下角主题下拉工具栏
@@ -254,7 +257,7 @@ content[1]:
               - .drawnix：完整 JSON 文档，保留画板与视口（DATA-02 / DATA-12）
               - .md：标准 Markdown 文本，打开时解析为思维导图、保存时把画板写回 Markdown（DATA-30 / DATA-31），末尾同样内嵌 manifest 字段
           - text: SYS-02 常见任务落点
-            children[7]:
+            children[8]:
               - 改 .toon 解析 / 序列化 → DATA-01（错误定位在 DATA-08，校验在 DATA-07）；改内嵌清单编解码 → DATA-27
               - 加一种可打开的文件格式 → DATA-04 判断 + DATA-05 读取 + DATA-06 保存 + DATA-16 常量；改文档扩展名同样落在这里（DATA-16 的新旧扩展名表 + VSX-02 扩展清单）
               - 改菜单项 / 新窗口 → UI-10
@@ -262,6 +265,7 @@ content[1]:
               - 加语言 → I18N-04 与 I18N-05，并过一遍 I18N-03 类型
               - 改 Mermaid 导图生成 → MH-01 ~ MH-05 一条链
               - 改移动端打开文件 / 工具栏布局 → DATA-11（选择器兜底）+ DATA-24（统一打开入口）+ DATA-35（可视视口与键盘）+ UI-47（移动端主题入口）
+              - 改桌面版窗口 / 菜单 / 文件关联 / 退出确认 → DESK-01；改桌面版标签页与保存流程 → DESK-05 / DESK-06 / DESK-10；改桌面版文件通道 → DESK-08；改桌面版打包 → DESK-03 / SCR-12
           - text: SYS-03 解析错误处理流程
             children[3]:
               - DATA-05 读取失败 → 返回 DocumentValidationIssue（行号 + 错误码）
@@ -275,16 +279,27 @@ content[1]:
           - SYS-05 代码规范：单个程序文件不超过 800 行；不引入未经确认的新依赖；先查现有组件（UI-20 ~ UI-30）再新建
           - SYS-29 术语：折叠气泡（同义：折叠圆饼 / 收拢圆饼 / 折叠徽标 / 收拢气泡）:: 思维导图节点收拢后，在节点右侧显示的实心圆，内含被收起的节点数量，数量过多时显示省略号，由 Plait 内核原生绘制
           - text: SYS-06 常用命令
-            children[9]:
+            children[20]:
               - npm start :: 开发服务器 http://localhost:7200
               - bash runsrc.sh / runsrc.bat :: 本地源码一键启动（重复执行即重启），停止用 runsrc.sh stop
+              - bash start.sh / bash stop.sh :: Web UI 一键启动（默认端口 8756，重复执行即重启，非阻塞）与停止，详见 SCR-10
               - npm run build:web :: 构建 Web 应用，产物 dist/apps/web
               - npm run build :: 构建全部包
               - npm test :: 运行全部单元测试（Vitest）
+              - npm run clean:deps / npm run reinstall :: 清理损坏的 node_modules（清除只读 + 重试 + 报告占用路径）/ 清理后立即 npm ci
+              - npm run export:source（或 bash export-source.sh）:: 导出纯源码 zip 到 dist/mindforai-source-<version>.zip，供拷贝到 Windows 后本地安装依赖
+              - Windows 一键脚本 :: 根目录 mindforai.bat（双击菜单）与 mindforai.ps1（install / run / package / build / clean / doctor）
+              - 运行环境 :: Node.js 22.12+（.nvmrc 固定 26.13.1，package.json engines 同步约束）；Electron 45 自身要求 node>=22.12，Node 20 已不满足
               - npm run lint :: oxlint 代码检查（格式化用 npm run format = oxfmt）
               - node scripts/generate-icons.mjs 03-chat :: 生成图标候选并把 03 设为生效图标
               - npm run seo:submit :: 向 IndexNow 提交站点 URL（Bing / Yandex / Seznam / Naver），并打印 Google / 百度等人工收录步骤
               - npm run package:vscode :: 一键构建 Webview、组装扩展目录并生成 dist/mindforai-<version>.vsix 安装包
+              - npm run build:desktop :: 构建桌面版渲染资源，产物 apps/desktop/renderer 与 dist/apps/desktop-web
+              - npm run desktop:dev :: 以 Electron 本地启动桌面版（首次会自动构建渲染资源）
+              - npm run package:desktop :: 打包 Windows 桌面版（默认 nsis + portable），产物 dist/desktop
+              - npm run package:desktop:list :: 列出全部可用 Windows 打包格式及各自的系统要求
+              - npm run package:desktop:<格式> :: 按单一格式打包，格式见上；all 表示全部可用格式
+              - bash package-windows.sh [格式...] :: Linux/macOS 侧打包入口，自动跳过当前系统不可用的格式
           - text: SYS-07 测试约定
             children[4]:
               - 单元测试与被测文件同目录（*.spec.ts(x)），运行 vite.config.ts 内置的 Vitest 配置
@@ -302,7 +317,7 @@ content[1]:
           - SYS-32 移动端适配约定：触摸设备（iPad / iPhone / Android / 触摸屏 Mac，判定在 UTIL-12）由 CORE-01 统一打上 mindforai--mobile 类，样式集中在 UI-48（styles/mobile.scss）；打开文件一律走 DATA-24 的统一入口，移动端由 DATA-11 使用不带 accept 过滤的 input 选择文件，规避移动浏览器把 .toon 置灰不可选；工具栏、状态栏与 Toast 通过 DATA-35 写入的 CSS 变量避让软键盘与安全区；移动端主题切换入口在 UI-47
           - SYS-28 清单内嵌主文档：清单以 ZIP+Base64 写入主 .toon 的 manifest: 字段，随主文件一起保存，无需第二个文件或额外授权；打开时优先读取该字段还原节点状态、视口、主题与语言，会话文本同样内嵌清单；主题与语言不再存 localStorage，默认值在程序内写死（暗夜 / 中文）
       - text: 6. 其他脚本与文档
-        children[10]:
+        children[21]:
           - SCR-01 scripts/generate-icons.mjs :: 生成 10 个候选图标、预览页、生效 favicon 与横版文字标志
           - SCR-02 scripts/release-version.js :: 发版时统一升版本号
           - SCR-03 scripts/publish.js :: 构建并发布包到 npm
@@ -313,6 +328,17 @@ content[1]:
           - DOC-01 docs/brand.md :: 品牌资源目录、候选图标含义与更换图标的方法
           - DOC-02 README.md / README_en.md :: 面向用户的中英文项目说明（功能、部署、开发命令）
           - DOC-03 CHANGELOG.md / CONTRIBUTING.md / SECURITY.md / CODE_OF_CONDUCT.md :: 变更记录与社区协作文档
+          - SCR-11 scripts/build-desktop.mjs :: 构建桌面版渲染资源：调用 DESK-14 构建，把 desktop.html 规范为 index.html 并整理到 apps/desktop/renderer
+          - SCR-12 scripts/package-desktop.mjs :: 一键打包桌面版：先构建渲染资源，再按 DESK-03 调用 electron-builder 生成免安装 exe 与安装包；非 Windows 主机自动跳过需要 wine 的 NSIS 目标
+          - SCR-13 scripts/start-desktop.mjs :: 桌面版开发启动：缺少渲染资源时先构建，再拉起 DESK-01
+          - SCR-16 scripts/export-source-zip.mjs / export-source.sh :: 导出源码包：按 git 已跟踪与未忽略文件收集源码（排除 node_modules、dist、.nx、renderer 等构建产物），追加 README-FIRST.txt 与 SOURCE-FILE-LIST.txt 后打成 dist/mindforai-source-<version>.zip，并校验包内不含 .node 原生模块与依赖目录
+          - SCR-17 根目录 mindforai.ps1 / mindforai.bat :: Windows 一键脚本：ps1 提供交互菜单与 install / run / package / build / clean / doctor 六个动作，支持 -ChinaMirror 与 -Force，显式设置控制台 UTF-8 编码。编码硬性约定：bat 必须纯 ASCII（cmd.exe 按字节偏移重读批处理，UTF-8 中文会被截断成非法命令，报 "'?' is not recognized"），所有中文文案只能放在 ps1（UTF-8 带 BOM）里。Node 探测顺序：PATH → fnm（fnm env --json 的 FNM_DIR / FNM_MULTISHELL_PATH、%APPDATA%\\fnm\node-versions\\*\\installation、aliases\\default、fnm_multishells）→ nvm-windows（NVM_HOME / NVM_SYMLINK）→ volta → 官方 nodejs 目录；找到后把该目录前置到 PATH 并解析出 npm.cmd 绝对路径，因此不依赖用户 shell 是否已初始化 fnm
+          - SCR-18 scripts/package-formats.js / scripts/package-formats.ps1 :: Windows 打包格式单一数据源：js 文件定义 nsis / portable / msi / msiwrapped / appx / appxbundle / zip / 7z / dir 九个目标及其系统要求，支持 --json / --ids / --recommended 供 PowerShell 读取；ps1 文件负责格式菜单、序号解析与按平台过滤
+          - SCR-19 scripts/make-appxbundle.mjs :: 把 dist/desktop 下已生成的 .appx 组合成 .appxbundle。electron-builder 不提供该目标，这里用 makeappx.exe 完成：自动在 PATH、ELECTRON_BUILDER_WINDOWS_KITS_PATH、Windows Kits 目录与 electron-builder 缓存中查找工具，校验各 .appx 的 Name / Publisher / Version 一致后组合
+          - SCR-20 package-windows.sh :: Linux / macOS 下的 Windows 打包入口，检查 Node 版本与依赖、探测 wine，并把格式参数透传给 SCR-12
+          - SCR-15 scripts/clean-node-modules.mjs :: 依赖目录复位脚本（npm run clean:deps / npm run reinstall）：先递归清除只读属性，再带重试删除 node_modules，失败时逐条打印被占用路径并给出排查建议，用于修复 Windows 上 EPERM / EISDIR 造成的依赖损坏
+          - SCR-14 scripts/run-node-cli.mjs :: 桌面版脚本共用的跨平台执行器：一律用 node 执行依赖包的 JS 入口（vite / electron / electron-builder），规避 Windows 上 .bin 为 .cmd、Unix 上无扩展名造成的差异
+          - SCR-10 start.sh / stop.sh :: Web UI 启停专用脚本（默认端口 8756）。start.sh 后台非阻塞启动 Vite 开发服务器，重复执行即先停旧实例再启动（重启），运行期日志 .mindforai-web.log、PID .mindforai-web.pid；stop.sh 直接转发 start.sh stop 结束该实例。端口可用环境变量 MINDFORAI_PORT 覆盖，与 runsrc.sh 逻辑一致但端口与 pid/log 文件独立，二者互不干扰
       - text: 7. 产品亮点（对外传播与使用建议）
         children[10]:
           - SYS-18 消除歧义：用树状层级明确概念边界与目标关系，避免自然语言的歧义、概念混淆与目标漂移，让 AI 的行为与人的意图保持一致。
@@ -346,4 +372,40 @@ content[1]:
           - text: 未纳入版本管理的文档
             children[1]:
               - 安装方法与上架流程（本地目录安装、.vsix 安装、市场发布、市场安装）只在交付报告中说明，不写入仓库与公开 GitHub
-manifest: UEsDBBQAAAAIAB04bV2z3+LlUAUAAC66AAANAAAAbWFuaWZlc3QudG9vbtWdzVLiQBSF9z5FHmCk7M4PDdt5DMuaSkGUzEBCheCMPv30AQsdtF24GL6rOwjmI+l7zu17O+34tG3m2abtlvf9ULdXj82wa/tunrmrRd+NTTfeurv5VZZdZ2PzZ4yH1l173+zG+FKWLVbtejk03W15OEY/19myX+w38YPzbDv0P5vFOBn7vju9Pa6aTTzlsh5+nV5b193Dvn6ILz+vXg88nO+xbX5v++F4vn/O6U/nPB7/3Pcbcb99rR/ah7arx8NXur32VTEpQ+GqaRFuiipMy2/XRZVPQp7nzs9C8MH58u4MoeuXze6D889mZwSvh2c3b95IMh8/1e6+9+t1vd01y3l2X693zbtDXi59M9bLeqzP3v70z798/nSXP3x7XT/1+3iCeLFWrxf6/BtNvvqdxmH/9a90HH2ffaUfh2M/wU6Bv//T/xfr7VAFYXkmVs7EKphYJROrsiohFVVEKqqMVFQhqahSUlHFpMLKSUpQLg82pYIFKtiMCuaQ0p+QfbqVOqaROqaNOqaJOqaFOqaBJm4hPVK91Ql/BGeKjMCQMiMwpNAIDCk1AmOKDXXy761mLBGcKifQrEVgUDmBZi7ebpKQTBMufkWpwZEYgfxbnVNvdY691VQdzKk6mDPTKqMxm4xYA+BMsREYUmwEhhQbgSHFRmBMsaHO4QSG7LgIDNlxERiy4yIwZMflILBc6cdqv8OKv8Oqv8PKv8Pqv8MagMM6gMNagMN6gMd6gMd6gMd6gMd6gMd6gMd6gMd6gMd6gMd6gMd6QI71gBzrATnWA3KoBxjtS0dwaokU2pcWGDQ6oH1pgUHzI0ctkTpqidRRS6RG1z5EcKoAQ9c+CAwqwMllGZcHgwqw2ZY4dBmLwKBRC13GIjBo1FKXscRfaNqUuF58OSmoclJQ5aSgyklBlZOCKidxPxUmWAKLLyel3SV7EZ2qhUKDqqHQoHooNKgilnbLthGdGybY0q3QsGGCLd8KDZo6CI2aPHCLuEKDlnGFBm1yl3ZrzBGd6xbYOrPQsG6BrTULDesWnusWnusWnusWZhsIEZ0rydgmgtCwkoxtJAgNK8nYZoLQsJKcgyWZm8Cb7Q9FdK5bYHtEQsO6BbZPJDSsWxhuySSbMoCryo1go7t9H9C5Nxy64/cRDSvZ0F2/j2hYyYbu/H1Ewyb40N2/k1MiviAn5dgEOtVLhAb1EqFBvURoUC8RGtRLhAb1kmRCZUFcsEtJhIYVF7Pd4IjOveHYbrDQsG6C7QYLDesm2G6w0KAzE6FRZyYRDdp6SFYOLLgFtlEtNKxbmO01RXTuDcf2moQGTQ8Scs0fiVPqOJxSR+EUOwapCeqUmp5OqclpIsXiy0mgykmgykmgykmgykmgyknAygl1phuo89xAneUG6m7wUWCR0m90jpicHxoAZ+YAAkPmAAJD5gACQ+YAyQoFPzigfUCBQYMD+ji5wKjBwUyQBYZMkAWGTJCT5U6+zkHb3wKD6hy09Z18hoI/BqFNNYFBxyD0yU/owzLQTdUKq+uHIzg1YqEPcwgMGrHQBzkEBhUT6EMcAoNmx9AHOASGLB8XVtcpRHCqM0DXKQgM6gzQdQqF1a57BKcGB7TrLjBocEC77gKDpk3IfmgsKUJDkvmfsY3uOQHdbwK610Ryd89LYyElN7mV0qWxkLPU5C4ml8ZCzlBL5vy0ZJq50XIqtJgKLaVCC6nQMiq0iAotoUILqNDyKbR4WjHNyWhFN1nPNQDO9FWBIZ1VYEhvFRjSXQWG9Ndks4MftdCFtwKDRi104W2yr8Ufg9BFkQKDjkGjaw8j+CVv9V9QSwECFAAUAAAACAAdOG1ds9/i5VAFAAAuugAADQAAAAAAAAAAAAAAAAAAAAAAbWFuaWZlc3QudG9vblBLBQYAAAAAAQABADsAAAB7BQAAAAA=
+      - text: 9. 桌面版（Electron，DESK）
+        children[4]:
+          - text: 9.1 桌面宿主（apps/desktop）
+            children[3]:
+              - DESK-01 apps/desktop/main.js :: Electron 主进程：用自定义 app:// 协议承载渲染资源（带 CSP 与路径穿越防护）、创建窗口、构建中文顶部系统菜单（文件 / 编辑 / 标签页 / 视图 / 语言 / 帮助，含另存为格式、导出图片、自动保存勾选项、语言单选组与菜单勾选状态同步）、原生打开与保存对话框、导出文件下载对话框标题、按路径读取文档、单实例锁与文件关联启动、渲染进程就绪后再投递待打开路径、关窗前收集未保存标签页并确认保存
+              - DESK-02 apps/desktop/preload.js :: 隔离环境下的受控桥：仅暴露打开 / 读取 / 保存 / 关闭确认 / 新建窗口 / 拖拽取真实路径 / 渲染进程就绪通知，以及菜单命令、打开路径、脏标签收集的订阅与菜单状态同步（syncMenuState），不开放任何 Node 接口
+              - DESK-03 apps/desktop/electron-builder.config.js :: 打包配置：appId com.mindforai.desktop、产物 dist/desktop、files 只收 main.js / preload.js / renderer 与 build、Windows 目标 nsis + portable、图标 apps/desktop/build/icon.png、注册 .toon / .json / .mindforai / .drawnixlite / .md 文件关联
+          - text: 9.2 渲染进程（apps/web/src/desktop）
+            children[9]:
+              - DESK-04 apps/web/src/desktop/main.tsx :: 桌面版入口：启用 DATA-33 宿主文件通道、注册 DESK-08 通道与 DESK-09 拖拽监听后挂载 DESK-05
+              - DESK-05 apps/web/src/desktop/app.tsx :: 多标签主应用：标签增删切换、打开即新标签、脏标记与防抖回写文本、系统菜单命令分发（新建 / 打开 / 保存 / 另存为 / 另存为格式 / 导出 SVG·PNG / 自动保存 / 透明背景 / 界面语言 / 搜索节点 / 帮助 / 清空画板 / 关闭与切换标签）、菜单状态回传与窗口标题跟随当前标签
+              - DESK-06 apps/web/src/desktop/tab-model.ts :: 标签页数据模型：空标签与文件标签创建、标题取路径文件名、按扩展名推断格式、文本到画板初始值的转换与画板序列化
+              - DESK-07 apps/web/src/desktop/tab-bar.tsx / tab-bar.scss :: 仿 Notepad++ 的顶部标签栏：未保存圆点、中键或叉号关闭、加号新建、横向滚动
+              - DESK-08 apps/web/src/desktop/bridge.ts :: 桌面版宿主文件通道：把 DATA-33 的打开与保存转发到主进程 IPC，维护菜单命令（携带 value 载荷）、打开路径、脏标签收集与保存回写的监听注册，并把菜单勾选状态（自动保存 / 透明背景 / 界面语言）同步给主进程
+              - DESK-09 apps/web/src/desktop/file-drop.ts :: 桌面版拖拽：用 webUtils 取回真实文件路径并先于画板拖拽层拦截，交给主进程按路径读取
+              - DESK-10 apps/web/src/desktop/tab-save.ts :: 未激活标签页的按文本保存，直接经 DESK-08 写入既有路径
+              - DESK-11 apps/web/src/desktop/styles.scss :: 桌面版布局样式：标签栏与画板区域上下布局，整页禁止滚动
+              - DESK-12 apps/web/src/desktop/bridge.spec.ts :: 桌面版单元测试：打开取消、保存回写、AbortError、脏标签收集、菜单命令转发与标签模型
+          - text: 9.3 构建与入口
+            children[3]:
+              - DESK-13 apps/web/desktop.html :: 桌面版 HTML 模板，带严格 CSP，仅加载本地相对资源
+              - DESK-14 apps/web/vite.desktop.config.ts :: 桌面版独立构建配置（base=./、产物 dist/apps/desktop-web、入口 desktop.html）
+              - 打包产物 :: dist/apps/desktop-web 为构建输出；apps/desktop/renderer 与 dist/desktop 为构建 / 打包产物，均不入版本库
+          - text: 9.4 桌面版约定
+            children[11]:
+              - SYS-33 零业务改动：桌面版复用 DATA-33 宿主文件通道，packages/mindforai 不为桌面端分叉逻辑；文档文本仍以 .toon / .json / .md 纯文本落盘，manifest 内嵌规则与浏览器版完全一致
+              - SYS-34 安全边界：contextIsolation 开启、nodeIntegration 关闭，渲染资源经自定义 app:// 协议加载（file:// 下 CSP 的 'self' 会拦截本地脚本），协议处理器做路径穿越校验；preload 只暴露最小 IPC 白名单；不使用任何远程内容
+              - SYS-38 菜单快捷键让位：系统菜单只注册文件与标签页级快捷键，撤销 / 重做 / 复制 / 粘贴 / 全选等编辑类快捷键不注册 role，交由画板 PLUG-02 与浏览器原生行为处理，避免菜单抢占画板键盘事件
+              - SYS-43 顶部系统菜单为桌面版唯一功能入口：文件（新建 / 打开 / 保存 / 另存为 / 另存为格式 / 导出图片 / 自动保存 / 关闭 / 退出）、编辑（撤销 / 重做 / 剪切 / 复制 / 粘贴 / 全选 / 搜索节点 / 清空画板）、标签页、视图（重载 / 开发者工具 / 缩放 / 全屏）、语言（五语单选）、帮助（使用帮助 / GitHub / 关于）；桌面版以 systemMenu 让画板隐藏自带主菜单，命令经 DESK-08 转发给 DATA-36；自动保存为全局开关，由菜单勾选项广播到所有窗口，渲染进程再用 DATA-36 写入各画板状态，状态栏不再重复提供开关
+              - SYS-35 多标签模型：一个窗口内多个标签，切换标签时销毁该标签画板实例并按需重建，文本在切换前回写；打开已打开的文件时聚焦已有标签
+              - SYS-36 保存语义：有路径时直接静默写盘，无路径时弹系统保存对话框；关标签与关窗口都会先确认未保存内容，退出时支持逐个保存
+              - SYS-37 文件关联：双击 .toon / .json / .md / .mindforai / .drawnixlite 时启动或聚焦已有实例，并在新标签中打开
+              - SYS-39 禁止跨系统共用 node_modules：原生模块（@parcel/watcher 等）为各平台独立二进制，且 node_modules/.bin 在 Linux 下是指向 JS 入口的符号链接，被 Windows 经映射盘读取后会变成畸形目录，导致 npm 报 EPERM / EISDIR；跨系统只共享源码（用 SCR-16 导出 zip），依赖必须在本机各自安装
+              - SYS-41 Windows 打包矩阵：electron-builder 26 的 Windows 目标为 nsis / nsis-web / portable / appx / msi / msiwrapped / squirrel 与归档目标 zip / 7z / tar.* / dir；其中 appxbundle 不是 electron-builder 目标，必须由 SCR-19 在 .appx 之后补一步 makeappx bundle。appx 与 appxbundle 的构建受平台限制（仅 Windows 10+ 或 macOS），nsis / msi / msiwrapped 在 Linux / macOS 上需要 wine。跨平台共用同一格式清单（SCR-18），新增格式只改 package-formats.js 一处
+              - SYS-42 未签名安装包的安装前提：./appx 与 .appxbundle 未签名时无法双击安装，需开启 Windows「开发人员模式」或用受信任证书签名；nsis / portable / msi 未签名时首次运行会有 SmartScreen 提示，属正常现象
+              - SYS-40 版本管理器只影响已初始化的终端：fnm / nvm 的 PATH 注入是一次性的 shell 副作用（fnm env 的输出只在被 Invoke-Expression 的那个会话里生效），cmd.exe 与新开的资源管理器进程都读不到，因此出现「PowerShell 里 node -v 正常、cmd 里找不到 node」。凡是要跨终端可靠的场景，优先用官方 .msi 安装包（写入系统 PATH）；脚本层面则按 SCR-17 的探测顺序自动定位 node，不依赖 shell 初始化
+manifest: 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

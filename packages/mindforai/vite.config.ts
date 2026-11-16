@@ -71,6 +71,7 @@ export default defineConfig({
     watch: false,
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./testing/setup-web-storage.ts'],
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     coverage: {
       reportsDirectory: '../../coverage/packages/mindforai',

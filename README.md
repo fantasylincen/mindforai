@@ -243,7 +243,7 @@ content[1]:
 
 ### 环境要求
 
-- Node.js 20+（推荐使用 [nvm](https://github.com/nvm-sh/nvm) 管理版本，仓库提供 `.nvmrc`）
+- Node.js 22.12+（推荐使用当前的 LTS 版本；仓库 `.nvmrc` 固定为 26.13.1，用 [nvm](https://github.com/nvm-sh/nvm) / [nvm-windows](https://github.com/coreybutler/nvm-windows) 管理版本）
 - npm 10+
 
 ### 常用命令

@@ -1,3 +1,4 @@
+// CORE-01 对外主组件 MindForAI：组装画板、工具栏、系统菜单联动、拖拽层与状态栏
 import { Board, BoardChangeData, Wrapper } from '@plait-board/react-board';
 import type { MindForAIFileHandle } from './data/json';
 import {
@@ -77,6 +78,8 @@ export type MindForAIProps = {
     filePath: string | null;
     fileHandle: MindForAIFileHandle;
   }) => void;
+  onDocumentSaved?: (filePath: string | null) => void;
+  onSystemMenuStateChange?: (state: MindForAISystemMenuState) => void;
   /**
    * Opens a brand new blank window (browser tab) for editing another document.
    * When omitted, a new tab pointing at the current location is opened.
@@ -85,7 +88,15 @@ export type MindForAIProps = {
   afterInit?: (board: PlaitBoard) => void;
   tutorial?: boolean;
   enableSessionRestore?: boolean;
+  systemMenu?: boolean;
+  initialAutoSave?: boolean;
 } & Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onSelect'>;
+
+export type MindForAISystemMenuState = {
+  autoSave: boolean;
+  exportTransparent: boolean;
+  language: Language | null;
+};
 
 export type { MindForAIToolState } from './hooks/use-mindforai';
 
@@ -130,10 +141,14 @@ export const MindForAI: React.FC<MindForAIProps> = ({
   onPreferenceChange,
   onLanguageChange,
   onDocumentFileChange,
+  onDocumentSaved,
+  onSystemMenuStateChange,
   onOpenNewWindow,
   afterInit,
   tutorial = false,
   enableSessionRestore = true,
+  systemMenu = false,
+  initialAutoSave = false,
 }) => {
   const options: PlaitBoardOptions = {
     readonly: false,
@@ -153,16 +168,22 @@ export const MindForAI: React.FC<MindForAIProps> = ({
       openCleanConfirm: false,
       invalidDocument: null,
       exportTransparent: initialPreference?.exportTransparent ?? false,
-      autoSave: false,
+      autoSave: initialAutoSave,
       editingDocument: false,
       openSearch: false,
       openHelp: false,
+      systemMenu,
     };
   });
 
   const [board, setBoard] = useState<MindForAIBoard | null>(null);
   const onDocumentFileChangeRef = useRef(onDocumentFileChange);
   onDocumentFileChangeRef.current = onDocumentFileChange;
+  const onDocumentSavedRef = useRef(onDocumentSaved);
+  onDocumentSavedRef.current = onDocumentSaved;
+  const onSystemMenuStateChangeRef = useRef(onSystemMenuStateChange);
+  onSystemMenuStateChangeRef.current = onSystemMenuStateChange;
+  const wasDirtyRef = useRef(false);
 
   useEffect(() => {
     onDocumentFileChangeRef.current?.({
@@ -170,6 +191,22 @@ export const MindForAI: React.FC<MindForAIProps> = ({
       fileHandle: appState.fileHandle,
     });
   }, [appState.filePath, appState.fileHandle]);
+
+  useEffect(() => {
+    const wasDirty = wasDirtyRef.current;
+    wasDirtyRef.current = appState.isDirty;
+    if (wasDirty && !appState.isDirty) {
+      onDocumentSavedRef.current?.(appState.filePath);
+    }
+  }, [appState.isDirty, appState.filePath]);
+
+  useEffect(() => {
+    setAppState((currentAppState) =>
+      currentAppState.autoSave === initialAutoSave
+        ? currentAppState
+        : { ...currentAppState, autoSave: initialAutoSave }
+    );
+  }, [initialAutoSave]);
 
   const [themeColorMode, setThemeColorMode] = useState<ThemeColorMode>(
     theme?.themeColorMode || ThemeColorMode.dark
@@ -187,6 +224,15 @@ export const MindForAI: React.FC<MindForAIProps> = ({
     board.showToast = showToast;
     board.setMindForAIAppState = setAppState;
   }
+
+  // 系统菜单需要知道自己该显示什么勾选状态，任何一项变化都上报一次
+  useEffect(() => {
+    onSystemMenuStateChangeRef.current?.({
+      autoSave: !!appState.autoSave,
+      exportTransparent: !!appState.exportTransparent,
+      language: appState.language ?? lastKnownLanguageRef.current,
+    });
+  }, [appState.autoSave, appState.exportTransparent, appState.language]);
 
   useEffect(() => {
     if (!board) {
@@ -292,6 +338,11 @@ export const MindForAI: React.FC<MindForAIProps> = ({
         if (board) {
           setBoardLanguage(board, language);
         }
+        setAppState((currentAppState) =>
+          currentAppState.language === language
+            ? currentAppState
+            : { ...currentAppState, language }
+        );
         onLanguageChange?.(language);
       }}
     >
