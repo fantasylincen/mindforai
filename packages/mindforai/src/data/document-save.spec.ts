@@ -96,9 +96,9 @@ describe('save current document', () => {
 
     expect(isSaved).toBe(true);
     const { payload, text, options } = await getSavedToonPayload();
-    expect(text.startsWith('type: mindforai')).toBe(true);
+    expect(text.startsWith('type: toon')).toBe(true);
     expect(text).not.toContain('mind_child');
-    expect(payload.type).toBe('mindforai');
+    expect(payload.type).toBe('toon');
     expect(payload.content).toEqual(['root']);
     expect(options.name).toBe('board');
     expect(options.extension).toBe('toon');
@@ -177,7 +177,7 @@ describe('save as', () => {
 
     expect(isSaved).toBe(true);
     const { payload, options } = await getSavedToonPayload();
-    expect(payload.type).toBe('mindforai');
+    expect(payload.type).toBe('toon');
     expect(payload.content).toEqual(['root']);
     expect(payload.elements).toBeUndefined();
     expect(options.name).toBe('board');

@@ -123,7 +123,7 @@ const appendManifestFieldLine = (data: MindForAIExportedData, lines: string[]): 
 
 export const serializeMindForAIText = (data: MindForAIExportedData): string => {
   const content = Array.isArray(data.content) ? data.content : [];
-  const lines = [`type: ${DocumentExportedType.mindforai}`, `version: ${data.version}`];
+  const lines = [`type: ${DocumentExportedType.toon}`, `version: ${data.version}`];
   if (!content.length) {
     lines.push('content: []');
     appendManifestFieldLine(data, lines);
@@ -265,7 +265,7 @@ export const parseMindForAITextWithDiagnostics = (
   let contentIndent = 0;
   let expectedContentCount: number | null = null;
   const buildMindForAIData = (content: MindForAINode[]): MindForAIExportedData => {
-    const data: MindForAIExportedData = { type: DocumentExportedType.mindforai, version, content };
+    const data: MindForAIExportedData = { type: DocumentExportedType.toon, version, content };
     if (manifest) {
       data.manifest = manifest;
     }
@@ -278,10 +278,10 @@ export const parseMindForAITextWithDiagnostics = (
     }
     if (trimmedLine.startsWith('type:')) {
       hasTypeDeclaration = true;
-      if (trimmedLine === `type: ${DocumentExportedType.mindforai}`) {
+      if (trimmedLine === `type: ${DocumentExportedType.toon}` || trimmedLine === `type: ${DocumentExportedType.legacyMindForAI}`) {
         isMindForAIDocument = true;
       } else {
-        pushMindForAITextIssue(issues, index, 'invalidType', DocumentExportedType.mindforai);
+        pushMindForAITextIssue(issues, index, 'invalidType', DocumentExportedType.toon);
       }
       continue;
     }

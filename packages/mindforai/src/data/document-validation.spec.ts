@@ -45,6 +45,7 @@ describe('document format detection', () => {
   });
 
   it('falls back to the document header', () => {
+    expect(resolveDocumentFormatByHeader('type: toon\nversion: 1')).toBe('mindforai');
     expect(resolveDocumentFormatByHeader('type: mindforai\nversion: 1')).toBe('mindforai');
     expect(resolveDocumentFormatByHeader('{\n  "type": "drawnixlite"')).toBe('drawnixlite');
     expect(resolveDocumentFormatByHeader('{\n  "type": "drawnix"')).toBeNull();
@@ -63,6 +64,23 @@ describe('mindforai text validation', () => {
     expect(result.ok).toBe(true);
     expect(result.data?.elements).toHaveLength(1);
     expect(result.issues).toEqual([]);
+  });
+
+  it('accepts the new toon type header', () => {
+    const toonText = validMindForAIText.replace('type: mindforai', 'type: toon');
+    const result = validateDocumentContents(toonText, 'mindforai');
+
+    expect(result.ok).toBe(true);
+    expect(result.data?.elements).toHaveLength(1);
+    expect(result.issues).toEqual([]);
+  });
+
+  it('rejects an unknown type header', () => {
+    const broken = validMindForAIText.replace('type: mindforai', 'type: drawnix');
+    const result = validateDocumentContents(broken, 'mindforai');
+
+    expect(result.ok).toBe(false);
+    expect(result.issues.some((issue) => issue.code === 'invalidType')).toBe(true);
   });
 
   it('locates malformed indentation', () => {

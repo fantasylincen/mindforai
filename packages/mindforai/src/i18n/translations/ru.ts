@@ -184,7 +184,7 @@ const ruTranslations: Translations = {
   'textEditor.stillInvalid': 'В документе ещё есть ошибки. Продолжите исправление.',
   'textEditor.valid': 'Формат корректен, можно открыть',
   'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
-  'documentError.missingType': "Missing 'type: mindforai' header",
+  'documentError.missingType': "Missing 'type: toon' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
   'documentError.missingContent': 'Missing content definition',

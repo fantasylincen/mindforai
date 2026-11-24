@@ -184,7 +184,7 @@ const arTranslations: Translations = {
   'textEditor.stillInvalid': 'لا يزال المستند يحتوي على أخطاء. يرجى متابعة الإصلاح.',
   'textEditor.valid': 'التنسيق صحيح وجاهز للفتح',
   'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
-  'documentError.missingType': "Missing 'type: mindforai' header",
+  'documentError.missingType': "Missing 'type: toon' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
   'documentError.missingContent': 'Missing content definition',

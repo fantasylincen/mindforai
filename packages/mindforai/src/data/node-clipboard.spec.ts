@@ -23,7 +23,7 @@ describe('node clipboard', () => {
     const getText = writeText('');
     await copyNodeAsMindForAIText([mindElement]);
     const text = getText();
-    expect(text.startsWith('type: mindforai')).toBe(true);
+    expect(text.startsWith('type: toon')).toBe(true);
     const elements = await readClipboardNodeElements();
     expect(elements).toHaveLength(1);
     expect(elements?.[0].type).toBe('mind');

@@ -64,10 +64,10 @@ content[1]:
         children[9]:
           - text: 4.1 文档格式与读写（DATA）——改动最频繁区域
             children[35]:
-              - DATA-01 src/data/mindforai-text.ts :: .toon 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）
+              - DATA-01 src/data/mindforai-text.ts :: .toon 行式缩进文本树的序列化与解析（叶子独占一行、不加引号）；保存与复制统一写出文件头 type: toon，读取同时兼容旧文件头 type: mindforai 并归一为 toon
               - DATA-02 src/data/toon-document.ts :: 三种格式（.toon / .json / .md）的保存与加载总入口；保存只写新扩展名，读取兼容旧版 TOON 与 .mindforai 文档
               - DATA-03 src/data/compact-document.ts :: .json 精简 JSON 树与 Plait 元素之间的互转，保存时在末尾内嵌 manifest 字段
-              - DATA-04 src/data/document-format.ts :: 按扩展名优先、文件头类型声明兜底判断文档格式（含 .md 等 Markdown 扩展名）；新扩展名 .toon / .json 与旧扩展名 .mindforai / .drawnixlite 均可识别，hasDocumentExtension 覆盖新旧扩展名；无法识别时再按首行 content[..]: 结构兜底，并提供 hasDocumentExtension 判断扩展名是否已知
+              - DATA-04 src/data/document-format.ts :: 按扩展名优先、文件头类型声明兜底判断文档格式（含 .md 等 Markdown 扩展名）；文件头 type: toon 与旧头 type: mindforai 均识别为 .toon 格式，新扩展名 .toon / .json 与旧扩展名 .mindforai / .drawnixlite 均可识别，hasDocumentExtension 覆盖新旧扩展名；无法识别时再按首行 content[..]: 结构兜底，并提供 hasDocumentExtension 判断扩展名是否已知
               - DATA-05 src/data/document-load.ts :: 统一文档读取入口，识别格式（含 Markdown）并返回内容或可定位的解析错误；文件名缺少已知扩展名时按 .toon 重新包装后读取
               - DATA-06 src/data/document-save.ts :: 保存 / 另存为流程（.toon / .json / .md 三种格式，仅输出新扩展名）、清单内嵌与保存结果提示的统一处理
               - DATA-07 src/data/document-validation.ts :: 各格式（含 Markdown 转换）的结构校验、错误定位与格式化输出
@@ -252,7 +252,7 @@ content[1]:
         children[12]:
           - text: SYS-01 文档格式三选一（保存只用 .toon / .json / .md；读取兼容旧扩展名 .mindforai / .drawnixlite，且不在界面任何位置提示）
             children[4]:
-              - .toon：行式缩进树状文本，叶子独占一行、文本不加引号；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）；读取兼容旧扩展名 .mindforai，保存不再输出旧扩展名且界面不做提示
+              - .toon：行式缩进树状文本，叶子独占一行、文本不加引号，文件头为 type: toon；末尾可带 manifest: 字段内嵌 ZIP+Base64 清单（DATA-01 负责读写，DATA-27 负责清单编解码，优先喂 AI）；读取兼容旧文件头 type: mindforai 与旧扩展名 .mindforai，保存不再输出旧头与旧扩展名且界面不做提示
               - .json：精简 JSON 树（DATA-03）；读取兼容旧扩展名 .drawnixlite，保存不再输出旧扩展名且界面不做提示
               - .drawnix：完整 JSON 文档，保留画板与视口（DATA-02 / DATA-12）
               - .md：标准 Markdown 文本，打开时解析为思维导图、保存时把画板写回 Markdown（DATA-30 / DATA-31），末尾同样内嵌 manifest 字段

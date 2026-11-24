@@ -98,7 +98,7 @@ function serializeNodeLines(node, depth, lines) {
 
 export function serializeDocument(content, version = 1, manifest = null) {
   const nodes = Array.isArray(content) ? content : [];
-  const lines = ['type: mindforai', `version: ${version}`];
+  const lines = ['type: toon', `version: ${version}`];
   if (!nodes.length) {
     lines.push('content: []');
     if (typeof manifest === 'string' && manifest.trim()) {
@@ -223,7 +223,7 @@ function parseNodeList(lines, startIndex, listIndent, issues) {
 }
 
 function buildData(content, version, manifest) {
-  const data = { type: 'mindforai', version, content };
+  const data = { type: 'toon', version, content };
   if (manifest) {
     data.manifest = manifest;
   }
@@ -258,7 +258,7 @@ export function parseText(contents) {
     }
     if (trimmedLine.startsWith('type:')) {
       hasTypeDeclaration = true;
-      if (trimmedLine === 'type: mindforai') {
+      if (trimmedLine === 'type: toon' || trimmedLine === 'type: mindforai') {
         isMindForAIDocument = true;
       } else {
         issues.push({ line: index + 1, column: 1, code: 'invalidType' });

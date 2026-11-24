@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MindForAIDocument {
-    private static final String TYPE = "mindforai";
+    private static final String TYPE = "toon";
     private int version;
     private List<MindForAINodeData> content;
     private String manifest;

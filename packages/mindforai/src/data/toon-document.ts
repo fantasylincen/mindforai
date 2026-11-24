@@ -65,7 +65,7 @@ export const convertToMindForAI = (document: unknown): MindForAIExportedData => 
     .content.map(compressCompactDocumentNode)
     .filter((node): node is MindForAINode => node !== null);
   return {
-    type: DocumentExportedType.mindforai,
+    type: DocumentExportedType.toon,
     version: VERSIONS.mindforai,
     content,
   };
@@ -101,7 +101,10 @@ export const saveAsMindForAI = async (
 export const isMindForAIData = (data: unknown): data is MindForAIExportedData => {
   const record = readPlainRecord(data);
   return (
-    !!record && record.type === DocumentExportedType.mindforai && Array.isArray(record.content)
+    !!record &&
+    (record.type === DocumentExportedType.toon ||
+      record.type === DocumentExportedType.legacyMindForAI) &&
+    Array.isArray(record.content)
   );
 };
 

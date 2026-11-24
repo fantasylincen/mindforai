@@ -14,7 +14,7 @@ export interface MindForAIParseIssue {
 
 export interface MindForAIParseResult {
   data: {
-    type: 'mindforai';
+    type: 'toon' | 'mindforai';
     version: number;
     content: MindForAINodeData[];
     manifest?: string;

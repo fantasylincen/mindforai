@@ -14,7 +14,8 @@ export interface DocumentExportedData {
 
 export enum DocumentExportedType {
   drawnixlite = 'drawnixlite',
-  mindforai = 'mindforai',
+  toon = 'toon',
+  legacyMindForAI = 'mindforai',
 }
 
 export type MindForAINode = string | MindForAIBranchNode;
@@ -25,7 +26,7 @@ export interface MindForAIBranchNode {
 }
 
 export interface MindForAIExportedData {
-  type: DocumentExportedType.mindforai;
+  type: DocumentExportedType.toon | DocumentExportedType.legacyMindForAI;
   version: number;
   content: MindForAINode[];
   manifest?: string;

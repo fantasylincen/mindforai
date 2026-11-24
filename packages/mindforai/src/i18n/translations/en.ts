@@ -182,7 +182,7 @@ const enTranslations: Translations = {
   'textEditor.stillInvalid': 'The document still has errors. Please keep fixing it.',
   'textEditor.valid': 'Format is valid and ready to open',
   'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
-  'documentError.missingType': "Missing 'type: mindforai' header",
+  'documentError.missingType': "Missing 'type: toon' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
   'documentError.missingContent': 'Missing content definition',

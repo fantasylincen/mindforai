@@ -332,7 +332,7 @@ export const parseMarkdownToMindForAI = (contents: string): MindForAIExportedDat
   const blocks = parseMarkdownBlocks(contents || '');
   const content = applyBlocksToTree(blocks);
   return {
-    type: DocumentExportedType.mindforai,
+    type: DocumentExportedType.toon,
     version: 1,
     content,
   };

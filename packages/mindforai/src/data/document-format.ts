@@ -97,7 +97,7 @@ export const resolveDocumentFormatByHeader = (contents: string): DocumentFormat 
   }
   if (jsonType === null) {
     const textType = readTextDocumentType(contents);
-    if (textType === 'mindforai') {
+    if (textType === 'toon' || textType === 'mindforai') {
       return 'mindforai';
     }
     const lineTextType = readMindForAILineText(contents);

@@ -3,7 +3,7 @@ import { parseMindForAIText, serializeMindForAIText } from './mindforai-text';
 import { MindForAIExportedData } from './types';
 
 const buildDocument = (content: MindForAIExportedData['content']): MindForAIExportedData => ({
-  type: 'mindforai',
+  type: 'toon',
   version: 1,
   content,
 });
@@ -25,7 +25,7 @@ describe('mindforai text format', () => {
 
     expect(serializeMindForAIText(document)).toBe(
       [
-        'type: mindforai',
+        'type: toon',
         'version: 1',
         'content[1]:',
         '  - text: TODOS',
@@ -59,7 +59,7 @@ describe('mindforai text format', () => {
   it('keeps empty content readable', () => {
     const text = serializeMindForAIText(buildDocument([]));
 
-    expect(text).toBe('type: mindforai\nversion: 1\ncontent: []');
+    expect(text).toBe('type: toon\nversion: 1\ncontent: []');
     expect(parseMindForAIText(text)).toEqual(buildDocument([]));
   });
 
@@ -80,6 +80,12 @@ describe('mindforai text format', () => {
     expect(parseMindForAIText('type: drawnix\nversion: 1')).toBeNull();
   });
 
+  it('reads legacy mindforai headers and normalizes them to toon', () => {
+    const legacy = ['type: mindforai', 'version: 1', 'content[1]:', '  - text: ROOT'].join('\n');
+
+    expect(parseMindForAIText(legacy)).toEqual(buildDocument(['ROOT']));
+  });
+
   it('appends and reads back the embedded manifest field', () => {
     const document: MindForAIExportedData = {
       ...buildDocument(['ROOT']),
@@ -98,7 +104,7 @@ describe('mindforai text format', () => {
     };
     const text = serializeMindForAIText(document);
 
-    expect(text).toBe('type: mindforai\nversion: 1\ncontent: []\nmanifest: QUJDREVG');
+    expect(text).toBe('type: toon\nversion: 1\ncontent: []\nmanifest: QUJDREVG');
     expect(parseMindForAIText(text)).toEqual(document);
   });
 });

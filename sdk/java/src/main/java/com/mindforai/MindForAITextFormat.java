@@ -17,7 +17,7 @@ public final class MindForAITextFormat {
 
     public static String serialize(List<MindForAINodeData> content, int version, String manifest) {
         List<String> lines = new ArrayList<>();
-        lines.add("type: mindforai");
+        lines.add("type: toon");
         lines.add("version: " + version);
         List<MindForAINodeData> nodes = content == null ? new ArrayList<>() : content;
         if (nodes.isEmpty()) {
@@ -272,7 +272,7 @@ public final class MindForAITextFormat {
             }
             if (trimmedLine.startsWith("type:")) {
                 hasTypeDeclaration = true;
-                if (trimmedLine.equals("type: mindforai")) {
+                if (trimmedLine.equals("type: toon") || trimmedLine.equals("type: mindforai")) {
                     isMindForAIDocument = true;
                 } else {
                     issues.add(new ParseIssue(index + 1, 1, "invalidType"));

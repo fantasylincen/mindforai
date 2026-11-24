@@ -95,7 +95,7 @@ def serialize_node_lines(node, depth, lines):
 def serialize_document(content, version=1, manifest=None):
     if not isinstance(content, list):
         content = []
-    lines = ["type: mindforai", f"version: {version}"]
+    lines = ["type: toon", f"version: {version}"]
     if not content:
         lines.append("content: []")
         if isinstance(manifest, str) and manifest.strip():
@@ -238,7 +238,7 @@ def parse_text(contents):
             continue
         if trimmed.startswith("type:"):
             has_type_declaration = True
-            if trimmed == "type: mindforai":
+            if trimmed == "type: toon" or trimmed == "type: mindforai":
                 is_mindforai_document = True
             else:
                 issues.append((index + 1, 1, "invalidType"))
@@ -320,7 +320,7 @@ def _match_content_header(header_line):
 
 
 def _build_data(content, version, manifest):
-    data = {"type": "mindforai", "version": version, "content": content}
+    data = {"type": "toon", "version": version, "content": content}
     if manifest:
         data["manifest"] = manifest
     return data

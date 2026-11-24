@@ -92,7 +92,7 @@ describe('serializeBoardDocumentText', () => {
 
   it('按 mindforai 格式序列化并保留清单', () => {
     const text = serializeBoardDocumentText(createBoardStub(), 'mindforai', 'project.toon');
-    expect(text).toContain('type: mindforai');
+    expect(text).toContain('type: toon');
     expect(text).toContain('manifest:');
   });
 

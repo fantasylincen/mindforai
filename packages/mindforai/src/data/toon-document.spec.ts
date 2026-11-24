@@ -62,7 +62,7 @@ describe('mindforai text document', () => {
     const result = convertToMindForAI({ elements });
 
     expect(result).toEqual({
-      type: DocumentExportedType.mindforai,
+      type: DocumentExportedType.toon,
       version: 1,
       content: [
         {
@@ -80,7 +80,7 @@ describe('mindforai text document', () => {
   it('serializes a board as compact text document without quoted nodes', () => {
     const serialized = serializeAsMindForAI(mockBoard(elements));
 
-    expect(serialized).toContain('type: mindforai');
+    expect(serialized).toContain('type: toon');
     expect(serialized).toContain('version: 1');
     expect(serialized).not.toContain('mind_child');
     expect(serialized).not.toContain('paragraph');
@@ -160,7 +160,7 @@ describe('mindforai text document', () => {
 
   it('accepts plain text nodes and skips empty ones', () => {
     const restored = mindForAIToDocumentData({
-      type: DocumentExportedType.mindforai,
+      type: DocumentExportedType.toon,
       version: 1,
       content: ['single root', '', { text: '', children: [] }],
     });

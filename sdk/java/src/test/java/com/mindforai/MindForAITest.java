@@ -209,7 +209,7 @@ public class MindForAITest {
         Node branch = node.add(new Node("branch", true));
         branch.add("leaf");
         String text = node.mindForAIText();
-        assertTrue(text.startsWith("type: mindforai\nversion: 1\ncontent[1]:"), "prefix");
+        assertTrue(text.startsWith("type: toon\nversion: 1\ncontent[1]:"), "prefix");
         assertTrue(MindForAITextFormat.parse(text).isSuccess(), "parseable");
     }
 
@@ -224,7 +224,7 @@ public class MindForAITest {
 
     private static void emptyDocument() {
         String text = MindForAITextFormat.serialize(new ArrayList<>(), 1, null);
-        assertEquals("type: mindforai\nversion: 1\ncontent: []", text);
+        assertEquals("type: toon\nversion: 1\ncontent: []", text);
         assertEquals(0, MindForAITextFormat.parseOrRaise(text).getContent().size());
     }
 

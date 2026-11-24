@@ -34,7 +34,7 @@ describe('document manifest text format', () => {
   it('writes the manifest as a mindforai text tree', () => {
     const text = serializeDocumentManifestText(buildManifest());
 
-    expect(text.startsWith('type: mindforai\nversion: 1\ncontent[1]:')).toBe(true);
+    expect(text.startsWith('type: toon\nversion: 1\ncontent[1]:')).toBe(true);
     expect(text).toContain('- text: manifest');
     expect(text).toContain('- document: folder/board.toon');
     expect(text).toContain('- theme: dark');

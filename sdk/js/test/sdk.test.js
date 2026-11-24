@@ -144,7 +144,7 @@ test('mindForAIText produces parseable standard text', () => {
   const branch = node.add(new Node('branch', true));
   branch.add('leaf');
   const text = node.mindForAIText();
-  assert.ok(text.startsWith('type: mindforai\nversion: 1\ncontent[1]:'));
+  assert.ok(text.startsWith('type: toon\nversion: 1\ncontent[1]:'));
   const data = parseOrRaise(text);
   assert.equal(data.content.length, 1);
 });
@@ -169,7 +169,7 @@ test('manifest field is kept when serializing', () => {
 
 test('empty document round trips', () => {
   const text = serializeDocument([], 1);
-  assert.equal(text, 'type: mindforai\nversion: 1\ncontent: []');
+  assert.equal(text, 'type: toon\nversion: 1\ncontent: []');
   assert.deepEqual(parseOrRaise(text).content, []);
 });
 

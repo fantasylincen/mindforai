@@ -146,7 +146,7 @@ class TestNode(unittest.TestCase):
         branch = node.add(Node("branch", True))
         branch.add("leaf")
         text = node.mind_for_ai_text()
-        self.assertTrue(text.startswith("type: mindforai\nversion: 1\ncontent[1]:"))
+        self.assertTrue(text.startswith("type: toon\nversion: 1\ncontent[1]:"))
         self.assertIsNotNone(parse_text(text)[0])
 
 
@@ -155,7 +155,7 @@ class TestParser(unittest.TestCase):
 
     def test_empty_document(self):
         text = serialize_document([])
-        self.assertEqual(text, "type: mindforai\nversion: 1\ncontent: []")
+        self.assertEqual(text, "type: toon\nversion: 1\ncontent: []")
         self.assertEqual(parse_text(text)[0]["content"], [])
 
     def test_manifest(self):

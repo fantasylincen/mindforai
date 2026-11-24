@@ -184,7 +184,7 @@ const viTranslations: Translations = {
   'textEditor.stillInvalid': 'Tài liệu vẫn còn lỗi. Vui lòng tiếp tục sửa.',
   'textEditor.valid': 'Định dạng hợp lệ và có thể mở',
   'documentError.unknownFormat': 'Unrecognized file format. Expected .toon or .json',
-  'documentError.missingType': "Missing 'type: mindforai' header",
+  'documentError.missingType': "Missing 'type: toon' header",
   'documentError.invalidType': 'Invalid document type declaration',
   'documentError.invalidVersion': 'version must be a positive integer',
   'documentError.missingContent': 'Missing content definition',

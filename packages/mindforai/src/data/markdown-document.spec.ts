@@ -33,7 +33,7 @@ describe('markdown document', () => {
 
   it('parses markdown with manifest into mindforai data', () => {
     const data = parseMarkdownDocumentToMindForAIData('# Title\n\n- one\n- two\n\nmanifest: ZIPBASE64');
-    expect(data.type).toBe('mindforai');
+    expect(data.type).toBe('toon');
     expect(data.manifest).toBe('ZIPBASE64');
     expect(data.content.length).toBeGreaterThan(0);
   });

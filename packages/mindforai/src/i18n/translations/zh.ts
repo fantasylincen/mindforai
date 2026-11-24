@@ -180,7 +180,7 @@ const zhTranslations: Translations = {
   'textEditor.stillInvalid': '文档仍有错误，请继续修正',
   'textEditor.valid': '格式正确，可以打开',
   'documentError.unknownFormat': '无法识别文件格式，请确认文件是 .toon 或 .json',
-  'documentError.missingType': '缺少 type: mindforai 文件头',
+  'documentError.missingType': '缺少 type: toon 文件头',
   'documentError.invalidType': '文件类型声明无效',
   'documentError.invalidVersion': 'version 必须为正整数',
   'documentError.missingContent': '缺少 content 定义',

@@ -118,7 +118,7 @@ export const serializeDocumentManifestText = (manifest: DocumentManifest): strin
     children: manifest.nodes.map((node) => buildManifestNodeStateTree(node)),
   });
   return serializeMindForAIText({
-    type: DocumentExportedType.mindforai,
+    type: DocumentExportedType.toon,
     version: manifest.version || VERSIONS.manifest,
     content: [{ text: MANIFEST_ROOT_TEXT, children: sections }],
   });
